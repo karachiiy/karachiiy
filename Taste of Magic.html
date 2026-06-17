@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taste of Magic — Scriptorium of Karachiiy</title>
+    <link rel="icon" type="image/png" href="../favicon.png">
+    
+    <!-- Elegant cinematic & serif typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;900&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Warm, rustic masonry & hearth colors */
+            --bg-dark: #0a0706;              /* Cast-iron / roasted bean black */
+            --parchment: #e8dcc4;            /* Soft, flour-dusted cream */
+            --honey-gold: #f4c430;           /* Sweet, glowing honey */
+            --copper: #a75a32;               /* Hammered warm copper */
+            --hearth-red: #823023;           /* Rustic brick red */
+            --ash-gray: #4a3f3b;             /* Cool soot gray */
+            --ui-bg: rgba(13, 9, 8, 0.85);   /* Translucent dark oak */
+            --border-elegant: 1px solid rgba(167, 90, 50, 0.3);
+            
+            --font-serif: 'Cinzel', serif;
+            --font-sans: 'Montserrat', sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--parchment);
+            font-family: var(--font-sans);
+            min-height: 100vh;
+            overflow-x: hidden;
+            user-select: none;
+        }
+
+        /* Ambient Hearth & Flour Dust Field */
+        #hearthCanvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+            mix-blend-mode: screen;
+            opacity: 0.7;
+        }
+
+        /* Heatwave Cursor Aura */
+        #heatAura {
+            position: fixed;
+            width: 450px; height: 450px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(167, 90, 50, 0.06) 0%, rgba(244, 196, 48, 0.02) 50%, transparent 70%);
+            z-index: 2;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: screen;
+        }
+
+        /* --- NAVIGATION HEADER --- */
+        .nav-header {
+            width: 100%;
+            max-width: 1450px;
+            margin: 0 auto;
+            padding: 3rem 4vw 0 4vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .brand-block {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .logo-img {
+            height: 48px;
+            width: auto;
+            filter: drop-shadow(0 0 10px rgba(167, 90, 50, 0.4));
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.2, 1);
+        }
+
+        .brand-block:hover .logo-img {
+            transform: scale(1.03) rotate(-1deg);
+        }
+
+        .brand-text h1 {
+            font-family: var(--font-serif);
+            font-size: 1.15rem;
+            letter-spacing: 4px;
+            color: var(--honey-gold);
+            text-transform: uppercase;
+        }
+
+        .back-link {
+            font-family: var(--font-serif);
+            font-size: 0.75rem;
+            color: rgba(232, 220, 196, 0.4);
+            text-decoration: none;
+            letter-spacing: 3px;
+            border-bottom: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: var(--honey-gold);
+            border-bottom-color: var(--honey-gold);
+            text-shadow: 0 0 15px rgba(244, 196, 48, 0.3);
+        }
+
+        /* --- THE SWITCHER TABS --- */
+        .exhibition-switcher {
+            display: flex;
+            justify-content: center;
+            gap: 1.2rem;
+            margin: 3.5rem auto 2.5rem auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .switch-tab {
+            background: rgba(13, 9, 8, 0.7);
+            border: 1px solid rgba(167, 90, 50, 0.3);
+            padding: 0.8rem 2.2rem;
+            font-family: var(--font-serif);
+            font-size: 0.8rem;
+            color: rgba(232, 220, 196, 0.4);
+            letter-spacing: 3px;
+            cursor: pointer;
+            text-transform: uppercase;
+            border-radius: 2px;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.2, 1);
+        }
+
+        .switch-tab:hover, .switch-tab.active {
+            color: var(--honey-gold);
+            border-color: var(--honey-gold);
+            background: rgba(167, 90, 50, 0.05);
+            box-shadow: 0 0 20px rgba(167, 90, 50, 0.15), inset 0 0 12px rgba(244, 196, 48, 0.05);
+        }
+
+        /* --- MAIN SHOWCASE SECTION --- */
+        .showcase-container {
+            width: 100%;
+            max-width: 1450px;
+            margin: 0 auto;
+            padding: 0 4vw 4rem 4vw;
+            display: flex;
+            gap: 4vw;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* INTERACTIVE BEFORE/AFTER SLIDER */
+        .slider-column {
+            flex: 1.25;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slider-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 780px;
+            aspect-ratio: 3 / 2;
+            border: 1px solid rgba(167, 90, 50, 0.4);
+            box-shadow: 0 30px 70px rgba(0,0,0,0.95);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        /* Frame Corner Accents */
+        .slider-wrapper::before, .slider-wrapper::after,
+        .lore-card::before, .lore-card::after {
+            content: '';
+            position: absolute;
+            width: 12px; height: 12px;
+            border-color: var(--copper);
+            border-style: solid;
+            z-index: 6;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        .slider-wrapper::before, .lore-card::before {
+            top: 10px; left: 10px;
+            border-width: 1px 0 0 1px;
+        }
+
+        .slider-wrapper::after, .lore-card::after {
+            bottom: 10px; right: 10px;
+            border-width: 0 1px 1px 0;
+        }
+
+        .img-before {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .img-after-container {
+            position: absolute;
+            top: 0; left: 0;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            border-right: 2px solid var(--honey-gold);
+        }
+
+        .img-after {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            max-width: none; 
+        }
+
+        /* Fire-Wyrm Slider Handle */
+        .slider-handle {
+            position: absolute;
+            top: 0; bottom: 0;
+            left: 50%;
+            width: 2px;
+            background: linear-gradient(to bottom, transparent, var(--honey-gold), transparent);
+            cursor: ew-resize;
+            z-index: 5;
+            transform: translateX(-50%);
+            box-shadow: 0 0 15px var(--honey-gold);
+        }
+
+        .slider-handle-button {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) rotate(45deg);
+            width: 38px; height: 38px;
+            background: #0f0d0c;
+            border: 1px solid var(--copper);
+            box-shadow: 0 0 15px rgba(167, 90, 50, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+            transition: border-color 0.3s;
+        }
+
+        .slider-wrapper:hover .slider-handle-button {
+            border-color: var(--honey-gold);
+            box-shadow: 0 0 20px var(--honey-gold);
+        }
+
+        .slider-handle-button::before {
+            content: '✥';
+            font-family: var(--font-serif);
+            font-size: 1rem;
+            color: var(--honey-gold);
+            transform: rotate(-45deg);
+            text-shadow: 0 0 5px var(--honey-gold);
+        }
+
+        .label-tag {
+            position: absolute;
+            bottom: 20px;
+            background: rgba(10, 8, 7, 0.9);
+            border: 1px solid rgba(167, 90, 50, 0.4);
+            padding: 0.5rem 1.2rem;
+            font-family: var(--font-serif);
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            color: var(--parchment);
+            z-index: 4;
+            pointer-events: none;
+            border-radius: 1px;
+            opacity: 0.85;
+        }
+
+        .label-before { right: 20px; }
+        .label-after { left: 20px; }
+
+        /* THE PARCHMENT LORE CARD */
+        .lore-column {
+            flex: 0.75;
+            max-width: 480px;
+        }
+
+        .lore-card {
+            background: var(--ui-bg);
+            border: var(--border-elegant);
+            padding: 3.5rem 2.8rem;
+            border-radius: 2px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.9), 0 0 40px rgba(167, 90, 50, 0.05) inset;
+            backdrop-filter: blur(10px);
+            position: relative;
+            min-height: 520px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Inner dashed border */
+        .card-inner-frame {
+            position: absolute;
+            top: 8px; right: 8px; bottom: 8px; left: 8px;
+            border: 1px solid rgba(167, 90, 50, 0.15);
+            pointer-events: none;
+        }
+
+        .lore-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .lore-label {
+            font-size: 0.65rem;
+            color: #7d8c99;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 0.5rem;
+        }
+
+        .lore-title {
+            font-family: var(--font-serif);
+            font-size: 1.7rem;
+            color: var(--honey-gold);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            line-height: 1.2;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .lore-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            color: var(--copper);
+            font-size: 0.75rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.7;
+        }
+
+        .lore-divider::before, .lore-divider::after {
+            content: '';
+            height: 1px;
+            width: 40px;
+            background: linear-gradient(90deg, transparent, var(--copper), transparent);
+        }
+
+        .lore-body {
+            background: rgba(4, 3, 2, 0.6);
+            border-left: 2px solid var(--copper);
+            padding: 1.2rem;
+            font-size: 0.85rem;
+            line-height: 1.8;
+            color: #c4cdd5;
+            margin-bottom: 1.8rem;
+            font-style: italic;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
+        }
+
+        .lore-body b {
+            color: var(--honey-gold);
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        .lore-meta-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            margin-bottom: 2rem;
+        }
+
+        .meta-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(6, 4, 3, 0.5);
+            border: 1px solid rgba(167, 90, 50, 0.1);
+            padding: 0.8rem 1.2rem;
+            border-radius: 2px;
+        }
+
+        .meta-label {
+            color: #7d8c99;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .meta-val {
+            color: var(--parchment);
+            font-size: 0.8rem;
+            font-weight: 500;
+            font-family: var(--font-serif);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .vgen-btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            background: transparent;
+            border: 1px solid var(--copper);
+            color: var(--honey-gold);
+            font-family: var(--font-serif);
+            padding: 1rem;
+            font-size: 0.8rem;
+            letter-spacing: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 5;
+        }
+
+        .vgen-btn:hover {
+            background: rgba(167, 90, 50, 0.05);
+            border-color: var(--honey-gold);
+            box-shadow: 0 0 20px rgba(244, 196, 48, 0.15);
+            color: #fff;
+        }
+
+        /* --- THE FOOTER CREDIT --- */
+        .home-footer {
+            position: absolute;
+            bottom: 2.5rem;
+            left: 6vw;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .social-links a {
+            color: rgba(232, 220, 196, 0.4);
+            text-decoration: none;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-family: var(--font-serif);
+            transition: color 0.3s, text-shadow 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--honey-gold);
+            text-shadow: 0 0 10px var(--honey-gold);
+        }
+
+        .credit-text {
+            font-size: 0.65rem;
+            color: rgba(232, 220, 196, 0.15);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* Transition Fade Class */
+        .fade-transition {
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        /* Responsive Optimization */
+        @media (max-width: 1024px) {
+            body {
+                overflow-y: auto;
+                padding-bottom: 4rem;
+            }
+            .nav-header {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+                padding-top: 2rem;
+            }
+            .showcase-container {
+                flex-direction: column;
+                gap: 3rem;
+                padding-bottom: 2rem;
+            }
+            .slider-column, .lore-column {
+                width: 100%;
+                max-width: 600px;
+                flex: none;
+            }
+            .home-footer {
+                position: relative;
+                bottom: 0;
+                left: 0;
+                align-items: center;
+                text-align: center;
+                margin-top: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Warm Hearth-Embers & Flour Dust Canvas -->
+    <canvas id="hearthCanvas"></canvas>
+    <div id="heatAura"></div>
+
+    <header class="nav-header">
+        <a href="../index.html" class="brand-block">
+            <img class="logo-img" src="../logo.png" alt="Karachiiy Logo">
+            <div class="brand-text">
+                <h1>Karachiiy</h1>
+            </div>
+        </a>
+        <a href="../index.html" class="back-link">✦ RETREAT TO SCRIPTORIUM</a>
+    </header>
+
+    <!-- EXHIBITION SWITCHER TABS -->
+    <div class="exhibition-switcher">
+        <button class="switch-tab active" data-id="0">I. Melina's Pastry Magic</button>
+        <button class="switch-tab" data-id="1">II. The General's Echo</button>
+    </div>
+
+    <!-- MAIN SHOWCASE SECTION -->
+    <main class="showcase-container">
+        
+        <!-- INTERACTIVE SLIDER COLUMN -->
+        <section class="slider-column">
+            <div class="slider-wrapper" id="sliderWrapper">
+                <!-- Before Layer (Paint-Over / Sketch) -->
+                <img class="img-before" id="imgBefore" src="Taste of Magic Cover PO.png" alt="Pastry Magic Paint-Over">
+                <span class="label-tag label-before">Before (Paint-Over Sketch)</span>
+                
+                <!-- After Layer (Finished Illustration) -->
+                <div class="img-after-container" id="imgAfterContainer">
+                    <img class="img-after" id="imgAfter" src="Taste of Magic Cover done.png" alt="Pastry Magic Finished Illustration">
+                    <span class="label-tag label-after">After (Finished Painting)</span>
+                </div>
+                
+                <!-- Draggable vertical bar -->
+                <div class="slider-handle" id="sliderHandle">
+                    <div class="slider-handle-button"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- LORE CARD COLUMN -->
+        <section class="lore-column">
+            <div class="lore-card" id="loreCard">
+                <div class="card-inner-frame"></div>
+                <div class="card-content" id="cardContent">
+                    <div class="lore-header">
+                        <p class="lore-label" id="loreLabel">Exhibition I</p>
+                        <h2 class="lore-title" id="loreTitle">Melina's Scriptorium</h2>
+                    </div>
+                    <div class="lore-divider">✥ ✦ ✥</div>
+                    
+                    <div class="lore-body" id="loreBody">
+                        "Client requested flying pastries. I spent significant mental energy ensuring the levitating donuts didn't look like they were threatening to commit velocity-based assault on the viewer. Added blue arcane trails to signify <b>'Yes, this is magic, not a bakery explosion.'</b> Melina's expression was adjusted to look 40% more joyful about her rising yeast."
+                    </div>
+                    
+                    <div class="lore-meta-list" id="loreMeta">
+                        <div class="meta-row">
+                            <span class="meta-label">Client</span>
+                            <span class="meta-val">Amber Atlas</span>
+                        </div>
+                        <div class="meta-row">
+                            <span class="meta-label">Medium</span>
+                            <span class="meta-val">Pastry & Flour Magic</span>
+                        </div>
+                        <div class="meta-row">
+                            <span class="meta-label">Total Bound</span>
+                            <span class="meta-val">2 Cover Commissions</span>
+                        </div>
+                    </div>
+
+                    <a href="https://vgen.co/Karachiiy" target="_blank" class="vgen-btn">Commission on VGen</a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="home-footer">
+        <div class="social-links">
+            <a href="https://x.com/Karachiiy" target="_blank">𝕏 / Twitter</a>
+            <a href="https://www.pixiv.net/en/users/33593211" target="_blank">Pixiv</a>
+            <a href="mailto:karacia8555@gmail.com">Email Contact</a>
+            <a href="https://vgen.co/Karachiiy" target="_blank">VGen</a>
+        </div>
+        <p class="credit-text">All Magics are Crafted by Archmage Karachiiy</p>
+    </footer>
+
+    <script>
+        const switcherTabs = document.querySelectorAll(".switch-tab");
+        const sliderWrapper = document.getElementById("sliderWrapper");
+        const imgBefore = document.getElementById("imgBefore");
+        const imgAfter = document.getElementById("imgAfter");
+        const imgAfterContainer = document.getElementById("imgAfterContainer");
+        const sliderHandle = document.getElementById("sliderHandle");
+        const cardContent = document.getElementById("cardContent");
+        const loreLabel = document.getElementById("loreLabel");
+        const loreTitle = document.getElementById("loreTitle");
+        const loreBody = document.getElementById("loreBody");
+        const aura = document.getElementById("heatAura");
+
+        const exhibitions = [
+            {
+                id: 0,
+                label: "Exhibition I",
+                title: "Melina's Scriptorium",
+                beforeImg: "Taste of Magic Cover PO.png",
+                afterImg: "Taste of Magic Cover done.png",
+                medium: "Pastry & Flour Magic",
+                lore: "Client requested flying pastries. I spent significant mental energy ensuring the levitating donuts didn't look like they were threatening to commit velocity-based assault on the viewer. Added blue arcane trails to signify <b>'Yes, this is magic, not a bakery explosion.'</b> Melina's expression was adjusted to look 40% more joyful about her rising yeast.",
+            },
+            {
+                id: 1,
+                label: "Exhibition II",
+                title: "The General's Echo",
+                beforeImg: "Taste of Magic Cover 2 PO.png",
+                afterImg: "Taste of Magic Cover 2 done.png",
+                medium: "Warm Hearth-Fire & Shimmertart",
+                lore: "Added Alistair looking handsome while eating a Shimmertart (which is basically a regular tart but with a distinct, illegally shimmering magical glaze). I also had to make sure Sienna (the little orange-and-black fire wyrm) looked cute and helpful, rather than looking like an active arson hazard near the kitchen oven. Corrected the perspective lines of the tiles to prevent architectural headaches.",
+            }
+        ];
+
+        let activeExhibition = exhibitions[0];
+
+        // Track mouse aura
+        document.addEventListener("mousemove", (e) => {
+            aura.style.left = e.clientX + "px";
+            aura.style.top = e.clientY + "px";
+        });
+
+        // --- TAB SWITCHER LOGIC ---
+        switcherTabs.forEach(tab => {
+            tab.addEventListener("click", () => {
+                if (tab.classList.contains("active")) return;
+
+                const id = parseInt(tab.getAttribute("data-id"));
+                activeExhibition = exhibitions[id];
+
+                switcherTabs.forEach(t => t.classList.remove("active"));
+                tab.classList.add("active");
+
+                sliderWrapper.classList.add("fade-transition");
+                cardContent.classList.add("fade-transition");
+
+                setTimeout(() => {
+                    imgBefore.src = activeExhibition.beforeImg;
+                    imgAfter.src = activeExhibition.afterImg;
+                    
+                    imgAfterContainer.style.width = "50%";
+                    sliderHandle.style.left = "50%";
+
+                    loreLabel.innerText = activeExhibition.label;
+                    loreTitle.innerText = activeExhibition.title;
+                    loreBody.innerHTML = activeExhibition.lore;
+                    
+                    const metaContainer = document.getElementById("loreMeta");
+                    metaContainer.innerHTML = `
+                        <div class="meta-row">
+                            <span class="meta-label">Client</span>
+                            <span class="meta-val">Amber Atlas</span>
+                        </div>
+                        <div class="meta-row">
+                            <span class="meta-label">Medium</span>
+                            <span class="meta-val">${activeExhibition.medium}</span>
+                        </div>
+                        <div class="meta-row">
+                            <span class="meta-label">Total Bound</span>
+                            <span class="meta-val">2 Cover Commissions</span>
+                        </div>
+                    `;
+
+                    sliderWrapper.classList.remove("fade-transition");
+                    cardContent.classList.remove("fade-transition");
+                }, 400);
+            });
+        });
+
+        // --- INTERACTIVE SLIDER LOGIC ---
+        let isDragging = false;
+
+        function updateSlider(clientX) {
+            const rect = sliderWrapper.getBoundingClientRect();
+            const positionX = clientX - rect.left;
+            let percentage = (positionX / rect.width) * 100;
+
+            if (percentage < 0) percentage = 0;
+            if (percentage > 100) percentage = 100;
+
+            imgAfterContainer.style.width = `${percentage}%`;
+            sliderHandle.style.left = `${percentage}%`;
+        }
+
+        sliderWrapper.addEventListener("mousedown", (e) => {
+            isDragging = true;
+            updateSlider(e.clientX);
+        });
+
+        window.addEventListener("mousemove", (e) => {
+            if (!isDragging) return;
+            updateSlider(e.clientX);
+        });
+
+        window.addEventListener("mouseup", () => { isDragging = false; });
+
+        sliderWrapper.addEventListener("touchstart", (e) => {
+            isDragging = true;
+            updateSlider(e.touches[0].clientX);
+        });
+
+        window.addEventListener("touchmove", (e) => {
+            if (!isDragging) return;
+            updateSlider(e.touches[0].clientX);
+        });
+
+        window.addEventListener("touchend", () => { isDragging = false; });
+
+        function adjustSliderImgSize() {
+            imgAfter.style.width = `${sliderWrapper.offsetWidth}px`;
+            imgAfter.style.height = `${sliderWrapper.offsetHeight}px`;
+        }
+        
+        window.addEventListener("resize", adjustSliderImgSize);
+        window.addEventListener("load", adjustSliderImgSize);
+        adjustSliderImgSize();
+
+        // --- AMBIENT CANVAS (Hearth-Embers & Golden Flour Sparkles) ---
+        const canvas = document.getElementById("hearthCanvas");
+        const ctx = canvas.getContext("2d");
+        let w = canvas.width = window.innerWidth;
+        let h = canvas.height = window.innerHeight;
+
+        window.addEventListener("resize", () => { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; adjustSliderImgSize(); });
+
+        class Speck {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * w;
+                this.y = h + Math.random() * 100;
+                this.size = Math.random() * 2 + 0.3;
+                this.speed = Math.random() * 0.4 + 0.1;
+                this.alpha = Math.random() * 0.5 + 0.1;
+                this.alphaDir = Math.random() > 0.5 ? 0.002 : -0.003;
+                this.oscillationSpeed = Math.random() * 0.02 + 0.01;
+                this.oscillationWidth = Math.random() * 0.5;
+                
+                // 70% Ember Orange/Copper, 30% Twinkling Flour-Dust White
+                const isEmber = Math.random() > 0.3;
+                if (isEmber) {
+                    const colors = ['rgba(167, 90, 50, ', 'rgba(130, 48, 35, ', 'rgba(244, 196, 48, '];
+                    this.colorBase = colors[Math.floor(Math.random() * colors.length)];
+                } else {
+                    this.colorBase = 'rgba(232, 220, 196, '; // Soft white-gold flour speck
+                }
+            }
+            update(tick) {
+                this.y -= this.speed;
+                this.x += Math.sin(tick * this.oscillationSpeed) * this.oscillationWidth;
+                this.alpha += this.alphaDir;
+                if (this.alpha > 0.8 || this.alpha < 0.05) this.alphaDir = -this.alphaDir;
+                if (this.y < 0) { this.reset(); this.y = h; }
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.colorBase + this.alpha + ')';
+                ctx.fill();
+            }
+        }
+
+        const specks = Array.from({ length: 90 }, () => new Speck());
+        let tick = 0;
+
+        function animate() {
+            ctx.clearRect(0, 0, w, h);
+            tick++;
+            specks.forEach(s => { s.update(tick); s.draw(); });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>
