@@ -390,6 +390,112 @@
             .codex-ui { left: 50%; transform: translate(-50%, -50%); width: 90%; padding: 2rem; }
             .modal-gradient { background: rgba(2, 3, 4, 0.85); }
         }
+        /* =========================================
+           MOBILE OPTIMIZATION (Phones / Small Tablets)
+           ========================================= */
+        @media (max-width: 768px) {
+            /* 1. Unlock scrolling and adjust base layout */
+            body {
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
+
+            /* 2. Gatekeeper Adjustments */
+            .ward-container {
+                padding: 2rem 1.5rem;
+                width: 90%;
+            }
+            .ward-title { font-size: 1.5rem; letter-spacing: 4px; }
+            .ward-instructions { font-size: 0.8rem; margin-bottom: 2rem; }
+            .password-input { width: 100%; font-size: 0.9rem; }
+
+            /* 3. Re-flow the Header & Footer */
+            .brand-header {
+                position: relative;
+                top: 0; left: 0;
+                padding: 1.5rem 0 1rem 0;
+                display: flex;
+                justify-content: center;
+                width: 100vw;
+            }
+            .archive-footer {
+                position: relative;
+                bottom: 0; left: 0;
+                padding: 2rem 1.5rem 3rem 1.5rem;
+                text-align: center;
+                width: 100vw;
+            }
+            .social-links { flex-wrap: wrap; justify-content: center; }
+
+            /* 4. Convert Horizontal Accordion to Vertical Scrolling List */
+            #archiveMuseum {
+                flex-direction: column;
+                height: auto;
+                padding: 0 1rem;
+                gap: 1rem;
+            }
+            .cinematic-panel {
+                height: 200px; /* Fixed height for each portrait */
+                flex: none !important;
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 4px;
+            }
+            .cinematic-panel:last-child { border-bottom: none; }
+            
+            /* Always show names and colors on mobile, no hover required */
+            .panel-img { filter: grayscale(0%) brightness(0.8); }
+            .panel-overlay {
+                opacity: 1;
+                transform: translateY(0);
+                padding: 2rem 1rem 1rem 1rem;
+            }
+            .panel-title { font-size: 1.3rem; }
+
+            /* 5. Scrollable Codex Modal (Image fixed in background, text scrolls over it) */
+            #profileModal {
+                overflow-y: auto; /* Allows scrolling inside the modal */
+                -webkit-overflow-scrolling: touch;
+            }
+            .modal-bg-img, .modal-gradient {
+                position: fixed; /* Keeps the character pinned while text scrolls */
+                height: 100vh;
+            }
+            .modal-gradient {
+                background: linear-gradient(to top, rgba(2, 3, 4, 1) 0%, rgba(2, 3, 4, 0.85) 60%, transparent 100%);
+            }
+
+            .btn-close {
+                position: fixed;
+                top: 1rem; right: 1rem;
+                font-size: 2.5rem;
+                background: rgba(0, 0, 0, 0.6);
+                width: 45px; height: 45px;
+                border-radius: 50%;
+                display: flex; justify-content: center; align-items: center;
+                backdrop-filter: blur(5px);
+            }
+
+            /* Push the text card down so the character's face is visible at the top */
+            .codex-ui {
+                position: relative;
+                top: auto; left: auto; transform: none;
+                width: 92%;
+                margin: 45vh auto 2rem auto; 
+                padding: 1.5rem;
+            }
+            
+            /* Condense stats for smaller screens */
+            .codex-name { font-size: 1.6rem; margin-bottom: 1rem; }
+            .stat-row { flex-direction: column; gap: 0.2rem; margin-bottom: 0.6rem; border-bottom: 1px dotted rgba(212, 175, 55, 0.1); padding-bottom: 0.3rem;}
+            .stat-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+            .stat-label { width: auto; font-size: 0.65rem; }
+            .stat-val { font-size: 0.8rem; }
+            
+            /* Stack buttons so they are easy to tap */
+            .codex-nav { flex-wrap: wrap; }
+            .dossier-btn { width: 100%; order: -1; margin-bottom: 1rem; }
+        }
     </style>
 </head>
 <body>
