@@ -230,6 +230,73 @@
             .deck-tab::after { display: none; }
             .home-footer { position: relative; bottom: 0; align-items: center; text-align: center; margin-top: 3rem; }
         }
+		/* =========================================
+           MOBILE OPTIMIZATION (Phones / Small Tablets)
+           ========================================= */
+        @media (max-width: 768px) {
+            /* 1. Allow scrolling and remove strict height limits */
+            body {
+                overflow-y: auto;
+                overflow-x: hidden;
+                height: auto;
+                min-height: 100vh;
+                padding: 1.5rem 1rem;
+            }
+
+            /* 2. Fix the layout wrapper so it flows downward */
+            .layout-wrapper {
+                padding: 0;
+                gap: 2rem;
+                margin-top: 0;
+            }
+
+            /* 3. Center the brand header and scale it down */
+            .left-column { width: 100%; }
+            .brand-header { margin-bottom: 1rem; }
+            .logo-img { height: 45px; margin-bottom: 0.8rem; }
+            .brand-tagline { font-size: 0.75rem; padding: 0.8rem 0 0 0; }
+
+            /* 4. Adjust the Card and Tabs for narrow screens */
+            .vault-layout { gap: 1.5rem; }
+            .project-deck { gap: 1rem; justify-content: center; margin-bottom: 0.5rem; }
+            .deck-tab { width: 35px; height: 35px; font-size: 0.8rem; }
+            
+            .portfolio-card {
+                padding: 2rem 1.5rem;
+                min-height: auto;
+            }
+            .card-title { font-size: 1.6rem; }
+            .card-lore { font-size: 0.8rem; padding: 1rem; }
+            .meta-row { 
+                flex-direction: column; 
+                align-items: flex-start; 
+                gap: 0.3rem; 
+                padding: 0.6rem 1rem;
+            }
+            .meta-val { font-size: 0.75rem; }
+
+            /* 5. Scale down the 3D Portal so it fits the screen */
+            .right-column { margin-top: 2rem; margin-bottom: 4rem; }
+            .portal-wrapper {
+                width: 320px;
+                height: 320px;
+            }
+            .portal-core { width: 70px; height: 70px; transform: translateZ(50px) rotate(45deg); }
+            .portal-wrapper:hover .portal-core { transform: translateZ(70px) scale(1.1) rotate(45deg); }
+            
+            /* SVG text scaling for mobile */
+            .ring-outer text { font-size: 7px; }
+            .ring-middle text { font-size: 10px; }
+
+            /* 6. Footer adjustments */
+            .home-footer { position: relative; margin-top: 2rem; gap: 1.2rem; padding-bottom: 2rem;}
+            .social-links { flex-wrap: wrap; justify-content: center; gap: 1rem; }
+        }
+
+        /* 7. Hide the glowing cursor aura on touch devices */
+        @media (hover: none) and (pointer: coarse) {
+            #cursorAura { display: none !important; }
+        }
     </style>
 </head>
 <body>
