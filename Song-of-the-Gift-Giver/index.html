@@ -297,9 +297,10 @@
             object-fit: cover; transition: opacity 0.4s ease; z-index: 1;
         }
 
-        /* Dynamic classes for full screen (0% to preserve upper hair, centered Erik) */
+        /* Dynamic classes for full screen */
         .full-preserve-hair { object-position: center 0%; }
         .full-standard { object-position: center 15%; }
+        .full-center { object-position: center 40%; } /* Add this line for Erik! */
 
         /* "Show More" Disappear Gradation */
         .modal-gradient {
@@ -612,14 +613,14 @@
                 lore: "A natural mind-mage who recently escaped the fanatical 'Shepherds of the Living Word' cult. Initially terrified of her own raw telepathic abilities, she arrived at Camelot hiding in a hoodie to block out the emotional noise of the world.\n\nShe possesses a divinely beautiful singing voice—a hallmark of her rare Siren Noblecore. Guided to Hydra House to forge her resilience, she is slowly learning to trust.",
                 quote: "\"I think I'd like that. We'll keep the professors off your back, and other students won't bug you when they see you with us.\""
             },
-            {
+          {
                 name: "Erik Morsin",
                 house: "Thunderbird",
                 anima: "White Hart",
                 core: "Noblecore / Coven Warden",
                 file: "Song of the Gift-Giver, Erik.png",
                 thumbCrop: "thumb-erik",
-                fullCrop: "full-standard",
+                fullCrop: "full-center", // <--- Change this line right here
                 lore: "The Crown Heir to the wealthy and deeply hated Duchy of Ireland. Underneath his flawless, practiced smiles, Erik is an incredibly sharp political mastermind who handles assassination attempts with lethal grace.\n\nAffectionately called the 'Gift-Giver,' he is the foundational heart of the Coven. He uses his vast resources to protect his friends while finding a peaceful escape from his family's brutal legacy through his violin.",
                 quote: "\"I want to give this a fair chance. I'm not going to ignore you, chase around after other girls for a bunch of years, then finally settle down.\""
             },
