@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Drafting Desk — Karachiiy Scriptorium</title>
+    <link rel="icon" type="image/png" href="../favicon.png">
+    
+    <!-- Cinematic Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;900&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #050608;
+            --parchment: #e8dcc4;
+            --gold: #d4af37;
+            --gold-dim: #7a631c;
+            --ember: #ff6b35;
+            --ui-bg: rgba(9, 11, 14, 0.85);
+            
+            --font-serif: 'Cinzel', serif;
+            --font-sans: 'Montserrat', sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--parchment);
+            font-family: var(--font-sans);
+            min-height: 100vh;
+            overflow-x: hidden;
+            user-select: none;
+        }
+
+        /* Cinematic Film Grain Overlay */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.045'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* Atmospheric Embers */
+        #particleCanvas {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+            mix-blend-mode: screen;
+        }
+
+        /* Header Navigation */
+        .nav-header {
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 3rem 4vw 2rem 4vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .brand-block {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .logo-img {
+            height: 45px;
+            width: auto;
+            filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.4));
+            transition: transform 0.4s ease;
+        }
+
+        .brand-block:hover .logo-img { transform: scale(1.05) rotate(-2deg); }
+
+        .brand-text h1 {
+            font-family: var(--font-serif);
+            font-size: 1rem;
+            letter-spacing: 4px;
+            color: var(--gold);
+            text-transform: uppercase;
+        }
+
+        .back-link {
+            font-family: var(--font-serif);
+            font-size: 0.75rem;
+            color: rgba(232, 220, 196, 0.5);
+            text-decoration: none;
+            letter-spacing: 3px;
+            border-bottom: 1px solid transparent;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .back-link:hover {
+            color: var(--gold);
+            border-bottom-color: var(--gold);
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Intro Text Section */
+        .intro-section {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 3rem auto;
+            position: relative;
+            z-index: 10;
+            padding: 0 2rem;
+        }
+
+        .intro-title {
+            font-family: var(--font-serif);
+            font-size: 2.2rem;
+            color: var(--gold);
+            letter-spacing: 4px;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.8);
+        }
+
+        .intro-body {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: rgba(232, 220, 196, 0.8);
+            font-weight: 300;
+        }
+
+        /* DUAL-PANE INTERACTIVE SKETCH SHOWCASE */
+        .showcase-wrapper {
+            width: 100%;
+            max-width: 1400px;
+            height: 75vh;
+            min-height: 600px;
+            margin: 0 auto 5rem auto;
+            display: flex;
+            gap: 0;
+            position: relative;
+            z-index: 10;
+            border: 1px solid var(--gold-dim);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.9), 0 0 40px rgba(212, 175, 55, 0.05) inset;
+            border-radius: 2px;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .sketch-pane {
+            flex: 1;
+            position: relative;
+            cursor: crosshair;
+            overflow: hidden;
+            transition: flex 0.8s cubic-bezier(0.25, 1, 0.2, 1);
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .sketch-pane:last-child { border-right: none; }
+        .sketch-pane:hover { flex: 1.8; }
+
+        .sketch-img {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            object-position: center 15%; /* Keeps focus on the face/top */
+            filter: grayscale(40%) brightness(0.5);
+            transition: all 0.8s cubic-bezier(0.25, 1, 0.2, 1);
+        }
+
+        .sketch-pane:hover .sketch-img {
+            filter: grayscale(0%) brightness(1.05);
+            transform: scale(1.02);
+            object-position: center 10%; /* Slight upward shift to guarantee face visibility */
+        }
+
+        /* Overlay UI inside panes */
+        .pane-overlay {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            background: linear-gradient(to top, rgba(5, 6, 8, 0.98) 0%, rgba(5, 6, 8, 0.7) 50%, transparent 100%);
+            padding: 4rem 3rem 3rem 3rem;
+            transform: translateY(30px);
+            opacity: 0.7;
+            transition: all 0.6s cubic-bezier(0.25, 1, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            height: 100%;
+        }
+
+        .sketch-pane:hover .pane-overlay {
+            transform: translateY(0);
+            opacity: 1;
+            background: linear-gradient(to top, rgba(5, 6, 8, 0.98) 0%, rgba(5, 6, 8, 0.8) 40%, rgba(5, 6, 8, 0.3) 70%, transparent 100%);
+        }
+
+        .pane-label { font-size: 0.7rem; color: #7d8c99; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 0.5rem; }
+        .pane-title { font-family: var(--font-serif); font-size: 1.8rem; color: var(--gold); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 1rem; text-shadow: 0 2px 10px rgba(0,0,0,0.9); }
+        .pane-desc { font-size: 0.9rem; line-height: 1.7; color: rgba(232, 220, 196, 0.9); font-weight: 300; max-width: 500px; opacity: 0; transform: translateY(15px); transition: all 0.5s cubic-bezier(0.25, 1, 0.2, 1); transition-delay: 0s; }
+        .sketch-pane:hover .pane-desc { opacity: 1; transform: translateY(0); transition-delay: 0.2s; }
+
+        /* GRID GALLERY COLLECTION */
+        .gallery-section {
+            max-width: 1400px;
+            margin: 0 auto 6rem auto;
+            padding: 0 4vw;
+            position: relative;
+            z-index: 10;
+        }
+
+        .gallery-title {
+            text-align: center;
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            color: var(--gold);
+            letter-spacing: 4px;
+            margin-bottom: 3rem;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .grid-item {
+            position: relative;
+            aspect-ratio: 2 / 3;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 2px;
+            background: #0a0c10;
+            cursor: pointer;
+        }
+
+        .grid-img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            filter: grayscale(50%) brightness(0.6) contrast(1.1);
+            transition: all 0.6s cubic-bezier(0.25, 1, 0.2, 1);
+        }
+
+        .grid-item:hover .grid-img {
+            filter: grayscale(0%) brightness(1) contrast(1.1);
+            transform: scale(1.05);
+        }
+
+        .grid-item::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.8);
+            pointer-events: none;
+        }
+
+        /* ==================================================
+           THE "TRAP" / EXCLUSIVE CTA SECTION
+           ================================================== */
+        .cta-container {
+            max-width: 1000px;
+            margin: 0 auto 6rem auto;
+            padding: 0 4vw;
+            position: relative;
+            z-index: 10;
+        }
+
+        .exclusive-box {
+            position: relative;
+            background: linear-gradient(135deg, rgba(12, 16, 20, 0.9) 0%, rgba(5, 7, 8, 0.98) 100%);
+            border: 1px solid var(--gold-dim);
+            padding: 4.5rem 4rem;
+            text-align: center;
+            border-radius: 3px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.95), inset 0 0 60px rgba(212, 175, 55, 0.05);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+        }
+
+        /* Glowing Accent Frame */
+        .exclusive-box::before {
+            content: '';
+            position: absolute; top: 10px; right: 10px; bottom: 10px; left: 10px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            pointer-events: none;
+        }
+
+        .cta-label {
+            font-family: var(--font-sans);
+            font-size: 0.75rem;
+            color: #c75c5c;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .cta-title {
+            font-family: var(--font-serif);
+            font-size: 2.5rem;
+            color: var(--gold);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+            line-height: 1.2;
+        }
+
+        .cta-desc {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: rgba(232, 220, 196, 0.85);
+            max-width: 700px;
+            margin: 0 auto 3rem auto;
+            font-weight: 300;
+        }
+
+        .cta-desc b {
+            color: #fff;
+            font-weight: 500;
+            text-shadow: 0 0 8px rgba(255,255,255,0.4);
+        }
+
+        .vgen-btn {
+            display: inline-block;
+            background: rgba(212, 175, 55, 0.03);
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            font-family: var(--font-serif);
+            padding: 1.2rem 3rem;
+            font-size: 0.95rem;
+            letter-spacing: 5px;
+            cursor: pointer;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.4s ease;
+            position: relative;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
+        }
+
+        .vgen-btn:hover {
+            background: rgba(212, 175, 55, 0.15);
+            color: #fff;
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.3), inset 0 0 15px rgba(212, 175, 55, 0.2);
+            transform: translateY(-2px);
+            border-color: #fff;
+        }
+
+        @media (max-width: 900px) {
+            .showcase-wrapper { flex-direction: column; height: 120vh; }
+            .sketch-pane { border-right: none; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+            .sketch-pane:last-child { border-bottom: none; }
+            .pane-desc { display: none; }
+            .sketch-pane:hover .pane-desc { display: block; }
+            .pane-overlay { transform: none; opacity: 1; padding: 2rem; background: linear-gradient(to top, rgba(5, 6, 8, 0.98) 0%, rgba(5, 6, 8, 0.6) 100%); }
+            .exclusive-box { padding: 3rem 2rem; }
+            .cta-title { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ambient Spark/Dust Canvas -->
+    <canvas id="particleCanvas"></canvas>
+
+    <header class="nav-header">
+        <a href="../index.html" class="brand-block">
+            <!-- Ensure logo.png is accessible from this directory -->
+            <img class="logo-img" src="../logo.png" alt="Karachiiy Logo" onerror="this.src='logo.png'">
+            <div class="brand-text">
+                <h1>Karachiiy</h1>
+            </div>
+        </a>
+        <a href="../index.html" class="back-link">✦ Return to Sanctum</a>
+    </header>
+
+    <section class="intro-section">
+        <h2 class="intro-title">The Anatomy of a Commission</h2>
+        <p class="intro-body">
+            Every great illustration is a series of choices: what to reveal, what to hide, and what emotion to bring to the surface. Before committing to a final render, I provide two unique sketch concepts. This ensures we find the exact heartbeat of your scene. Explore the drafts below to see how shifting the perspective completely transforms the narrative.
+        </p>
+    </section>
+
+    <!-- THE DUAL-PANE SHOWCASE -->
+    <div class="showcase-wrapper">
+        
+        <!-- SKETCH DIRECTION 1 -->
+        <div class="sketch-pane">
+            <img class="sketch-img" src="1.png" alt="Sketch Direction I">
+            <div class="pane-overlay">
+                <p class="pane-label">Direction I</p>
+                <h3 class="pane-title">Quiet Defiance</h3>
+                <p class="pane-desc">
+                    A more intimate, guarded composition. The tight framing and the protective positioning of her staff and familiar create a sense of brewing tension. The viewer is pulled directly into her space, forced to confront the smoldering, dangerous magic reflected in her gaze.
+                </p>
+            </div>
+        </div>
+
+        <!-- SKETCH DIRECTION 2 -->
+        <div class="sketch-pane">
+            <img class="sketch-img" src="2.png" alt="Sketch Direction II">
+            <div class="pane-overlay">
+                <p class="pane-label">Direction II</p>
+                <h3 class="pane-title">The Commander's Stance</h3>
+                <p class="pane-desc">
+                    This direction pulls back to establish Alexandria’s commanding presence within the world. Resting the heavy staff casually on her shoulder transforms her posture from defensive to utterly confident. With her familiar grounding the scene beside her, she looks ready to conquer whatever lies beyond the treeline.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- THE SKETCH ARCHIVES (GRID) -->
+    <section class="gallery-section">
+        <h3 class="gallery-title">✦ Further Explorations ✦</h3>
+        <div class="gallery-grid">
+            <!-- Replace these srcs with 3.png, 4.png, etc. -->
+            <div class="grid-item"><img class="grid-img" src="3.png" alt="Sketch Concept" onerror="this.style.display='none'"></div>
+            <div class="grid-item"><img class="grid-img" src="4.png" alt="Sketch Concept" onerror="this.style.display='none'"></div>
+            <div class="grid-item"><img class="grid-img" src="5.png" alt="Sketch Concept" onerror="this.style.display='none'"></div>
+            <div class="grid-item"><img class="grid-img" src="6.png" alt="Sketch Concept" onerror="this.style.display='none'"></div>
+            <div class="grid-item"><img class="grid-img" src="7.png" alt="Sketch Concept" onerror="this.style.display='none'"></div>
+            <div class="grid-item"><img class="grid-img" src="8.png" alt="Sketch Concept" onerror="this.style.display='none'"></div>
+            <div class="grid-item"><img class="grid-img" src="9.png" alt="Sketch Concept" onerror="this.style.display='none'"></div>
+            <div class="grid-item"><img class="grid-img" src="10.png" alt="Sketch Concept" onerror="this.style.display='none'"></div>
+            <div class="grid-item"><img class="grid-img" src="11.png" alt="Sketch Concept" onerror="this.style.display='none'"></div>
+            <div class="grid-item"><img class="grid-img" src="12.png" alt="Sketch Concept" onerror="this.style.display='none'"></div>
+        </div>
+    </section>
+
+    <!-- THE "TRAP" / EXCLUSIVE CTA SECTION -->
+    <section class="cta-container">
+        <div class="exclusive-box">
+            <p class="cta-label">Special Opportunity Opening June 26, 2026</p>
+            <h2 class="cta-title">Enshrine Your Character in the Archives</h2>
+            <p class="cta-desc">
+                A masterpiece deserves more than just a folder on your desktop. Starting June 26th, accepted commissions unlock a <b>strictly limited feature:</b> your own bespoke, beautifully coded exhibition page right here in the Scriptorium. 
+                <br><br>
+                This dedicated space will house your finished artwork alongside your character's history, lore, and quotes. You dictate the rules—leave it open for the world to admire, or <b>seal it behind a private password</b> known only to you and your trusted circle. Due to the meticulous nature of coding these pages, <b>slots for the Archive feature are extremely limited.</b>
+            </p>
+            <a href="https://vgen.co/Karachiiy" target="_blank" class="vgen-btn">Secure Your Grimoire Page</a>
+        </div>
+    </section>
+
+    <script>
+        // Atmospheric Ember Canvas Script
+        const canvas = document.getElementById("particleCanvas");
+        const ctx = canvas.getContext("2d");
+        let w = canvas.width = window.innerWidth;
+        let h = canvas.height = window.innerHeight;
+
+        window.addEventListener("resize", () => {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        });
+
+        class Particle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * w;
+                this.y = h + Math.random() * 100;
+                this.size = Math.random() * 1.5 + 0.5;
+                this.speed = Math.random() * 0.4 + 0.1;
+                this.alpha = Math.random() * 0.5 + 0.1;
+                this.alphaDir = Math.random() > 0.5 ? 0.002 : -0.002;
+                
+                // Color palette: mix of gold dust and orange embers
+                const colors = ['212, 175, 55', '255, 107, 53', '232, 220, 196'];
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+            }
+            update() {
+                this.y -= this.speed;
+                this.x += Math.sin(this.y * 0.01) * 0.5; // gentle drifting
+                this.alpha += this.alphaDir;
+                
+                if (this.alpha > 0.7 || this.alpha < 0.05) this.alphaDir = -this.alphaDir;
+                if (this.y < 0) { this.reset(); this.y = h; }
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${this.color}, ${this.alpha})`;
+                ctx.fill();
+            }
+        }
+
+        const particles = Array.from({ length: 70 }, () => new Particle());
+
+        function animate() {
+            ctx.clearRect(0, 0, w, h);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>
