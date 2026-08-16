@@ -3,27 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mango Media — Death is a Girl (Omnibus Cover Package)</title>
-    <link rel="icon" type="image/png" href="../favicon.png">
+    <title>KARACHIIY — Scriptorium & Fantasy Illustrator</title>
+    <!-- Favicon link strictly customized -->
+    <link rel="icon" type="image/png" href="favicon.png">
     
-    <!-- Cinematic Gothic & Clean Editorial Typography -->
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;900&family=Montserrat:ital,wght@0,200;0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            /* Palette: Spectral Soul Cyan, Eldritch Crimson, Abyssal Obsidian & Bone Parchment */
-            --bg-void: #030406;
-            --bg-card: rgba(6, 8, 12, 0.88);
-            --parchment: #e2e8f0;
-            --spectral-cyan: #00f0ff;
-            --spectral-glow: rgba(0, 240, 255, 0.28);
-            --spectral-dim: rgba(0, 240, 255, 0.12);
-            --eldritch-red: #e63946;
-            --eldritch-glow: rgba(230, 57, 70, 0.25);
-            --bone-white: #cbd5e1;
-            --gold-accent: #d4af37;
-            --gold-glow: rgba(212, 175, 55, 0.3);
-            --border-line: rgba(0, 240, 255, 0.2);
+            /* Core Backgrounds */
+            --bg-dark: #050608;
+            --parchment: #e8dcc4;
+            --ui-bg: rgba(9, 11, 14, 0.75);
+            
+            /* Dynamic Theme Variables */
+            --theme-color: #d4af37;        
+            --theme-color-dim: #7a631c;    
+            --theme-glow: rgba(212, 175, 55, 0.15); 
+            --theme-core: #ff9f1c;         
+            --theme-core-glow: rgba(255, 159, 28, 0.25);
             
             --font-serif: 'Cinzel', serif;
             --font-sans: 'Montserrat', sans-serif;
@@ -32,944 +30,610 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            background-color: var(--bg-void);
+            background-color: var(--bg-dark);
             color: var(--parchment);
             font-family: var(--font-sans);
-            min-height: 100vh;
-            overflow-x: hidden;
-            user-select: none;
-            position: relative;
+            height: 100vh; width: 100vw; overflow: hidden; user-select: none; perspective: 1200px;
         }
 
-        /* --- FILM GRAIN & VINTAGE PAPER NOISE OVERLAY --- */
         body::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: 999;
-            mix-blend-mode: overlay;
+            content: ''; position: fixed; top: -30%; left: -20%; width: 150vw; height: 150vh;
+            background: radial-gradient(circle at 75% 50%, var(--theme-glow) 0%, transparent 60%);
+            opacity: 0.3; z-index: 0; pointer-events: none; transition: background 1s ease;
         }
 
-        /* Atmospheric Vignette */
-        body::after {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: radial-gradient(circle at center, transparent 40%, rgba(1, 2, 4, 0.85) 95%);
-            pointer-events: none;
-            z-index: 998;
+        #particleCanvas {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: 1; pointer-events: none; mix-blend-mode: screen;
         }
 
-        /* Eerie Spectral Spirits & Hollow Dust Canvas */
-        #eerieCanvas {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            z-index: 1;
-            pointer-events: none;
-            mix-blend-mode: screen;
-            opacity: 0.85;
-        }
-
-        /* Dual-Tone Spectral Cursor Aura */
         #cursorAura {
-            position: fixed;
-            width: 520px; height: 520px;
-            border-radius: 50%;
-            background: radial-gradient(circle, var(--spectral-glow) 0%, var(--eldritch-glow) 35%, transparent 70%);
-            z-index: 2;
-            pointer-events: none;
-            transform: translate(-50%, -50%);
-            mix-blend-mode: screen;
-            transition: width 0.3s, height 0.3s;
+            position: fixed; width: 600px; height: 600px; border-radius: 50%;
+            background: radial-gradient(circle, var(--theme-core-glow) 0%, var(--theme-glow) 40%, transparent 70%);
+            z-index: 2; pointer-events: none; transform: translate(-50%, -50%);
+            mix-blend-mode: screen; transition: width 0.3s, height 0.3s, background 1s ease;
         }
 
-        /* --- TOP PACKAGE HEADER --- */
-        .package-header {
-            width: 100%;
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 2.8rem 4vw 1rem 4vw;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-            z-index: 10;
+        .layout-wrapper {
+            display: flex; justify-content: space-between; align-items: center;
+            width: 100%; height: 100%; max-width: 1600px; margin: 0 auto; padding: 0 6vw;
+            position: relative; z-index: 10;
         }
 
-        .publisher-brand {
-            display: flex;
-            align-items: center;
-            gap: 1.4rem;
-            text-decoration: none;
-            color: inherit;
+        .left-column {
+            display: flex; flex-direction: column; justify-content: center; height: 100%; position: relative; width: 520px;
         }
 
-        .logo-img {
-            height: 50px;
-            width: auto;
-            filter: drop-shadow(0 0 15px var(--spectral-cyan));
-            transition: transform 0.4s ease;
+        .brand-header { position: absolute; top: 3rem; left: 0; z-index: 100; display: flex; align-items: center; gap: 1rem; }
+        .logo-img { height: 55px; width: auto; filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.2)); transition: transform 0.4s ease; margin-bottom: 1.2rem; }
+        .logo-img:hover { transform: scale(1.03) rotate(-1deg); }
+        .brand-tagline {
+            font-family: var(--font-serif); font-size: 0.85rem; color: rgba(232, 220, 196, 0.7);
+            letter-spacing: 2px; line-height: 1.8; max-width: 480px;
+            border-left: 2px solid var(--theme-color-dim); padding-left: 1.2rem; transition: border-color 0.5s ease;
         }
+        .brand-tagline b { color: var(--theme-color); font-weight: 600; transition: color 0.5s ease; }
 
-        .publisher-brand:hover .logo-img {
-            transform: scale(1.05) rotate(-1deg);
-        }
-
-        .package-title-group h1 {
-            font-family: var(--font-serif);
-            font-size: 1.15rem;
-            letter-spacing: 4px;
-            color: #fff;
-            text-transform: uppercase;
-            text-shadow: 0 0 15px var(--spectral-glow);
-        }
-
-        .package-badge {
-            font-size: 0.68rem;
-            letter-spacing: 3px;
-            color: var(--spectral-cyan);
-            text-transform: uppercase;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .package-badge::before {
-            content: "✦";
-            color: var(--eldritch-red);
-        }
-
-        /* Official Patron Delivery Package Indicator */
-        .delivery-status-badge {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-family: var(--font-serif);
-            font-size: 0.72rem;
-            color: var(--spectral-cyan);
-            letter-spacing: 3px;
-            padding: 0.65rem 1.4rem;
-            border: 1px solid rgba(0, 240, 255, 0.35);
-            background: rgba(4, 7, 12, 0.85);
-            border-radius: 2px;
-            box-shadow: 0 0 20px var(--spectral-glow);
-            text-transform: uppercase;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--spectral-cyan);
-            box-shadow: 0 0 10px var(--spectral-cyan);
-            animation: pulseDot 2s infinite ease-in-out;
-        }
-
-        @keyframes pulseDot {
-            0%, 100% { transform: scale(0.9); opacity: 0.6; }
-            50% { transform: scale(1.2); opacity: 1; }
-        }
-
-        /* --- MAIN SHOWCASE SECTION --- */
-        .showcase-container {
-            width: 100%;
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 1.5rem 4vw 3rem 4vw;
-            display: flex;
-            gap: 3.5vw;
-            align-items: flex-start;
-            position: relative;
-            z-index: 10;
-        }
-
-        /* MASTER ARTWORK VIEWPORT */
-        .artwork-column {
-            flex: 1.15;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .artwork-frame {
-            position: relative;
-            width: 100%;
-            max-width: 720px;
-            background: rgba(2, 3, 5, 0.95);
-            border: 1px solid var(--border-line);
-            border-radius: 4px;
-            box-shadow: 0 30px 90px rgba(0,0,0,0.98), 0 0 40px rgba(0, 240, 255, 0.08);
-            overflow: hidden;
-            cursor: pointer;
-            transition: border-color 0.5s ease, box-shadow 0.5s ease, transform 0.4s ease;
-        }
-
-        .artwork-frame:hover {
-            transform: scale(1.01);
-            border-color: var(--spectral-cyan);
-            box-shadow: 0 35px 100px rgba(0,0,0,1), 0 0 50px var(--spectral-glow);
-        }
-
-        /* Gothic Corner Filigree Accents */
-        .artwork-frame::before, .artwork-frame::after,
-        .codex-card::before, .codex-card::after {
-            content: '';
-            position: absolute;
-            width: 16px; height: 16px;
-            border-color: var(--spectral-cyan);
-            border-style: solid;
-            z-index: 6;
-            pointer-events: none;
-            opacity: 0.75;
-            transition: border-color 0.5s ease;
-        }
-
-        .artwork-frame::before, .codex-card::before {
-            top: 10px; left: 10px;
-            border-width: 1px 0 0 1px;
-        }
-
-        .artwork-frame::after, .codex-card::after {
-            bottom: 10px; right: 10px;
-            border-width: 0 1px 1px 0;
-        }
-
-        .display-img {
-            width: 100%;
-            height: auto;
-            max-height: 80vh;
-            object-fit: contain;
-            display: block;
-            transition: transform 0.6s ease;
-        }
-
-        .artwork-frame:hover .display-img {
-            transform: scale(1.02);
-        }
-
-        .expand-badge {
-            position: absolute;
-            bottom: 18px;
-            right: 18px;
-            background: rgba(3, 5, 8, 0.9);
-            border: 1px solid var(--spectral-cyan);
-            padding: 0.55rem 1.2rem;
-            font-family: var(--font-serif);
-            font-size: 0.68rem;
-            letter-spacing: 3px;
-            color: var(--parchment);
-            border-radius: 2px;
-            pointer-events: none;
-            backdrop-filter: blur(8px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.9);
-            text-transform: uppercase;
-        }
-
-        /* --- DIGITAL PACKAGE CODEX & MANIFEST --- */
-        .codex-column {
-            flex: 1.1;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .codex-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-line);
-            padding: 3rem 2.5rem;
-            border-radius: 3px;
-            box-shadow: 0 30px 70px rgba(0,0,0,0.95);
-            backdrop-filter: blur(14px);
-            position: relative;
-        }
-
-        .card-inner-frame {
-            position: absolute;
-            top: 8px; right: 8px; bottom: 8px; left: 8px;
-            border: 1px dashed rgba(0, 240, 255, 0.1);
-            pointer-events: none;
-        }
-
-        .codex-header {
-            text-align: center;
-            margin-bottom: 1.4rem;
-        }
-
-        .client-tag {
-            font-size: 0.65rem;
-            color: var(--spectral-cyan);
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            margin-bottom: 0.4rem;
-            font-weight: 600;
-        }
-
-        .codex-title {
-            font-family: var(--font-serif);
-            font-size: 1.85rem;
-            color: #fff;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            line-height: 1.2;
-            text-shadow: 0 2px 15px rgba(0,0,0,0.9);
-        }
-
-        .codex-divider {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 14px;
-            color: var(--spectral-cyan);
-            font-size: 0.8rem;
-            margin: 1rem 0 1.4rem 0;
-            opacity: 0.7;
-        }
-
-        .codex-divider::before, .codex-divider::after {
-            content: '';
-            height: 1px;
-            width: 50px;
-            background: linear-gradient(90deg, transparent, var(--spectral-cyan), transparent);
-        }
-
-        /* NOVEL SYNOPSIS NARRATIVE BOX */
-        .synopsis-box {
-            background: rgba(2, 4, 6, 0.75);
-            border-left: 3px solid var(--spectral-cyan);
-            padding: 1.2rem 1.4rem;
-            font-size: 0.84rem;
-            line-height: 1.8;
-            color: #c4d1dc;
-            margin-bottom: 1.6rem;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
-            border-radius: 0 2px 2px 0;
-        }
-
-        .synopsis-box b {
-            color: #fff;
-            font-weight: 500;
-        }
-
-        /* INTERACTIVE CHARACTER DOSSIER TABS */
-        .character-nav {
-            display: flex;
-            gap: 0.6rem;
-            margin-bottom: 1rem;
-        }
-
-        .char-tab {
-            flex: 1;
-            background: rgba(4, 7, 10, 0.85);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--bone-white);
-            font-family: var(--font-serif);
-            font-size: 0.72rem;
-            letter-spacing: 2px;
-            padding: 0.75rem 0.4rem;
-            cursor: pointer;
-            text-transform: uppercase;
-            border-radius: 2px;
-            transition: all 0.3s ease;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .char-tab:hover, .char-tab.active {
-            color: var(--spectral-cyan);
-            border-color: var(--spectral-cyan);
-            background: var(--spectral-dim);
-            box-shadow: 0 0 15px var(--spectral-glow);
-        }
-
-        .char-dossier-panel {
-            background: rgba(2, 4, 6, 0.65);
-            border: 1px solid rgba(0, 240, 255, 0.15);
-            padding: 1.2rem 1.4rem;
-            border-radius: 2px;
-            margin-bottom: 1.6rem;
-            min-height: 120px;
-        }
-
-        .dossier-identity {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-            padding-bottom: 0.4rem;
-        }
+        .vault-layout { display: flex; gap: 2rem; align-items: center; margin-top: 2rem; }
 
-        .dossier-name {
-            font-family: var(--font-serif);
-            font-size: 0.95rem;
-            color: #fff;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+        .project-deck { display: flex; flex-direction: column; gap: 1.2rem; }
+        .deck-tab {
+            width: 45px; height: 45px; background: rgba(10, 14, 18, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 4px; transform: rotate(45deg);
+            color: rgba(232, 220, 196, 0.3); font-family: var(--font-serif); font-size: 0.9rem; font-weight: 600;
+            display: flex; justify-content: center; align-items: center; cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.2, 1); position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
-
-        .dossier-role {
-            font-size: 0.65rem;
-            color: var(--spectral-cyan);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        .dossier-desc {
-            font-size: 0.8rem;
-            line-height: 1.7;
-            color: #a4b3c2;
-        }
-
-        /* --- DIGITAL PACKAGE DELIVERABLES MANIFEST --- */
-        .manifest-title {
-            font-family: var(--font-serif);
-            font-size: 0.78rem;
-            color: var(--spectral-cyan);
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .manifest-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.65rem;
-            margin-bottom: 1.8rem;
-        }
-
-        .manifest-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(3, 5, 8, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 0.85rem 1.2rem;
-            border-radius: 2px;
-            transition: all 0.3s ease;
-        }
-
-        .manifest-item:hover {
-            background: rgba(4, 8, 14, 0.9);
-            border-color: var(--spectral-cyan);
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.1);
-        }
-
-        .file-info {
-            display: flex;
-            flex-direction: column;
-            gap: 0.2rem;
-        }
-
-        .file-name {
-            font-family: var(--font-serif);
-            font-size: 0.8rem;
-            color: #fff;
-            letter-spacing: 1px;
-        }
-
-        .file-spec {
-            font-size: 0.65rem;
-            color: #64748b;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .download-btn {
-            background: transparent;
-            border: 1px solid var(--border-line);
-            color: var(--spectral-cyan);
-            font-family: var(--font-serif);
-            font-size: 0.68rem;
-            letter-spacing: 2px;
-            padding: 0.45rem 1rem;
-            text-transform: uppercase;
-            text-decoration: none;
-            border-radius: 2px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .download-btn:hover {
-            background: var(--spectral-cyan);
-            color: #000;
-            font-weight: 600;
-            box-shadow: 0 0 15px var(--spectral-cyan);
-        }
-
-        /* METADATA SUMMARY */
-        .meta-summary {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.6rem;
-            margin-bottom: 1.8rem;
-        }
-
-        .meta-box {
-            background: rgba(3, 5, 8, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            padding: 0.65rem 1rem;
-            border-radius: 2px;
-        }
-
-        .meta-box-label {
-            font-size: 0.62rem;
-            color: #64748b;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .meta-box-val {
-            font-family: var(--font-serif);
-            font-size: 0.78rem;
-            color: var(--parchment);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 0.2rem;
-        }
-
-        .inspect-action-btn {
-            width: 100%;
-            background: transparent;
-            border: 1px solid var(--spectral-cyan);
-            color: var(--spectral-cyan);
-            font-family: var(--font-serif);
-            padding: 1rem;
-            font-size: 0.78rem;
-            letter-spacing: 4px;
-            cursor: pointer;
-            text-transform: uppercase;
-            transition: all 0.3s ease;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .inspect-action-btn:hover {
-            background: var(--spectral-dim);
-            box-shadow: 0 0 25px var(--spectral-glow);
-            color: #fff;
-        }
-
-        /* --- LIGHTBOX MODAL & BOTTOM CAPTION --- */
-        #lightboxModal {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            background: rgba(2, 3, 5, 0.96);
-            z-index: 1000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-            transition: opacity 0.4s ease, visibility 0.4s ease;
-            backdrop-filter: blur(16px);
-        }
-
-        #lightboxModal.active {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: auto;
-        }
-
-        .lightbox-content-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            max-width: 92vw;
-            max-height: 94vh;
-        }
-
-        .lightbox-img {
-            max-width: 90vw;
-            max-height: 82vh;
-            object-fit: contain;
-            box-shadow: 0 0 70px rgba(0,0,0,1);
-            border: 1px solid var(--spectral-cyan);
-            border-radius: 2px;
-        }
-
-        /* PURE WHITE CAPTION */
-        .lightbox-caption {
-            margin-top: 1.2rem;
-            font-family: var(--font-serif);
-            font-size: 0.85rem;
-            letter-spacing: 4px;
-            color: #ffffff;
-            text-transform: uppercase;
-            text-align: center;
-            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
-        }
-
-        .lightbox-close {
-            position: absolute;
-            top: 2rem;
-            right: 3rem;
-            font-size: 2.8rem;
-            color: var(--spectral-cyan);
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-family: var(--font-sans);
-            font-weight: 200;
-            transition: transform 0.3s ease;
-        }
-
-        .lightbox-close:hover {
-            transform: rotate(90deg) scale(1.1);
-        }
-
-        /* --- LUXURY EDITORIAL PATRON FOOTER --- */
-        .luxury-footer {
-            position: relative;
-            width: 100%;
-            max-width: 1600px;
-            margin: 2rem auto 2.8rem auto;
-            padding: 1.8rem 4vw 0 4vw;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 10;
-            font-family: var(--font-serif);
-            font-size: 0.72rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-        }
-
-        .footer-left {
-            color: #64748b;
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-
-        .footer-dim {
-            color: #52637a;
-            letter-spacing: 3px;
-        }
-
-        .footer-gold {
-            color: var(--gold-accent);
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px var(--gold-glow);
-        }
-
-        .footer-right {
-            color: #0e8388;
-            letter-spacing: 3px;
-            font-size: 0.7rem;
-            transition: color 0.3s;
-        }
-
-        .luxury-footer:hover .footer-right {
-            color: var(--spectral-cyan);
-            text-shadow: 0 0 8px var(--spectral-glow);
-        }
-
-        /* --- RESPONSIVE ADJUSTMENTS --- */
-        @media (max-width: 1150px) {
-            body { overflow-y: auto; }
-            .showcase-container { flex-direction: column; gap: 3rem; align-items: center; }
-            .artwork-column, .codex-column { width: 100%; max-width: 750px; }
-            .package-header { flex-direction: column; gap: 1.5rem; text-align: center; }
-            .luxury-footer { flex-direction: column; gap: 1rem; text-align: center; justify-content: center; }
-            .footer-left { justify-content: center; }
-        }
-
+        .deck-tab span { transform: rotate(-45deg); }
+        .deck-tab:hover {
+            color: var(--theme-color); border-color: var(--theme-color);
+            box-shadow: 0 0 15px var(--theme-glow); transform: rotate(45deg) scale(1.1);
+        }
+        .deck-tab.active {
+            color: var(--theme-color); border-color: var(--theme-color); background: rgba(255, 255, 255, 0.02);
+            box-shadow: 0 0 25px var(--theme-glow), inset 0 0 10px var(--theme-glow); transform: rotate(45deg) scale(1.15);
+        }
+        .deck-tab::after {
+            content: attr(data-title); position: absolute; left: 50px; top: -10px;
+            background: #090c0e; border: 1px solid var(--theme-color-dim); padding: 0.6rem 1.2rem;
+            font-family: var(--font-serif); font-size: 0.75rem; letter-spacing: 3px; color: var(--theme-color);
+            white-space: nowrap; opacity: 0; pointer-events: none;
+            transform: rotate(-45deg) translateX(-15px); transition: all 0.3s ease; box-shadow: 0 10px 25px rgba(0,0,0,0.9); border-radius: 2px;
+        }
+        .deck-tab:hover::after { opacity: 1; transform: rotate(-45deg) translateX(0); }
+
+        .portfolio-card {
+            width: 100%; background: linear-gradient(135deg, rgba(12, 16, 20, 0.8) 0%, rgba(5, 7, 8, 0.95) 100%);
+            border: 1px solid var(--theme-color-dim); padding: 3.5rem 3rem; border-radius: 4px;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.95), 0 0 50px rgba(255,255,255,0.02) inset;
+            backdrop-filter: blur(12px); position: relative; min-height: 550px;
+            display: flex; flex-direction: column; justify-content: space-between; transition: border-color 0.5s ease, box-shadow 0.5s ease;
+        }
+        .portfolio-card:hover { box-shadow: 0 40px 80px rgba(0,0,0,1), 0 0 30px var(--theme-glow) inset; }
+        .portfolio-card::before {
+            content: ''; position: absolute; top: 12px; right: 12px; bottom: 12px; left: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08); pointer-events: none;
+        }
+        .portfolio-card::after {
+            content: ''; position: absolute; top: 18px; right: 18px; bottom: 18px; left: 18px;
+            border: 1px dashed rgba(255, 255, 255, 0.05); pointer-events: none;
+        }
+
+        .card-content { opacity: 1; transition: opacity 0.4s ease; height: 100%; display: flex; flex-direction: column; }
+        .card-content.fade-out { opacity: 0; }
+
+        .card-label { font-size: 0.7rem; color: #7d8c99; text-transform: uppercase; letter-spacing: 5px; margin-bottom: 1rem; font-weight: 600; text-align: center; }
+        .card-title {
+            font-family: var(--font-serif); font-size: 2.1rem; color: var(--theme-color); line-height: 1.2; margin-bottom: 1rem;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.8); text-transform: uppercase; letter-spacing: 3px; text-align: center; transition: color 0.5s;
+        }
+        .card-divider {
+            display: flex; align-items: center; justify-content: center; gap: 15px; color: var(--theme-color-dim); font-size: 0.8rem; margin-bottom: 1.5rem; opacity: 0.7; transition: color 0.5s;
+        }
+        .card-divider::before, .card-divider::after {
+            content: ''; height: 1px; width: 50px; background: linear-gradient(90deg, transparent, var(--theme-color-dim), transparent);
+        }
+
+        .card-lore {
+            background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.03); border-left: 2px solid var(--theme-color);
+            padding: 1.2rem; font-size: 0.85rem; line-height: 1.7; color: #c4cdd5; font-style: italic; margin-bottom: 1.5rem;
+            transition: all 0.5s ease; box-shadow: inset 0 0 20px rgba(0,0,0,0.4);
+        }
+        .card-lore b { color: var(--theme-color); font-weight: 600; letter-spacing: 1px; font-style: normal; }
+
+        .card-meta { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 2rem; flex-grow: 1; }
+        .meta-row {
+            display: flex; justify-content: space-between; align-items: center; background: rgba(4, 5, 7, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.03); padding: 0.8rem 1.2rem; border-radius: 2px; transition: all 0.3s ease;
+        }
+        .meta-row:hover { background: rgba(4, 5, 7, 0.8); border-color: rgba(255, 255, 255, 0.08); }
+        .meta-row.highlight-total {
+            border-color: rgba(212, 175, 55, 0.3); background: rgba(212, 175, 55, 0.02); animation: totalPulse 3s infinite alternate ease-in-out;
+        }
+        @keyframes totalPulse {
+            0% { border-color: rgba(212, 175, 55, 0.2); box-shadow: 0 0 10px rgba(212, 175, 55, 0.02); }
+            100% { border-color: rgba(212, 175, 55, 0.45); box-shadow: 0 0 15px rgba(212, 175, 55, 0.08); }
+        }
+        .meta-label { color: #7d8c99; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; }
+        .meta-val { color: var(--parchment); font-size: 0.8rem; font-weight: 500; font-family: var(--font-serif); letter-spacing: 1px; text-transform: uppercase; }
+        .meta-row.highlight-total .meta-val { color: var(--gold); text-shadow: 0 0 10px var(--gold-glow); }
+
+        .enter-btn {
+            width: 100%; background: transparent; border: 1px solid var(--theme-color-dim); color: var(--theme-color);
+            font-family: var(--font-serif); padding: 1.1rem; font-size: 0.85rem; letter-spacing: 5px; cursor: pointer;
+            text-transform: uppercase; transition: all 0.3s ease; position: relative; z-index: 5;
+        }
+        .enter-btn:hover {
+            background: rgba(255, 255, 255, 0.02); border-color: var(--theme-color); box-shadow: 0 0 25px var(--theme-glow); color: #fff; letter-spacing: 6px;
+        }
+        .enter-btn.btn-disabled { border-color: rgba(255,255,255,0.05); color: rgba(232, 220, 196, 0.25); cursor: pointer; }
+        .enter-btn.btn-disabled:hover { background: transparent; box-shadow: none; color: rgba(232, 220, 196, 0.25); letter-spacing: 5px; }
+        
+        .btn-error-state { border-color: #e06c75 !important; color: #e06c75 !important; text-shadow: 0 0 10px rgba(224, 108, 117, 0.5) !important; font-weight: 600; }
+
+        @keyframes rattle {
+            0%, 100% { transform: translateX(0); border-color: #e06c75; box-shadow: 0 0 30px rgba(224, 108, 117, 0.3) inset; }
+            20% { transform: translateX(-6px) rotate(-1deg); }
+            40% { transform: translateX(6px) rotate(1deg); }
+            60% { transform: translateX(-6px) rotate(-1deg); }
+            80% { transform: translateX(6px) rotate(1deg); }
+        }
+        .rattle { animation: rattle 0.4s ease-in-out; }
+
+        /* --- RIGHT SIDE: THE 3D PARALLAX SIGIL --- */
+        .right-column { flex-grow: 1; display: flex; justify-content: flex-end; align-items: center; height: 100%; z-index: 10; }
+        .portal-wrapper { position: relative; width: 540px; height: 540px; display: flex; justify-content: center; align-items: center; cursor: pointer; transform-style: preserve-3d; transition: transform 0.15s ease; }
+        .sigil-ring { position: absolute; fill: none; stroke-width: 1.2; transform-origin: center; transition: stroke 0.6s ease, filter 0.6s ease; }
+        .ring-outer { width: 100%; height: 100%; stroke: rgba(255, 255, 255, 0.1); animation: spinCW 60s linear infinite; transform: translateZ(-80px); }
+        .ring-middle { width: 82%; height: 82%; stroke: var(--theme-color-dim); stroke-dasharray: 4 12; animation: spinCCW 40s linear infinite; transform: translateZ(-30px); }
+        .ring-inner { width: 65%; height: 65%; stroke: var(--theme-glow); stroke-dasharray: 20 10 5 10; animation: spinCW 25s linear infinite; transform: translateZ(20px); }
+        .portal-core {
+            position: absolute; width: 100px; height: 100px;
+            background: radial-gradient(circle at center, #fff 0%, var(--theme-color) 40%, var(--theme-core) 70%, transparent 100%);
+            box-shadow: 0 0 60px var(--theme-glow), 0 0 40px var(--theme-core-glow); z-index: 5; transition: all 0.6s cubic-bezier(0.25, 1, 0.2, 1);
+            display: flex; justify-content: center; align-items: center; transform: translateZ(100px) rotate(45deg); clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+        }
+        .portal-core::before {
+            content: ''; position: absolute; top: 8px; left: 8px; right: 8px; bottom: 8px; border: 1px solid rgba(255,255,255,0.8);
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); animation: corePulse 2.5s infinite alternate ease-in-out;
+        }
+        .portal-wrapper:hover .portal-core {
+            transform: translateZ(140px) scale(1.15) rotate(45deg);
+            background: radial-gradient(circle at center, #fff 0%, var(--theme-core) 40%, var(--theme-color) 80%, transparent 100%);
+            box-shadow: 0 0 80px var(--theme-core-glow), 0 0 50px var(--theme-glow);
+        }
+        .portal-wrapper:hover .ring-outer { stroke: var(--theme-color-dim); filter: drop-shadow(0 0 10px var(--theme-glow)); }
+        .portal-wrapper:hover .ring-middle { stroke: var(--theme-color); filter: drop-shadow(0 0 15px var(--theme-glow)); }
+        .portal-wrapper:hover .ring-inner { stroke: var(--theme-core); filter: drop-shadow(0 0 15px var(--theme-core-glow)); }
+        .portal-flash { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #fff; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 1s cubic-bezier(0.25, 1, 0.2, 1); }
+
+        .home-footer { position: absolute; bottom: 2.5rem; left: 0; z-index: 100; display: flex; flex-direction: column; gap: 0.8rem; }
+        .social-links { display: flex; gap: 1.5rem; align-items: center; }
+        .social-links a {
+            color: rgba(232, 220, 196, 0.4); text-decoration: none; font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; font-family: var(--font-serif); transition: color 0.3s, text-shadow 0.3s;
+        }
+        .social-links a:hover { color: var(--theme-color); text-shadow: 0 0 10px var(--theme-glow); }
+        .credit-text { font-size: 0.65rem; color: rgba(232, 220, 196, 0.15); letter-spacing: 2px; text-transform: uppercase; }
+
+        @keyframes spinCW { 0% { transform: translateZ(inherit) rotate(0deg); } 100% { transform: translateZ(inherit) rotate(360deg); } }
+        @keyframes spinCCW { 0% { transform: translateZ(inherit) rotate(360deg); } 100% { transform: translateZ(inherit) rotate(0deg); } }
+        @keyframes corePulse { 0% { transform: scale(0.9); opacity: 0.7; } 100% { transform: scale(1.1); opacity: 1; } }
+
+        @media (max-width: 1100px) {
+            body { overflow-y: auto; padding: 2rem; }
+            .layout-wrapper { flex-direction: column; gap: 4rem; justify-content: flex-start; margin-top: 2rem; }
+            .left-column { width: 100%; align-items: center; }
+            .brand-header { position: relative; top: 0; align-items: center; text-align: center; margin-bottom: 2rem; }
+            .brand-tagline { border-left: none; border-top: 2px solid var(--theme-color-dim); padding-left: 0; padding-top: 1rem; }
+            .vault-layout { margin-top: 0; flex-direction: column; }
+            .project-deck { flex-direction: row; }
+            .deck-tab::after { display: none; }
+            .home-footer { position: relative; bottom: 0; align-items: center; text-align: center; margin-top: 3rem; }
+        }
+		/* =========================================
+           MOBILE OPTIMIZATION (Phones / Small Tablets)
+           ========================================= */
         @media (max-width: 768px) {
-            .codex-card { padding: 2rem 1.5rem; }
-            .codex-title { font-size: 1.5rem; }
-            .meta-summary { grid-template-columns: 1fr; }
-            .character-nav { flex-direction: column; }
-            .manifest-item { flex-direction: column; align-items: flex-start; gap: 0.8rem; }
-            .download-btn { width: 100%; text-align: center; }
-            .lightbox-caption { font-size: 0.72rem; letter-spacing: 2px; }
-            .luxury-footer { font-size: 0.65rem; }
+            /* 1. Allow scrolling and remove strict height limits */
+            body {
+                overflow-y: auto;
+                overflow-x: hidden;
+                height: auto;
+                min-height: 100vh;
+                padding: 1.5rem 1rem;
+            }
+
+            /* 2. Fix the layout wrapper so it flows downward */
+            .layout-wrapper {
+                padding: 0;
+                gap: 2rem;
+                margin-top: 0;
+            }
+
+            /* 3. Center the brand header and scale it down */
+            .left-column { width: 100%; }
+            .brand-header { margin-bottom: 1rem; }
+            .logo-img { height: 45px; margin-bottom: 0.8rem; }
+            .brand-tagline { font-size: 0.75rem; padding: 0.8rem 0 0 0; }
+
+            /* 4. Adjust the Card and Tabs for narrow screens */
+            .vault-layout { gap: 1.5rem; }
+            .project-deck { gap: 1rem; justify-content: center; margin-bottom: 0.5rem; }
+            .deck-tab { width: 35px; height: 35px; font-size: 0.8rem; }
+            
+            .portfolio-card {
+                padding: 2rem 1.5rem;
+                min-height: auto;
+            }
+            .card-title { font-size: 1.6rem; }
+            .card-lore { font-size: 0.8rem; padding: 1rem; }
+            .meta-row { 
+                flex-direction: column; 
+                align-items: flex-start; 
+                gap: 0.3rem; 
+                padding: 0.6rem 1rem;
+            }
+            .meta-val { font-size: 0.75rem; }
+
+            /* 5. Scale down the 3D Portal so it fits the screen */
+            .right-column { margin-top: 2rem; margin-bottom: 4rem; }
+            .portal-wrapper {
+                width: 320px;
+                height: 320px;
+            }
+            .portal-core { width: 70px; height: 70px; transform: translateZ(50px) rotate(45deg); }
+            .portal-wrapper:hover .portal-core { transform: translateZ(70px) scale(1.1) rotate(45deg); }
+            
+            /* SVG text scaling for mobile */
+            .ring-outer text { font-size: 7px; }
+            .ring-middle text { font-size: 10px; }
+
+            /* 6. Footer adjustments */
+            .home-footer { position: relative; margin-top: 2rem; gap: 1.2rem; padding-bottom: 2rem;}
+            .social-links { flex-wrap: wrap; justify-content: center; gap: 1rem; }
+        }
+
+        /* 7. Hide the glowing cursor aura on touch devices */
+        @media (hover: none) and (pointer: coarse) {
+            #cursorAura { display: none !important; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Eerie Floating Soul Wisps & Hollow Mist Canvas -->
-    <canvas id="eerieCanvas"></canvas>
+    <canvas id="particleCanvas"></canvas>
     <div id="cursorAura"></div>
+    <div class="portal-flash" id="portalFlash"></div>
 
-    <!-- Master Lightbox Modal With Pure White Bottom Caption -->
-    <div id="lightboxModal">
-        <button class="lightbox-close" id="modalClose">&times;</button>
-        <div class="lightbox-content-box" onclick="event.stopPropagation()">
-            <img class="lightbox-img" id="lightboxImg" src="Mango Media, Death is a Girl.png" alt="Death is a Girl — Omnibus Cover Illustration">
-            <p class="lightbox-caption">MANGO MEDIA ー "DEATH IS A GIRL" OMNIBUS COVER</p>
+    <div class="layout-wrapper">
+        <!-- LEFT COLUMN (IDENTITY & VAULT CARD) -->
+        <div class="left-column">
+            
+            <header class="brand-header">
+                <img class="logo-img" src="logo.png" alt="Karachiiy Logo">
+                <div class="brand-tagline">
+                    <b>Illustrator of worlds that do not yet exist.</b><br>
+                    Specializing in fantasy, wonder, and visual storytelling.
+                </div>
+            </header>
+
+            <div class="vault-layout">
+                <div class="project-deck">
+                    <div class="deck-tab active" data-id="0" data-title="I. Song of the Gift-Giver"><span>I</span></div>
+                    <div class="deck-tab" data-id="1" data-title="II. Beneath the Dragoneye Moons"><span>II</span></div>
+                    <div class="deck-tab" data-id="2" data-title="III. Beware of Chicken"><span>III</span></div>
+                    <div class="deck-tab" data-id="3" data-title="IV. Taste of Magic"><span>IV</span></div>
+                </div>
+
+                <div class="portfolio-container">
+                    <div class="portfolio-card" id="portfolioCard">
+                        <div class="card-content" id="cardContent">
+                            <div>
+                                <p class="card-label" id="cardLabel">Active Grimoire</p>
+                                <h2 class="card-title" id="cardTitle">Song of the Gift-Giver</h2>
+                                <div class="card-divider">✦ ✥ ✦</div>
+                                
+                                <div class="card-lore" id="cardLore">
+                                    To breach the wards of the sanctum, you must speak the true name of the Coven: <br><br><b>Morsin's Monsters</b><br><br>*(Please wipe your boots before entering. Felix just mopped this floor and he will literally cry if you ruin it.)*
+                                </div>
+                                
+                                <div class="card-meta" id="cardMeta">
+                                    <div class="meta-row">
+                                        <span class="meta-label">Client</span>
+                                        <span class="meta-val">Selkie Myth</span>
+                                    </div>
+                                    <div class="meta-row">
+                                        <span class="meta-label">Special Note</span>
+                                        <span class="meta-val">Adept-Era Set</span>
+                                    </div>
+                                    <div class="meta-row highlight-total">
+                                        <span class="meta-label">Total Bound</span>
+                                        <span class="meta-val">6 Unified Vessels</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="enter-btn" id="enterBtn">ENTER SANCTUM</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="home-footer">
+                <div class="social-links">
+                    <a href="https://x.com/Karachiiy" target="_blank">𝕏 / Twitter</a>
+                    <a href="https://www.pixiv.net/en/users/33593211" target="_blank">Pixiv</a>
+                    <a href="mailto:karacia8555@gmail.com">Email Contact</a>
+	<a href="https://vgen.co/Karachiiy" target="_blank">VGen</a>
+                </div>
+                <p class="credit-text">All Magics are Crafted by Arcmage Karachiiy</p>
+            </footer>
+        </div>
+
+        <!-- RIGHT COLUMN (3D PARALLAX SIGIL) -->
+        <div class="right-column">
+            <section class="portal-container-3d">
+                <div class="portal-wrapper" id="portalGateway">
+                    <svg class="sigil-ring ring-outer" viewBox="0 0 200 200">
+                        <circle cx="100" cy="100" r="95" stroke-dasharray="2 4 8 4" />
+                        <circle cx="100" cy="100" r="90" stroke-opacity="0.2"/>
+                        <path id="outerText" fill="none" d="M 100, 100 m -82, 0 a 82,82 0 1,1 164,0 a 82,82 0 1,1 -164,0" />
+                        <text fill="rgba(255, 255, 255, 0.15)" font-family="Cinzel" font-size="6" letter-spacing="4">
+                            <textPath href="#outerText">✦ ᛁᛚᛚᚢᛊᛏᚱᚨᛏᛟᚱ ᛟᚠ ᛗᚤᚦ ᚨᚾᛞ ᛗᚨᚷᛁᚲ ✦ ᚲᚨᚱᚨᚲᚺᛁᛁᚤ ✦</textPath>
+                        </text>
+                    </svg>
+
+                    <svg class="sigil-ring ring-middle" viewBox="0 0 200 200">
+                        <circle cx="100" cy="100" r="78" />
+                        <path id="middleText" fill="none" d="M 100, 100 m -58, 0 a 58,58 0 1,1 116,0 a 58,58 0 1,1 -116,0" />
+                        <text fill="currentColor" font-family="Cinzel" font-size="8.5" letter-spacing="5">
+                            <textPath href="#middleText">✧ ☽ ✥ ☾ ✧ ☽ ✥ ☾ ✧ ☽ ✥ ☾ ✧ ☽ ✥ ☾ ✧ ☽ ✥ ☾</textPath>
+                        </text>
+                    </svg>
+
+                    <svg class="sigil-ring ring-inner" viewBox="0 0 200 200">
+                        <circle cx="100" cy="100" r="58" />
+                    </svg>
+
+                    <div class="portal-core"></div>
+                </div>
+            </section>
         </div>
     </div>
 
-    <!-- TOP HEADER WITH PATRON STATUS BADGE -->
-    <header class="package-header">
-        <div class="publisher-brand">
-            <img class="logo-img" src="../logo.png" alt="Karachiiy Scriptorium">
-            <div class="package-title-group">
-                <h1>Mango Media</h1>
-                <p class="package-badge">Official Omnibus Asset Vault</p>
-            </div>
-        </div>
-        <div class="delivery-status-badge">
-            <span class="status-dot"></span>
-            <span>✦ Official Patron Delivery Package</span>
-        </div>
-    </header>
-
-    <!-- MAIN SHOWCASE CONTAINER -->
-    <main class="showcase-container">
-        
-        <!-- MASTER ARTWORK DISPLAY -->
-        <section class="artwork-column">
-            <div class="artwork-frame" id="artworkFrame">
-                <img class="display-img" id="displayImg" src="Mango Media, Death is a Girl.png" alt="Death is a Girl Omnibus Illustration">
-                <div class="expand-badge">✦ CLICK TO EXPAND FULL MASTER ✦</div>
-            </div>
-        </section>
-
-        <!-- DIGITAL PACKAGE CODEX & MANIFEST -->
-        <section class="codex-column">
-            <div class="codex-card">
-                <div class="card-inner-frame"></div>
-                
-                <div class="codex-header">
-                    <p class="client-tag">Commission Delivery // Mango Media</p>
-                    <h2 class="codex-title">Death is a Girl</h2>
-                </div>
-                
-                <div class="codex-divider">✦ ✥ ✦</div>
-                
-                <!-- CANONICAL NOVEL SYNOPSIS -->
-                <div class="synopsis-box">
-                    "Morrigan died as the unwilling sacrifice in a demonic ritual, but the Grim Reaper has another plan for this wayward soul—to make her his new apprentice! Reaping isn't exactly her dream summer job, but with the alternative being banished to limbo, she's ready to give it a shot. Either way, she'll have to adapt to a world of spirits, hollows, black magic, and demons while completing her daily murder list is just part of the job."
-                </div>
-
-                <!-- CHARACTER ARCHIVE TABS -->
-                <div class="character-nav">
-                    <button class="char-tab active" data-char="morrigan">✦ Morrigan</button>
-                    <button class="char-tab" data-char="death">✦ Death</button>
-                    <button class="char-tab" data-char="noir">✦ Noir</button>
-                </div>
-
-                <!-- DYNAMIC CHARACTER DOSSIER PANEL -->
-                <div class="char-dossier-panel" id="dossierPanel">
-                    <div class="dossier-identity">
-                        <span class="dossier-name" id="dossierName">Morrigan</span>
-                        <span class="dossier-role" id="dossierRole">Apprentice Reaper</span>
-                    </div>
-                    <p class="dossier-desc" id="dossierDesc">
-                        A 16-year-old wayward soul with unnaturally pale skin, white hair, and piercing red eyes. Sacrificed in a demonic ritual, she now walks the rain-slicked urban streets wielding a cyan-bladed scythe as Death's apprentice.
-                    </p>
-                </div>
-
-                <!-- DIGITAL ASSETS DELIVERY MANIFEST -->
-                <p class="manifest-title">✦ Master Delivery Manifest</p>
-                <div class="manifest-list">
-                    <div class="manifest-item">
-                        <div class="file-info">
-                            <span class="file-name">Mango Media, Death is a Girl.png</span>
-                            <span class="file-spec">Master Full-Render Asset · 350 DPI</span>
-                        </div>
-                        <a href="Mango Media, Death is a Girl.png" download class="download-btn">Save Asset</a>
-                    </div>
-                    <div class="manifest-item">
-                        <div class="file-info">
-                            <span class="file-name">Mango Media, Death is a Girl.psd</span>
-                            <span class="file-spec">Master Single-Layer Archive (.PSD)</span>
-                        </div>
-                        <a href="Mango Media, Death is a Girl.psd" download class="download-btn">Save Asset</a>
-                    </div>
-                </div>
-
-                <!-- METADATA SPECS -->
-                <div class="meta-summary">
-                    <div class="meta-box">
-                        <p class="meta-box-label">Client / Publisher</p>
-                        <p class="meta-box-val">Mango Media</p>
-                    </div>
-                    <div class="meta-box">
-                        <p class="meta-box-label">Project Scope</p>
-                        <p class="meta-box-val">Audiobook Omnibus</p>
-                    </div>
-                    <div class="meta-box">
-                        <p class="meta-box-label">Author</p>
-                        <p class="meta-box-val">Autumn Knights</p>
-                    </div>
-                    <div class="meta-box">
-                        <p class="meta-box-label">Illustrationship</p>
-                        <p class="meta-box-val">Archmage Karachiiy</p>
-                    </div>
-                </div>
-
-                <!-- INSPECTION TRIGGER -->
-                <button class="inspect-action-btn" id="inspectBtn">✦ Inspect Master Illustration ✦</button>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- LUXURY EDITORIAL PATRON FOOTER -->
-    <footer class="luxury-footer">
-        <div class="footer-left">
-            <span class="footer-dim">ILLUSTRATED WITH GRIM DEVOTION BY </span>
-            <span class="footer-gold">ARCHMAGE KARACHIIY</span>
-            <span class="footer-dim"> FOR </span>
-            <span class="footer-gold">MANGO MEDIA LLC</span>
-        </div>
-        <div class="footer-right">
-            OMNIBUS ARCHIVE PACKAGE // DEATH IS A GIRL
-        </div>
-    </footer>
-
     <script>
-        // CANONICAL CHARACTER DATA (100% Faithful to Novel & Author Brief)
-        const characterData = {
-            morrigan: {
-                name: "Morrigan",
-                role: "Apprentice Reaper",
-                desc: "A 16-year-old wayward soul with unnaturally pale skin, white hair, and piercing red eyes. Sacrificed in a demonic ritual, she now walks the rain-slicked urban streets wielding a cyan-bladed scythe as Death's apprentice."
+        const portal = document.getElementById("portalGateway");
+        const enterBtn = document.getElementById("enterBtn");
+        const flash = document.getElementById("portalFlash");
+        const aura = document.getElementById("cursorAura");
+        const tabs = document.querySelectorAll(".deck-tab");
+        const cardContent = document.getElementById("cardContent");
+        const portfolioCard = document.getElementById("portfolioCard");
+
+        // PROJECT DATABASE WITH FUNNY LORE AND FUNNY REJECTION MESSAGES
+        const projects = [
+            {
+                id: 0,
+                title: "Song of the Gift-Giver",
+                label: "Active Grimoire",
+                meta: [
+                    { label: "Client", val: "Selkie Myth" },
+                    { label: "Special Note", val: "Adept-Era Set" },
+                    { label: "Total Bound", val: "6 Unified Vessels", highlight: true }
+                ],
+                extraLore: "To breach the wards of the sanctum, you must speak the true name of the Coven: <br><br><b>Morsin's Monsters</b><br><br>*(Please wipe your boots before entering. Felix just mopped this floor and he will literally cry if you ruin it.)*",
+                btnText: "ENTER SANCTUM",
+                disabled: false,
+                colors: {
+                    color: "#d4af37", dim: "#7a631c", glow: "rgba(212, 175, 55, 0.25)",
+                    core: "#ff9f1c", coreGlow: "rgba(255, 159, 28, 0.25)"
+                }
             },
-            death: {
-                name: "The Grim Reaper",
-                role: "The Sovereign of the Dead",
-                desc: "An ancient skeleton enveloped in a tattered dark cloak, using his colossal gothic scythe as a walking staff. Rather than banishing Morrigan's soul to limbo, he chose to guide her through the harrowing duties of reaping."
+            {
+                id: 1,
+                title: "Beneath the Dragoneye Moons",
+                label: "Sealed Archive",
+                meta: [
+                    { label: "Client", val: "Selkie Myth" },
+                    { label: "Warding Status", val: "Oath of Elaine Active" },
+                    { label: "Security Guard", val: "The Dawn Sentinel" }
+                ],
+                extraLore: "Access restricted. This vault has been sworn to secrecy under the Oath of Elaine. <br><br>WARNING: Unauthorized scrying will trigger an excessive amount of explosive healing magic. Bribing the wards with mangos currently has a 4% success rate.",
+                btnText: "✧ SEALED BY OATH ✧",
+                disabled: true,
+                lockedMessages: ["✧ ELAINE SAID NO ✧", "✧ LACK OF MANGOS DETECTED ✧", "✧ OATHBREAKER DETECTED ✧"],
+                colors: {
+                    color: "#64dfdf", dim: "#177e89", glow: "rgba(100, 223, 223, 0.25)",
+                    core: "#ffb703", coreGlow: "rgba(255, 183, 3, 0.25)"
+                }
             },
-            noir: {
-                name: "Noir",
-                role: "Eldritch Familiar",
-                desc: "Appearing as a black cat at Morrigan's feet, Noir is technically a fragmented sliver of an Eldritch Horror. Inky, shadowy tentacles creep from the darkness beneath his paws as he accompanies the reapers on their harvest."
+            {
+                id: 2,
+                title: "Beware of Chicken",
+                label: "Cultivation Scroll",
+                meta: [
+                    { label: "Client", val: "Casualfarmer" },
+                    { label: "Warding Status", val: "Heavenly Dao of Farming" },
+                    { label: "Security Guard", val: "Great Master Bi De" }
+                ],
+                extraLore: "Access denied. The archives are heavily guarded by a Heavenly Martial Arts Rooster who demands you respect the Dao of Farming. <br><br>Attempting to bypass these wards will result in getting pecked into your next reincarnation cycle.",
+                btnText: "✧ PECKED SHUT ✧",
+                disabled: true,
+                lockedMessages: ["✧ *ANGRY CLUCKING NOISES* ✧", "✧ THE DAO REJECTS YOU ✧", "✧ GET PECKED ✧"],
+                colors: {
+                    color: "#8cb369", dim: "#4a5d23", glow: "rgba(140, 179, 105, 0.25)",
+                    core: "#f4e285", coreGlow: "rgba(244, 226, 133, 0.25)"
+                }
+            },
+            {
+                id: 3,
+                title: "Taste of Magic",
+                label: "Culinary Grimoire",
+                meta: [
+                    { label: "Client", val: "Amber Atlas" },
+                    { label: "Special Note", val: "Cozy Kitchen" },
+                    { label: "Total Bound", val: "2 Cover Vessels", highlight: true }
+                ],
+                extraLore: "A warm, flour-dusted kitchen where magic rising as yeast is perfectly legal. <br><br>Warning: Hovering near the oven-wyrm Sienna might result in singed sleeves. Do not attempt to scry while eating Shimmertart.",
+                btnText: "ENTER SANCTUM",
+                disabled: false,
+                colors: {
+                    color: "#f28482", dim: "#844445", glow: "rgba(242, 132, 130, 0.25)",
+                    core: "#f6bd60", coreGlow: "rgba(246, 189, 96, 0.25)"
+                }
             }
-        };
+        ];
 
-        // CHARACTER TAB INTERACTION
-        const charTabs = document.querySelectorAll(".char-tab");
-        const dossierName = document.getElementById("dossierName");
-        const dossierRole = document.getElementById("dossierRole");
-        const dossierDesc = document.getElementById("dossierDesc");
+        let activeProject = projects[0];
 
-        charTabs.forEach(tab => {
+        tabs.forEach(tab => {
             tab.addEventListener("click", () => {
-                const charKey = tab.getAttribute("data-char");
-                const data = characterData[charKey];
-                if (!data) return;
+                if (tab.classList.contains("active")) return;
+                
+                const id = parseInt(tab.getAttribute("data-id"));
+                activeProject = projects[id];
 
-                charTabs.forEach(t => t.classList.remove("active"));
+                tabs.forEach(t => t.classList.remove("active"));
                 tab.classList.add("active");
 
-                dossierName.innerText = data.name;
-                dossierRole.innerText = data.role;
-                dossierDesc.innerText = data.desc;
+                cardContent.classList.add("fade-out");
+                
+                setTimeout(() => {
+                    document.getElementById("cardTitle").innerText = activeProject.title;
+                    document.getElementById("cardLabel").innerText = activeProject.label;
+                    document.getElementById("cardLore").innerHTML = activeProject.extraLore;
+                    
+                    const metaContainer = document.getElementById("cardMeta");
+                    metaContainer.innerHTML = "";
+                    activeProject.meta.forEach(m => {
+                        const row = document.createElement("div");
+                        row.className = m.highlight ? "meta-row highlight-total" : "meta-row";
+                        row.innerHTML = `<span class="meta-label">${m.label}</span><span class="meta-val">${m.val}</span>`;
+                        metaContainer.appendChild(row);
+                    });
+
+                    enterBtn.innerText = activeProject.btnText;
+                    if (activeProject.disabled) {
+                        enterBtn.classList.add("btn-disabled");
+                    } else {
+                        enterBtn.classList.remove("btn-disabled");
+                    }
+
+                    const r = document.documentElement;
+                    r.style.setProperty('--theme-color', activeProject.colors.color);
+                    r.style.setProperty('--theme-color-dim', activeProject.colors.dim);
+                    r.style.setProperty('--theme-glow', activeProject.colors.glow);
+                    r.style.setProperty('--theme-core', activeProject.colors.core);
+                    r.style.setProperty('--theme-core-glow', activeProject.colors.coreGlow);
+
+                    cardContent.classList.remove("fade-out");
+                }, 400);
             });
         });
 
-        // LIGHTBOX CONTROLS
-        const artworkFrame = document.getElementById("artworkFrame");
-        const inspectBtn = document.getElementById("inspectBtn");
-        const lightboxModal = document.getElementById("lightboxModal");
-        const modalClose = document.getElementById("modalClose");
-
-        function openLightbox() {
-            lightboxModal.classList.add("active");
-        }
-
-        function closeLightbox() {
-            lightboxModal.classList.remove("active");
-        }
-
-        artworkFrame.addEventListener("click", openLightbox);
-        inspectBtn.addEventListener("click", openLightbox);
-        modalClose.addEventListener("click", closeLightbox);
-
-        lightboxModal.addEventListener("click", (e) => {
-            if (e.target === lightboxModal) closeLightbox();
-        });
-
-        document.addEventListener("keydown", (e) => {
-            if (e.key === "Escape") closeLightbox();
-        });
-
-        // DUAL-AURA TRACKING
-        const aura = document.getElementById("cursorAura");
         document.addEventListener("mousemove", (e) => {
             aura.style.left = e.clientX + "px";
             aura.style.top = e.clientY + "px";
+            const x = (window.innerWidth / 2 - e.clientX) / 30;
+            const y = (window.innerHeight / 2 - e.clientY) / 30;
+            portal.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
         });
 
-        // --- EERIE CANVAS: FLOATING SOUL WISPS & HOLLOW SPIRIT MOTES ---
-        const canvas = document.getElementById("eerieCanvas");
+        const interactiveElements = [portal, enterBtn, ...tabs, document.querySelector(".logo-img")];
+        interactiveElements.forEach(el => {
+            if(!el) return;
+            el.addEventListener("mouseenter", () => { aura.style.width = "800px"; aura.style.height = "800px"; });
+            el.addEventListener("mouseleave", () => { aura.style.width = "600px"; aura.style.height = "600px"; });
+        });
+
+        document.addEventListener("mouseleave", () => {
+            portal.style.transition = "transform 0.6s ease";
+            portal.style.transform = `rotateY(0deg) rotateX(0deg)`;
+        });
+        portal.addEventListener("mouseenter", () => { portal.style.transition = "none"; });
+
+        // Handling Button Clicks & Redirections
+        function handleInteraction() {
+            if (activeProject.disabled) {
+                // Rattle effect
+                portfolioCard.classList.remove("rattle");
+                void portfolioCard.offsetWidth; 
+                portfolioCard.classList.add("rattle");
+                
+                // Funny dynamic rejection text
+                const originalText = activeProject.btnText;
+                const msgs = activeProject.lockedMessages;
+                enterBtn.innerText = msgs[Math.floor(Math.random() * msgs.length)];
+                enterBtn.classList.add("btn-error-state");
+                
+                setTimeout(() => { 
+                    enterBtn.innerText = originalText; 
+                    enterBtn.classList.remove("btn-error-state");
+                }, 1500);
+                return;
+            }
+
+            particles.forEach(p => p.speed = Math.random() * 25 + 10);
+            setTimeout(() => { flash.style.opacity = "1"; }, 300);
+            setTimeout(() => { 
+                if (activeProject.id === 0) {
+                    window.location.href = "./Song-of-the-Gift-Giver/"; 
+                } else if (activeProject.id === 3) {
+                    window.location.href = "./Taste-of-Magic/"; 
+                }
+            }, 1000);
+        }
+
+        portal.addEventListener("click", handleInteraction);
+        enterBtn.addEventListener("click", handleInteraction);
+
+        // --- DYNAMIC PARTICLE SYSTEM ---
+        const canvas = document.getElementById("particleCanvas");
         const ctx = canvas.getContext("2d");
         let w = canvas.width = window.innerWidth;
         let h = canvas.height = window.innerHeight;
 
-        window.addEventListener("resize", () => {
-            w = canvas.width = window.innerWidth;
-            h = canvas.height = window.innerHeight;
-        });
+        window.addEventListener("resize", () => { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; });
 
-        class SpiritParticle {
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : '255, 255, 255';
+        }
+
+        class Particle {
             constructor() { this.reset(); }
             reset() {
-                this.x = Math.random() * w;
-                this.y = h + Math.random() * 80;
-                this.size = Math.random() * 2.4 + 0.5;
-                this.speedY = -(Math.random() * 0.7 + 0.2);
-                this.speedX = Math.random() * 0.4 - 0.2;
+                this.x = Math.random() * w; this.y = h + Math.random() * 100;
+                this.size = Math.random() * 2 + 0.3;
+                this.speed = Math.random() * 0.5 + 0.1;
                 this.alpha = Math.random() * 0.6 + 0.1;
                 this.alphaDir = Math.random() > 0.5 ? 0.003 : -0.003;
-                this.life = Math.random() * 200 + 100;
-                
-                // Color Distribution: 65% Soul Cyan, 25% Ethereal Pale Ghost Dust, 10% Eldritch Crimson
-                const roll = Math.random();
-                if (roll < 0.65) {
-                    this.color = "0, 240, 255"; // Soul Cyan
-                } else if (roll < 0.90) {
-                    this.color = "203, 213, 225"; // Pale Ghost Dust
-                } else {
-                    this.color = "230, 57, 70"; // Eldritch Crimson
-                }
+                this.useCoreColor = Math.random() > 0.5;
             }
             update() {
-                this.y += this.speedY;
-                this.x += Math.sin(this.life * 0.03) * 0.4;
+                this.y -= this.speed;
+                this.x += Math.sin(this.life * 0.02) * 0.3;
                 this.alpha += this.alphaDir;
-                if (this.alpha > 0.85 || this.alpha < 0.05) this.alphaDir = -this.alphaDir;
-                this.life--;
-                if (this.life <= 0 || this.y < -20) this.reset();
+                if (this.alpha > 0.8 || this.alpha < 0.1) this.alphaDir = -this.alphaDir;
+                if (this.y < 0) { this.reset(); this.y = h; }
             }
             draw() {
+                const rootStyle = getComputedStyle(document.documentElement);
+                const hexColor = this.useCoreColor ? rootStyle.getPropertyValue('--theme-core').trim() : rootStyle.getPropertyValue('--theme-color').trim();
+                const rgb = hexToRgb(hexColor);
+                
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(${this.color}, ${this.alpha})`;
-                ctx.shadowBlur = this.size > 1.5 ? 10 : 0;
-                ctx.shadowColor = `rgba(${this.color}, 0.8)`;
+                ctx.fillStyle = `rgba(${rgb}, ${this.alpha})`;
                 ctx.fill();
             }
         }
 
-        const spirits = Array.from({ length: 90 }, () => new SpiritParticle());
+        const particles = Array.from({ length: 75 }, () => new Particle());
 
         function animate() {
             ctx.clearRect(0, 0, w, h);
-            spirits.forEach(s => {
-                s.update();
-                s.draw();
-            });
+            ctx.globalAlpha = 1;
+            particles.forEach(p => { p.update(); p.draw(); });
             requestAnimationFrame(animate);
         }
         animate();
