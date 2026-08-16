@@ -1,1 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mango Media — Death is a Girl (Omnibus Cover Package)</title>
+    <link rel="icon" type="image/png" href="../favicon.png">
+    
+    <!-- Cinematic Gothic & Clean Editorial Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;900&family=Montserrat:ital,wght@0,200;0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Palette: Spectral Soul Cyan, Eldritch Crimson, Abyssal Obsidian & Bone Parchment */
+            --bg-void: #030406;
+            --bg-card: rgba(6, 8, 12, 0.88);
+            --parchment: #e2e8f0;
+            --spectral-cyan: #00f0ff;
+            --spectral-glow: rgba(0, 240, 255, 0.28);
+            --spectral-dim: rgba(0, 240, 255, 0.12);
+            --eldritch-red: #e63946;
+            --eldritch-glow: rgba(230, 57, 70, 0.25);
+            --bone-white: #cbd5e1;
+            --gold-accent: #d4af37;
+            --gold-glow: rgba(212, 175, 55, 0.3);
+            --border-line: rgba(0, 240, 255, 0.2);
+            
+            --font-serif: 'Cinzel', serif;
+            --font-sans: 'Montserrat', sans-serif;
+        }
 
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-void);
+            color: var(--parchment);
+            font-family: var(--font-sans);
+            min-height: 100vh;
+            overflow-x: hidden;
+            user-select: none;
+            position: relative;
+        }
+
+        /* --- FILM GRAIN & VINTAGE PAPER NOISE OVERLAY --- */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 999;
+            mix-blend-mode: overlay;
+        }
+
+        /* Atmospheric Vignette */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: radial-gradient(circle at center, transparent 40%, rgba(1, 2, 4, 0.85) 95%);
+            pointer-events: none;
+            z-index: 998;
+        }
+
+        /* Eerie Spectral Spirits & Hollow Dust Canvas */
+        #eerieCanvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+            mix-blend-mode: screen;
+            opacity: 0.85;
+        }
+
+        /* Dual-Tone Spectral Cursor Aura */
+        #cursorAura {
+            position: fixed;
+            width: 520px; height: 520px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--spectral-glow) 0%, var(--eldritch-glow) 35%, transparent 70%);
+            z-index: 2;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: screen;
+            transition: width 0.3s, height 0.3s;
+        }
+
+        /* --- TOP PACKAGE HEADER --- */
+        .package-header {
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2.8rem 4vw 1rem 4vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .publisher-brand {
+            display: flex;
+            align-items: center;
+            gap: 1.4rem;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .logo-img {
+            height: 50px;
+            width: auto;
+            filter: drop-shadow(0 0 15px var(--spectral-cyan));
+            transition: transform 0.4s ease;
+        }
+
+        .publisher-brand:hover .logo-img {
+            transform: scale(1.05) rotate(-1deg);
+        }
+
+        .package-title-group h1 {
+            font-family: var(--font-serif);
+            font-size: 1.15rem;
+            letter-spacing: 4px;
+            color: #fff;
+            text-transform: uppercase;
+            text-shadow: 0 0 15px var(--spectral-glow);
+        }
+
+        .package-badge {
+            font-size: 0.68rem;
+            letter-spacing: 3px;
+            color: var(--spectral-cyan);
+            text-transform: uppercase;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .package-badge::before {
+            content: "✦";
+            color: var(--eldritch-red);
+        }
+
+        /* Official Patron Delivery Package Indicator */
+        .delivery-status-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--font-serif);
+            font-size: 0.72rem;
+            color: var(--spectral-cyan);
+            letter-spacing: 3px;
+            padding: 0.65rem 1.4rem;
+            border: 1px solid rgba(0, 240, 255, 0.35);
+            background: rgba(4, 7, 12, 0.85);
+            border-radius: 2px;
+            box-shadow: 0 0 20px var(--spectral-glow);
+            text-transform: uppercase;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--spectral-cyan);
+            box-shadow: 0 0 10px var(--spectral-cyan);
+            animation: pulseDot 2s infinite ease-in-out;
+        }
+
+        @keyframes pulseDot {
+            0%, 100% { transform: scale(0.9); opacity: 0.6; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+
+        /* --- MAIN SHOWCASE SECTION --- */
+        .showcase-container {
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 1.5rem 4vw 3rem 4vw;
+            display: flex;
+            gap: 3.5vw;
+            align-items: flex-start;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* MASTER ARTWORK VIEWPORT */
+        .artwork-column {
+            flex: 1.15;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .artwork-frame {
+            position: relative;
+            width: 100%;
+            max-width: 720px;
+            background: rgba(2, 3, 5, 0.95);
+            border: 1px solid var(--border-line);
+            border-radius: 4px;
+            box-shadow: 0 30px 90px rgba(0,0,0,0.98), 0 0 40px rgba(0, 240, 255, 0.08);
+            overflow: hidden;
+            cursor: pointer;
+            transition: border-color 0.5s ease, box-shadow 0.5s ease, transform 0.4s ease;
+        }
+
+        .artwork-frame:hover {
+            transform: scale(1.01);
+            border-color: var(--spectral-cyan);
+            box-shadow: 0 35px 100px rgba(0,0,0,1), 0 0 50px var(--spectral-glow);
+        }
+
+        /* Gothic Corner Filigree Accents */
+        .artwork-frame::before, .artwork-frame::after,
+        .codex-card::before, .codex-card::after {
+            content: '';
+            position: absolute;
+            width: 16px; height: 16px;
+            border-color: var(--spectral-cyan);
+            border-style: solid;
+            z-index: 6;
+            pointer-events: none;
+            opacity: 0.75;
+            transition: border-color 0.5s ease;
+        }
+
+        .artwork-frame::before, .codex-card::before {
+            top: 10px; left: 10px;
+            border-width: 1px 0 0 1px;
+        }
+
+        .artwork-frame::after, .codex-card::after {
+            bottom: 10px; right: 10px;
+            border-width: 0 1px 1px 0;
+        }
+
+        .display-img {
+            width: 100%;
+            height: auto;
+            max-height: 80vh;
+            object-fit: contain;
+            display: block;
+            transition: transform 0.6s ease;
+        }
+
+        .artwork-frame:hover .display-img {
+            transform: scale(1.02);
+        }
+
+        .expand-badge {
+            position: absolute;
+            bottom: 18px;
+            right: 18px;
+            background: rgba(3, 5, 8, 0.9);
+            border: 1px solid var(--spectral-cyan);
+            padding: 0.55rem 1.2rem;
+            font-family: var(--font-serif);
+            font-size: 0.68rem;
+            letter-spacing: 3px;
+            color: var(--parchment);
+            border-radius: 2px;
+            pointer-events: none;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.9);
+            text-transform: uppercase;
+        }
+
+        /* --- DIGITAL PACKAGE CODEX & MANIFEST --- */
+        .codex-column {
+            flex: 1.1;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .codex-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-line);
+            padding: 3rem 2.5rem;
+            border-radius: 3px;
+            box-shadow: 0 30px 70px rgba(0,0,0,0.95);
+            backdrop-filter: blur(14px);
+            position: relative;
+        }
+
+        .card-inner-frame {
+            position: absolute;
+            top: 8px; right: 8px; bottom: 8px; left: 8px;
+            border: 1px dashed rgba(0, 240, 255, 0.1);
+            pointer-events: none;
+        }
+
+        .codex-header {
+            text-align: center;
+            margin-bottom: 1.4rem;
+        }
+
+        .client-tag {
+            font-size: 0.65rem;
+            color: var(--spectral-cyan);
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 0.4rem;
+            font-weight: 600;
+        }
+
+        .codex-title {
+            font-family: var(--font-serif);
+            font-size: 1.85rem;
+            color: #fff;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            line-height: 1.2;
+            text-shadow: 0 2px 15px rgba(0,0,0,0.9);
+        }
+
+        .codex-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            color: var(--spectral-cyan);
+            font-size: 0.8rem;
+            margin: 1rem 0 1.4rem 0;
+            opacity: 0.7;
+        }
+
+        .codex-divider::before, .codex-divider::after {
+            content: '';
+            height: 1px;
+            width: 50px;
+            background: linear-gradient(90deg, transparent, var(--spectral-cyan), transparent);
+        }
+
+        /* NOVEL SYNOPSIS NARRATIVE BOX */
+        .synopsis-box {
+            background: rgba(2, 4, 6, 0.75);
+            border-left: 3px solid var(--spectral-cyan);
+            padding: 1.2rem 1.4rem;
+            font-size: 0.84rem;
+            line-height: 1.8;
+            color: #c4d1dc;
+            margin-bottom: 1.6rem;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
+            border-radius: 0 2px 2px 0;
+        }
+
+        .synopsis-box b {
+            color: #fff;
+            font-weight: 500;
+        }
+
+        /* INTERACTIVE CHARACTER DOSSIER TABS */
+        .character-nav {
+            display: flex;
+            gap: 0.6rem;
+            margin-bottom: 1rem;
+        }
+
+        .char-tab {
+            flex: 1;
+            background: rgba(4, 7, 10, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--bone-white);
+            font-family: var(--font-serif);
+            font-size: 0.72rem;
+            letter-spacing: 2px;
+            padding: 0.75rem 0.4rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .char-tab:hover, .char-tab.active {
+            color: var(--spectral-cyan);
+            border-color: var(--spectral-cyan);
+            background: var(--spectral-dim);
+            box-shadow: 0 0 15px var(--spectral-glow);
+        }
+
+        .char-dossier-panel {
+            background: rgba(2, 4, 6, 0.65);
+            border: 1px solid rgba(0, 240, 255, 0.15);
+            padding: 1.2rem 1.4rem;
+            border-radius: 2px;
+            margin-bottom: 1.6rem;
+            min-height: 120px;
+        }
+
+        .dossier-identity {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding-bottom: 0.4rem;
+        }
+
+        .dossier-name {
+            font-family: var(--font-serif);
+            font-size: 0.95rem;
+            color: #fff;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .dossier-role {
+            font-size: 0.65rem;
+            color: var(--spectral-cyan);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .dossier-desc {
+            font-size: 0.8rem;
+            line-height: 1.7;
+            color: #a4b3c2;
+        }
+
+        /* --- DIGITAL PACKAGE DELIVERABLES MANIFEST --- */
+        .manifest-title {
+            font-family: var(--font-serif);
+            font-size: 0.78rem;
+            color: var(--spectral-cyan);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .manifest-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+            margin-bottom: 1.8rem;
+        }
+
+        .manifest-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(3, 5, 8, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 0.85rem 1.2rem;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .manifest-item:hover {
+            background: rgba(4, 8, 14, 0.9);
+            border-color: var(--spectral-cyan);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.1);
+        }
+
+        .file-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .file-name {
+            font-family: var(--font-serif);
+            font-size: 0.8rem;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+
+        .file-spec {
+            font-size: 0.65rem;
+            color: #64748b;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .download-btn {
+            background: transparent;
+            border: 1px solid var(--border-line);
+            color: var(--spectral-cyan);
+            font-family: var(--font-serif);
+            font-size: 0.68rem;
+            letter-spacing: 2px;
+            padding: 0.45rem 1rem;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .download-btn:hover {
+            background: var(--spectral-cyan);
+            color: #000;
+            font-weight: 600;
+            box-shadow: 0 0 15px var(--spectral-cyan);
+        }
+
+        /* METADATA SUMMARY */
+        .meta-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.6rem;
+            margin-bottom: 1.8rem;
+        }
+
+        .meta-box {
+            background: rgba(3, 5, 8, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 0.65rem 1rem;
+            border-radius: 2px;
+        }
+
+        .meta-box-label {
+            font-size: 0.62rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .meta-box-val {
+            font-family: var(--font-serif);
+            font-size: 0.78rem;
+            color: var(--parchment);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 0.2rem;
+        }
+
+        .inspect-action-btn {
+            width: 100%;
+            background: transparent;
+            border: 1px solid var(--spectral-cyan);
+            color: var(--spectral-cyan);
+            font-family: var(--font-serif);
+            padding: 1rem;
+            font-size: 0.78rem;
+            letter-spacing: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .inspect-action-btn:hover {
+            background: var(--spectral-dim);
+            box-shadow: 0 0 25px var(--spectral-glow);
+            color: #fff;
+        }
+
+        /* --- LIGHTBOX MODAL & BOTTOM CAPTION --- */
+        #lightboxModal {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(2, 3, 5, 0.96);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+            backdrop-filter: blur(16px);
+        }
+
+        #lightboxModal.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .lightbox-content-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 92vw;
+            max-height: 94vh;
+        }
+
+        .lightbox-img {
+            max-width: 90vw;
+            max-height: 82vh;
+            object-fit: contain;
+            box-shadow: 0 0 70px rgba(0,0,0,1);
+            border: 1px solid var(--spectral-cyan);
+            border-radius: 2px;
+        }
+
+        /* PURE WHITE CAPTION */
+        .lightbox-caption {
+            margin-top: 1.2rem;
+            font-family: var(--font-serif);
+            font-size: 0.85rem;
+            letter-spacing: 4px;
+            color: #ffffff;
+            text-transform: uppercase;
+            text-align: center;
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 2rem;
+            right: 3rem;
+            font-size: 2.8rem;
+            color: var(--spectral-cyan);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: var(--font-sans);
+            font-weight: 200;
+            transition: transform 0.3s ease;
+        }
+
+        .lightbox-close:hover {
+            transform: rotate(90deg) scale(1.1);
+        }
+
+        /* --- LUXURY EDITORIAL PATRON FOOTER --- */
+        .luxury-footer {
+            position: relative;
+            width: 100%;
+            max-width: 1600px;
+            margin: 2rem auto 2.8rem auto;
+            padding: 1.8rem 4vw 0 4vw;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+            font-family: var(--font-serif);
+            font-size: 0.72rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .footer-left {
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .footer-dim {
+            color: #52637a;
+            letter-spacing: 3px;
+        }
+
+        .footer-gold {
+            color: var(--gold-accent);
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px var(--gold-glow);
+        }
+
+        .footer-right {
+            color: #0e8388;
+            letter-spacing: 3px;
+            font-size: 0.7rem;
+            transition: color 0.3s;
+        }
+
+        .luxury-footer:hover .footer-right {
+            color: var(--spectral-cyan);
+            text-shadow: 0 0 8px var(--spectral-glow);
+        }
+
+        /* --- RESPONSIVE ADJUSTMENTS --- */
+        @media (max-width: 1150px) {
+            body { overflow-y: auto; }
+            .showcase-container { flex-direction: column; gap: 3rem; align-items: center; }
+            .artwork-column, .codex-column { width: 100%; max-width: 750px; }
+            .package-header { flex-direction: column; gap: 1.5rem; text-align: center; }
+            .luxury-footer { flex-direction: column; gap: 1rem; text-align: center; justify-content: center; }
+            .footer-left { justify-content: center; }
+        }
+
+        @media (max-width: 768px) {
+            .codex-card { padding: 2rem 1.5rem; }
+            .codex-title { font-size: 1.5rem; }
+            .meta-summary { grid-template-columns: 1fr; }
+            .character-nav { flex-direction: column; }
+            .manifest-item { flex-direction: column; align-items: flex-start; gap: 0.8rem; }
+            .download-btn { width: 100%; text-align: center; }
+            .lightbox-caption { font-size: 0.72rem; letter-spacing: 2px; }
+            .luxury-footer { font-size: 0.65rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Eerie Floating Soul Wisps & Hollow Mist Canvas -->
+    <canvas id="eerieCanvas"></canvas>
+    <div id="cursorAura"></div>
+
+    <!-- Master Lightbox Modal With Pure White Bottom Caption -->
+    <div id="lightboxModal">
+        <button class="lightbox-close" id="modalClose">&times;</button>
+        <div class="lightbox-content-box" onclick="event.stopPropagation()">
+            <img class="lightbox-img" id="lightboxImg" src="Mango Media, Death is a Girl.png" alt="Death is a Girl — Omnibus Cover Illustration">
+            <p class="lightbox-caption">MANGO MEDIA ー "DEATH IS A GIRL" OMNIBUS COVER</p>
+        </div>
+    </div>
+
+    <!-- TOP HEADER WITH PATRON STATUS BADGE -->
+    <header class="package-header">
+        <div class="publisher-brand">
+            <img class="logo-img" src="../logo.png" alt="Karachiiy Scriptorium">
+            <div class="package-title-group">
+                <h1>Mango Media</h1>
+                <p class="package-badge">Official Omnibus Asset Vault</p>
+            </div>
+        </div>
+        <div class="delivery-status-badge">
+            <span class="status-dot"></span>
+            <span>✦ Official Patron Delivery Package</span>
+        </div>
+    </header>
+
+    <!-- MAIN SHOWCASE CONTAINER -->
+    <main class="showcase-container">
+        
+        <!-- MASTER ARTWORK DISPLAY -->
+        <section class="artwork-column">
+            <div class="artwork-frame" id="artworkFrame">
+                <img class="display-img" id="displayImg" src="Mango Media, Death is a Girl.png" alt="Death is a Girl Omnibus Illustration">
+                <div class="expand-badge">✦ CLICK TO EXPAND FULL MASTER ✦</div>
+            </div>
+        </section>
+
+        <!-- DIGITAL PACKAGE CODEX & MANIFEST -->
+        <section class="codex-column">
+            <div class="codex-card">
+                <div class="card-inner-frame"></div>
+                
+                <div class="codex-header">
+                    <p class="client-tag">Commission Delivery // Mango Media</p>
+                    <h2 class="codex-title">Death is a Girl</h2>
+                </div>
+                
+                <div class="codex-divider">✦ ✥ ✦</div>
+                
+                <!-- CANONICAL NOVEL SYNOPSIS -->
+                <div class="synopsis-box">
+                    "Morrigan died as the unwilling sacrifice in a demonic ritual, but the Grim Reaper has another plan for this wayward soul—to make her his new apprentice! Reaping isn't exactly her dream summer job, but with the alternative being banished to limbo, she's ready to give it a shot. Either way, she'll have to adapt to a world of spirits, hollows, black magic, and demons while completing her daily murder list is just part of the job."
+                </div>
+
+                <!-- CHARACTER ARCHIVE TABS -->
+                <div class="character-nav">
+                    <button class="char-tab active" data-char="morrigan">✦ Morrigan</button>
+                    <button class="char-tab" data-char="death">✦ Death</button>
+                    <button class="char-tab" data-char="noir">✦ Noir</button>
+                </div>
+
+                <!-- DYNAMIC CHARACTER DOSSIER PANEL -->
+                <div class="char-dossier-panel" id="dossierPanel">
+                    <div class="dossier-identity">
+                        <span class="dossier-name" id="dossierName">Morrigan</span>
+                        <span class="dossier-role" id="dossierRole">Apprentice Reaper</span>
+                    </div>
+                    <p class="dossier-desc" id="dossierDesc">
+                        A 16-year-old wayward soul with unnaturally pale skin, white hair, and piercing red eyes. Sacrificed in a demonic ritual, she now walks the rain-slicked urban streets wielding a cyan-bladed scythe as Death's apprentice.
+                    </p>
+                </div>
+
+                <!-- DIGITAL ASSETS DELIVERY MANIFEST -->
+                <p class="manifest-title">✦ Master Delivery Manifest</p>
+                <div class="manifest-list">
+                    <div class="manifest-item">
+                        <div class="file-info">
+                            <span class="file-name">Mango Media, Death is a Girl.png</span>
+                            <span class="file-spec">Master Full-Render Asset · 350 DPI</span>
+                        </div>
+                        <a href="Mango Media, Death is a Girl.png" download class="download-btn">Save Asset</a>
+                    </div>
+                    <div class="manifest-item">
+                        <div class="file-info">
+                            <span class="file-name">Mango Media, Death is a Girl.psd</span>
+                            <span class="file-spec">Master Single-Layer Archive (.PSD)</span>
+                        </div>
+                        <a href="Mango Media, Death is a Girl.psd" download class="download-btn">Save Asset</a>
+                    </div>
+                </div>
+
+                <!-- METADATA SPECS -->
+                <div class="meta-summary">
+                    <div class="meta-box">
+                        <p class="meta-box-label">Client / Publisher</p>
+                        <p class="meta-box-val">Mango Media</p>
+                    </div>
+                    <div class="meta-box">
+                        <p class="meta-box-label">Project Scope</p>
+                        <p class="meta-box-val">Audiobook Omnibus</p>
+                    </div>
+                    <div class="meta-box">
+                        <p class="meta-box-label">Author</p>
+                        <p class="meta-box-val">Autumn Knights</p>
+                    </div>
+                    <div class="meta-box">
+                        <p class="meta-box-label">Illustrationship</p>
+                        <p class="meta-box-val">Archmage Karachiiy</p>
+                    </div>
+                </div>
+
+                <!-- INSPECTION TRIGGER -->
+                <button class="inspect-action-btn" id="inspectBtn">✦ Inspect Master Illustration ✦</button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- LUXURY EDITORIAL PATRON FOOTER -->
+    <footer class="luxury-footer">
+        <div class="footer-left">
+            <span class="footer-dim">ILLUSTRATED WITH GRIM DEVOTION BY </span>
+            <span class="footer-gold">ARCHMAGE KARACHIIY</span>
+            <span class="footer-dim"> FOR </span>
+            <span class="footer-gold">MANGO MEDIA LLC</span>
+        </div>
+        <div class="footer-right">
+            OMNIBUS ARCHIVE PACKAGE // DEATH IS A GIRL
+        </div>
+    </footer>
+
+    <script>
+        // CANONICAL CHARACTER DATA (100% Faithful to Novel & Author Brief)
+        const characterData = {
+            morrigan: {
+                name: "Morrigan",
+                role: "Apprentice Reaper",
+                desc: "A 16-year-old wayward soul with unnaturally pale skin, white hair, and piercing red eyes. Sacrificed in a demonic ritual, she now walks the rain-slicked urban streets wielding a cyan-bladed scythe as Death's apprentice."
+            },
+            death: {
+                name: "The Grim Reaper",
+                role: "The Sovereign of the Dead",
+                desc: "An ancient skeleton enveloped in a tattered dark cloak, using his colossal gothic scythe as a walking staff. Rather than banishing Morrigan's soul to limbo, he chose to guide her through the harrowing duties of reaping."
+            },
+            noir: {
+                name: "Noir",
+                role: "Eldritch Familiar",
+                desc: "Appearing as a black cat at Morrigan's feet, Noir is technically a fragmented sliver of an Eldritch Horror. Inky, shadowy tentacles creep from the darkness beneath his paws as he accompanies the reapers on their harvest."
+            }
+        };
+
+        // CHARACTER TAB INTERACTION
+        const charTabs = document.querySelectorAll(".char-tab");
+        const dossierName = document.getElementById("dossierName");
+        const dossierRole = document.getElementById("dossierRole");
+        const dossierDesc = document.getElementById("dossierDesc");
+
+        charTabs.forEach(tab => {
+            tab.addEventListener("click", () => {
+                const charKey = tab.getAttribute("data-char");
+                const data = characterData[charKey];
+                if (!data) return;
+
+                charTabs.forEach(t => t.classList.remove("active"));
+                tab.classList.add("active");
+
+                dossierName.innerText = data.name;
+                dossierRole.innerText = data.role;
+                dossierDesc.innerText = data.desc;
+            });
+        });
+
+        // LIGHTBOX CONTROLS
+        const artworkFrame = document.getElementById("artworkFrame");
+        const inspectBtn = document.getElementById("inspectBtn");
+        const lightboxModal = document.getElementById("lightboxModal");
+        const modalClose = document.getElementById("modalClose");
+
+        function openLightbox() {
+            lightboxModal.classList.add("active");
+        }
+
+        function closeLightbox() {
+            lightboxModal.classList.remove("active");
+        }
+
+        artworkFrame.addEventListener("click", openLightbox);
+        inspectBtn.addEventListener("click", openLightbox);
+        modalClose.addEventListener("click", closeLightbox);
+
+        lightboxModal.addEventListener("click", (e) => {
+            if (e.target === lightboxModal) closeLightbox();
+        });
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") closeLightbox();
+        });
+
+        // DUAL-AURA TRACKING
+        const aura = document.getElementById("cursorAura");
+        document.addEventListener("mousemove", (e) => {
+            aura.style.left = e.clientX + "px";
+            aura.style.top = e.clientY + "px";
+        });
+
+        // --- EERIE CANVAS: FLOATING SOUL WISPS & HOLLOW SPIRIT MOTES ---
+        const canvas = document.getElementById("eerieCanvas");
+        const ctx = canvas.getContext("2d");
+        let w = canvas.width = window.innerWidth;
+        let h = canvas.height = window.innerHeight;
+
+        window.addEventListener("resize", () => {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        });
+
+        class SpiritParticle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * w;
+                this.y = h + Math.random() * 80;
+                this.size = Math.random() * 2.4 + 0.5;
+                this.speedY = -(Math.random() * 0.7 + 0.2);
+                this.speedX = Math.random() * 0.4 - 0.2;
+                this.alpha = Math.random() * 0.6 + 0.1;
+                this.alphaDir = Math.random() > 0.5 ? 0.003 : -0.003;
+                this.life = Math.random() * 200 + 100;
+                
+                // Color Distribution: 65% Soul Cyan, 25% Ethereal Pale Ghost Dust, 10% Eldritch Crimson
+                const roll = Math.random();
+                if (roll < 0.65) {
+                    this.color = "0, 240, 255"; // Soul Cyan
+                } else if (roll < 0.90) {
+                    this.color = "203, 213, 225"; // Pale Ghost Dust
+                } else {
+                    this.color = "230, 57, 70"; // Eldritch Crimson
+                }
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += Math.sin(this.life * 0.03) * 0.4;
+                this.alpha += this.alphaDir;
+                if (this.alpha > 0.85 || this.alpha < 0.05) this.alphaDir = -this.alphaDir;
+                this.life--;
+                if (this.life <= 0 || this.y < -20) this.reset();
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${this.color}, ${this.alpha})`;
+                ctx.shadowBlur = this.size > 1.5 ? 10 : 0;
+                ctx.shadowColor = `rgba(${this.color}, 0.8)`;
+                ctx.fill();
+            }
+        }
+
+        const spirits = Array.from({ length: 90 }, () => new SpiritParticle());
+
+        function animate() {
+            ctx.clearRect(0, 0, w, h);
+            spirits.forEach(s => {
+                s.update();
+                s.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>
