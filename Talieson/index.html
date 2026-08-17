@@ -1185,60 +1185,28 @@
         };
 
         // EXHIBITION DATA
-        const exhibitions = [
-            {
-                id: 0,
-                label: "Exhibition I — Duo Action",
-                title: "The Great Egg Heist",
-                imgSrc: "Jade and Layla ー The Great Egg Heist Adventure.png",
-                psdSrc: "Jade and Layla ー The Great Egg Heist Adventure.psd",
-                caption: "JADE & LAYLA ー THE GREAT EGG HEIST ADVENTURE",
-                primaryColor: "#38b000",      /* Jade Emerald Green */
-                secondaryColor: "#ffb703",    /* Glowing Egg Gold */
-                glow: "rgba(255, 183, 3, 0.28)",
-                bgGlow: "rgba(56, 176, 0, 0.12)",
-                status: "Tactical Retreat (Screaming)",
-                narrative: "The plan was simple: scout the ancient avian ruins and leave quietly. Jade, being the outspoken menace she is, saw a glowing magical egg and decided it belonged in their living room. Somehow, their partnership remains unbroken.",
-                dialogueHTML: `
-                    <div class="dialogue-line">
-                        <span class="speaker-layla">LAYLA:</span> "Jade... I specifically asked you to scout the perimeter for five minutes. Five minutes! How did you manage to aggravate an ancient Roc in under three?!"
-                    </div>
-                    <div class="dialogue-line">
-                        <span class="speaker-jade">JADE:</span> "I was scouting! Then I saw this shiny giant omelet-in-progress and thought, 'Layla works so hard, she deserves an ancient legendary breakfast!' Also it didn't have a 'Do Not Touch' sign!"
-                    </div>
-                    <div class="dialogue-line">
-                        <span class="speaker-layla">LAYLA:</span> "THE SIGN WAS THE MOTHER CURRENTLY TRYING TO SWALLOW US WHOLE!"
-                    </div>
-                    <div class="dialogue-line">
-                        <span class="speaker-jade">JADE:</span> "Relax! I grabbed the <i>smallest</i> egg in the nest! That's called compromise!"
-                    </div>
-                `,
-                particleMode: "heist"
-            },
-            {
-                id: 1,
-                label: "Exhibition II — Solo Solitude",
-                title: "Moonlight Solitude",
-                imgSrc: "Layla ー Moonlight Solitude.png",
-                psdSrc: "Layla ー Moonlight Solitude.psd",
-                caption: "LAYLA ー MOONLIGHT SOLITUDE",
-                primaryColor: "#0077b6",      /* Deep Ice Blue */
-                secondaryColor: "#90e0ef",    /* Argent Moonlight Silver */
-                glow: "rgba(144, 224, 239, 0.3)",
-                bgGlow: "rgba(0, 119, 182, 0.15)",
-                status: "Serene & Reflective",
-                narrative: "Before the chaotic egg heists and screaming bird monsters, there were quiet nights. Layla standing under the argent glow of the full moon, catching the first falling snow in absolute tranquility.",
-                dialogueHTML: `
-                    <div class="dialogue-line">
-                        <span class="speaker-layla">LAYLA:</span> "It's snowing..."
-                    </div>
-                    <div class="dialogue-line" style="margin-top: 0.5rem; font-style: italic; color: #a0aec0;">
-                        Of course, this peaceful moment lasted approximately four seconds before Jade accidentally dislodged an entire tree's worth of snow onto herself while trying to catch a frozen pinecone. Still, beneath the quiet moonlight, their bond remains unbroken.
-                    </div>
-                `,
-                particleMode: "snow"
-            }
-        ];
+const exhibitions = [
+    {
+        id: 0,
+        label: "Exhibition I — Duo Action",
+        title: "The Great Egg Heist",
+        imgSrc: "Jade and Layla ー The Great Egg Heist Adventure.png",
+        psdName: "Jade and Layla ー The Great Egg Heist Adventure.psd",
+        psdSrc: "https://drive.google.com/file/d/1SzeVpusPwAx6aBz_nkrSLFQdxDh9QIA_/view?usp=sharing",
+        caption: "JADE & LAYLA ー THE GREAT EGG HEIST ADVENTURE",
+        // ...
+    },
+    {
+        id: 1,
+        label: "Exhibition II — Solo Solitude",
+        title: "Moonlight Solitude",
+        imgSrc: "Layla ー Moonlight Solitude.png",
+        psdName: "Layla ー Moonlight Solitude.psd",
+        psdSrc: "https://drive.google.com/file/d/1rxpAiTk1-02eOwEaz3mwK9KUfxgfvN00/view?usp=sharing",
+        caption: "LAYLA ー MOONLIGHT SOLITUDE",
+        // ...
+    }
+];
 
         let currentIdx = 0;
 
@@ -1310,16 +1278,20 @@
 
         // --- PASSWORD-PROTECTED DELIVERY VAULT LOGIC ---
         function updateVaultManifest() {
-            const activeData = exhibitions[currentIdx];
-            vaultActiveTitle.innerText = activeData.title;
-            vaultPngName.innerText = activeData.imgSrc;
-            vaultPngLink.href = activeData.imgSrc;
-            vaultPngLink.setAttribute("download", activeData.imgSrc);
-            vaultPsdName.innerText = activeData.psdSrc;
-            vaultPsdLink.href = activeData.psdSrc;
-            vaultPsdLink.setAttribute("download", activeData.psdSrc);
-        }
-
+    const activeData = exhibitions[currentIdx];
+    vaultActiveTitle.innerText = activeData.title;
+    
+    // PNG Asset (Local Download)
+    vaultPngName.innerText = activeData.imgSrc;
+    vaultPngLink.href = activeData.imgSrc;
+    vaultPngLink.setAttribute("download", activeData.imgSrc);
+    
+    // PSD Asset (Google Drive External Link)
+    vaultPsdName.innerText = activeData.psdName;
+    vaultPsdLink.href = activeData.psdSrc;
+    vaultPsdLink.setAttribute("target", "_blank");
+    vaultPsdLink.removeAttribute("download");
+}
         function unlockVault() {
             const entered = vaultPassInput.value.trim().toLowerCase().replace(/[^a-z0-9]/g, "");
             const target = "together until the end".toLowerCase().replace(/[^a-z0-9]/g, "");
