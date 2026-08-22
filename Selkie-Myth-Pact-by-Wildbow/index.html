@@ -1,1 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selkie Myth — Blake Thorburn (Pact Fanart Package)</title>
+    <link rel="icon" type="image/png" href="../favicon.png">
+    
+    <!-- Cinematic Gothic & Clean Editorial Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;900&family=Montserrat:ital,wght@0,200;0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Palette: Deep Occult Shadows, Frost Cyan & Amber Gold */
+            --bg-void: #04080d;
+            --bg-card: rgba(8, 14, 20, 0.88);
+            --parchment: #e2e8f0;
+            
+            --theme-primary: #00e5ff; /* Frost Hatchet Cyan */
+            --theme-glow: rgba(0, 229, 255, 0.28);
+            --theme-bg-glow: rgba(0, 229, 255, 0.12);
+            
+            --theme-secondary: #ffb703; /* Goldfinch / Pizza Amber */
+            --secondary-glow: rgba(255, 183, 3, 0.25);
+            
+            --bone-white: #cbd5e1;
+            --border-line: rgba(0, 229, 255, 0.25);
+            
+            --font-serif: 'Cinzel', serif;
+            --font-sans: 'Montserrat', sans-serif;
+        }
 
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-void);
+            color: var(--parchment);
+            font-family: var(--font-sans);
+            min-height: 100vh;
+            overflow-x: hidden;
+            user-select: none;
+            position: relative;
+        }
+
+        /* --- FILM GRAIN & OCCULT VIGNETTE --- */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 999;
+            mix-blend-mode: overlay;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: radial-gradient(circle at center, transparent 40%, rgba(2, 4, 7, 0.9) 100%);
+            pointer-events: none;
+            z-index: 998;
+        }
+
+        /* Ethereal Frost Canvas */
+        #ambientCanvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+            mix-blend-mode: screen;
+            opacity: 0.85;
+        }
+
+        /* Frost & Amber Aura */
+        #cursorAura {
+            position: fixed;
+            width: 520px; height: 520px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--theme-glow) 0%, var(--theme-bg-glow) 35%, transparent 70%);
+            z-index: 2;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: screen;
+            transition: width 0.3s, height 0.3s;
+        }
+
+        /* --- TOP PACKAGE HEADER --- */
+        .package-header {
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2.8rem 4vw 1rem 4vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .publisher-brand {
+            display: flex;
+            align-items: center;
+            gap: 1.4rem;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .logo-img {
+            height: 50px;
+            width: auto;
+            filter: drop-shadow(0 0 15px var(--theme-primary));
+            transition: transform 0.4s ease;
+        }
+
+        .publisher-brand:hover .logo-img {
+            transform: scale(1.05) rotate(-1deg);
+        }
+
+        .package-title-group h1 {
+            font-family: var(--font-serif);
+            font-size: 1.15rem;
+            letter-spacing: 4px;
+            color: #fff;
+            text-transform: uppercase;
+            text-shadow: 0 0 15px var(--theme-glow);
+        }
+
+        .package-badge {
+            font-size: 0.68rem;
+            letter-spacing: 3px;
+            color: var(--theme-primary);
+            text-transform: uppercase;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .package-badge::before {
+            content: "✦";
+            color: var(--theme-secondary);
+        }
+
+        .delivery-status-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--font-serif);
+            font-size: 0.72rem;
+            color: var(--theme-primary);
+            letter-spacing: 3px;
+            padding: 0.65rem 1.4rem;
+            border: 1px solid rgba(0, 229, 255, 0.35);
+            background: rgba(4, 7, 12, 0.85);
+            border-radius: 2px;
+            box-shadow: 0 0 20px var(--theme-glow);
+            text-transform: uppercase;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--theme-primary);
+            box-shadow: 0 0 10px var(--theme-primary);
+            animation: pulseDot 2s infinite ease-in-out;
+        }
+
+        @keyframes pulseDot {
+            0%, 100% { transform: scale(0.9); opacity: 0.6; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+
+        /* --- MAIN SHOWCASE SECTION --- */
+        .showcase-container {
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 1.5rem 4vw 3rem 4vw;
+            display: flex;
+            gap: 3.5vw;
+            align-items: flex-start;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* MASTER ARTWORK VIEWPORT */
+        .artwork-column {
+            flex: 1.15;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .artwork-frame {
+            position: relative;
+            width: 100%;
+            max-width: 680px;
+            background: rgba(2, 3, 5, 0.95);
+            border: 1px solid var(--border-line);
+            border-radius: 4px;
+            box-shadow: 0 30px 90px rgba(0,0,0,0.98), 0 0 40px rgba(0, 229, 255, 0.08);
+            overflow: hidden;
+            cursor: pointer;
+            transition: border-color 0.5s ease, box-shadow 0.5s ease, transform 0.4s ease;
+        }
+
+        .artwork-frame:hover {
+            transform: scale(1.01);
+            border-color: var(--theme-primary);
+            box-shadow: 0 35px 100px rgba(0,0,0,1), 0 0 50px var(--theme-glow);
+        }
+
+        .artwork-frame::before, .artwork-frame::after,
+        .codex-card::before, .codex-card::after {
+            content: '';
+            position: absolute;
+            width: 16px; height: 16px;
+            border-color: var(--theme-primary);
+            border-style: solid;
+            z-index: 6;
+            pointer-events: none;
+            opacity: 0.75;
+            transition: border-color 0.5s ease;
+        }
+
+        .artwork-frame::before, .codex-card::before { top: 10px; left: 10px; border-width: 1px 0 0 1px; }
+        .artwork-frame::after, .codex-card::after { bottom: 10px; right: 10px; border-width: 0 1px 1px 0; }
+
+        .display-img {
+            width: 100%;
+            height: auto;
+            max-height: 80vh;
+            object-fit: contain;
+            display: block;
+            transition: transform 0.6s ease;
+        }
+
+        .artwork-frame:hover .display-img {
+            transform: scale(1.02);
+        }
+
+        .expand-badge {
+            position: absolute;
+            bottom: 18px;
+            right: 18px;
+            background: rgba(3, 5, 8, 0.9);
+            border: 1px solid var(--theme-primary);
+            padding: 0.55rem 1.2rem;
+            font-family: var(--font-serif);
+            font-size: 0.68rem;
+            letter-spacing: 3px;
+            color: var(--parchment);
+            border-radius: 2px;
+            pointer-events: none;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.9);
+            text-transform: uppercase;
+        }
+
+        /* --- DIGITAL PACKAGE CODEX --- */
+        .codex-column {
+            flex: 1.1;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .codex-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-line);
+            padding: 2.8rem 2.5rem;
+            border-radius: 3px;
+            box-shadow: 0 30px 70px rgba(0,0,0,0.95);
+            backdrop-filter: blur(14px);
+            position: relative;
+        }
+
+        .card-inner-frame {
+            position: absolute;
+            top: 8px; right: 8px; bottom: 8px; left: 8px;
+            border: 1px dashed rgba(0, 229, 255, 0.1);
+            pointer-events: none;
+        }
+
+        .codex-header {
+            text-align: center;
+            margin-bottom: 1.4rem;
+        }
+
+        .client-tag {
+            font-size: 0.65rem;
+            color: var(--theme-secondary);
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 0.4rem;
+            font-weight: 600;
+        }
+
+        .codex-title {
+            font-family: var(--font-serif);
+            font-size: 1.85rem;
+            color: #fff;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            line-height: 1.2;
+            text-shadow: 0 2px 15px rgba(0,0,0,0.9);
+        }
+
+        .codex-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            color: var(--theme-primary);
+            font-size: 0.8rem;
+            margin: 1rem 0 1.4rem 0;
+            opacity: 0.7;
+        }
+
+        .codex-divider::before, .codex-divider::after {
+            content: '';
+            height: 1px;
+            width: 50px;
+            background: linear-gradient(90deg, transparent, var(--theme-primary), transparent);
+        }
+
+        /* NARRATIVE & DIALOGUE BOX */
+        .synopsis-box {
+            background: rgba(2, 6, 10, 0.75);
+            border-left: 3px solid var(--theme-primary);
+            padding: 1.2rem 1.4rem;
+            font-size: 0.84rem;
+            line-height: 1.8;
+            color: #c4d1dc;
+            margin-bottom: 1.2rem;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
+            border-radius: 0 2px 2px 0;
+        }
+
+        .dialogue-box {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-left: 3px solid var(--theme-secondary);
+            padding: 1.1rem;
+            font-size: 0.82rem;
+            line-height: 1.65;
+            color: #d1d9e0;
+            margin-bottom: 1.6rem;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
+            border-radius: 0 2px 2px 0;
+        }
+
+        .dialogue-line { margin-bottom: 0.7rem; }
+        .dialogue-line:last-child { margin-bottom: 0; }
+
+        .speaker-rose { color: #a4b3c2; font-weight: 700; font-family: var(--font-serif); letter-spacing: 1px; }
+        .speaker-blake { color: var(--theme-primary); font-weight: 700; font-family: var(--font-serif); letter-spacing: 1px; }
+
+        /* INTERACTIVE DOSSIER TABS */
+        .character-nav {
+            display: flex;
+            gap: 0.6rem;
+            margin-bottom: 1rem;
+        }
+
+        .char-tab {
+            flex: 1;
+            background: rgba(4, 8, 12, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--bone-white);
+            font-family: var(--font-serif);
+            font-size: 0.72rem;
+            letter-spacing: 2px;
+            padding: 0.75rem 0.4rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .char-tab:hover, .char-tab.active {
+            color: var(--theme-primary);
+            border-color: var(--theme-primary);
+            background: var(--theme-bg-glow);
+            box-shadow: 0 0 15px var(--theme-glow);
+        }
+
+        .char-tab.btn-amber:hover, .char-tab.btn-amber.active {
+            color: var(--theme-secondary);
+            border-color: var(--theme-secondary);
+            background: rgba(255, 183, 3, 0.1);
+            box-shadow: 0 0 15px var(--secondary-glow);
+        }
+
+        .char-dossier-panel {
+            background: rgba(2, 6, 10, 0.65);
+            border: 1px solid rgba(0, 229, 255, 0.15);
+            padding: 1.2rem 1.4rem;
+            border-radius: 2px;
+            margin-bottom: 1.6rem;
+            min-height: 110px;
+        }
+
+        .dossier-identity {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding-bottom: 0.4rem;
+        }
+
+        .dossier-name { font-family: var(--font-serif); font-size: 0.95rem; color: #fff; letter-spacing: 2px; text-transform: uppercase; }
+        .dossier-role { font-size: 0.65rem; color: var(--theme-primary); letter-spacing: 2px; text-transform: uppercase; }
+        .dossier-desc { font-size: 0.8rem; line-height: 1.7; color: #a4b3c2; }
+
+        /* METADATA SUMMARY */
+        .meta-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.6rem;
+            margin-bottom: 1.6rem;
+        }
+
+        .meta-box {
+            background: rgba(3, 7, 12, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 0.65rem 1rem;
+            border-radius: 2px;
+        }
+
+        .meta-box-label { font-size: 0.62rem; color: #64748b; text-transform: uppercase; letter-spacing: 2px; }
+        .meta-box-val { font-family: var(--font-serif); font-size: 0.78rem; color: var(--parchment); text-transform: uppercase; letter-spacing: 1px; margin-top: 0.2rem; }
+
+        /* ACTION BUTTONS */
+        .action-btn-group {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .inspect-action-btn, .vault-trigger-btn {
+            flex: 1;
+            background: transparent;
+            border: 1px solid var(--theme-primary);
+            color: var(--theme-primary);
+            font-family: var(--font-serif);
+            padding: 0.9rem;
+            font-size: 0.72rem;
+            letter-spacing: 3px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .vault-trigger-btn { border-color: var(--theme-secondary); color: var(--theme-secondary); }
+
+        .inspect-action-btn:hover { background: var(--theme-bg-glow); box-shadow: 0 0 25px var(--theme-glow); color: #fff; }
+        .vault-trigger-btn:hover { background: rgba(255, 183, 3, 0.1); box-shadow: 0 0 25px var(--secondary-glow); color: #fff; }
+
+        /* --- LIGHTBOX MODAL --- */
+        #lightboxModal {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(2, 4, 6, 0.96);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+            backdrop-filter: blur(16px);
+        }
+        #lightboxModal.active { opacity: 1; visibility: visible; pointer-events: auto; }
+
+        .lightbox-content-box { display: flex; flex-direction: column; align-items: center; max-width: 92vw; max-height: 94vh; }
+        
+        .lightbox-img {
+            max-width: 90vw; max-height: 82vh; object-fit: contain;
+            box-shadow: 0 0 70px rgba(0,0,0,1);
+            border: 1px solid var(--theme-primary); border-radius: 2px;
+        }
+
+        .lightbox-caption {
+            margin-top: 1.2rem; font-family: var(--font-serif); font-size: 0.85rem; letter-spacing: 4px;
+            color: #ffffff; text-transform: uppercase; text-align: center; text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
+        }
+
+        .lightbox-close {
+            position: absolute; top: 2rem; right: 3rem; font-size: 2.8rem; color: var(--theme-primary);
+            background: none; border: none; cursor: pointer; font-family: var(--font-sans); font-weight: 200; transition: transform 0.3s;
+        }
+        .lightbox-close:hover { transform: rotate(90deg) scale(1.1); }
+
+        /* --- PASSWORD-PROTECTED VAULT MODAL --- */
+        #vaultModal {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(2, 4, 6, 0.96); z-index: 1300;
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; visibility: hidden; pointer-events: none;
+            transition: opacity 0.4s ease, visibility 0.4s ease; backdrop-filter: blur(16px);
+        }
+        #vaultModal.active { opacity: 1; visibility: visible; pointer-events: auto; }
+
+        .vault-card {
+            background: rgba(6, 10, 16, 0.96); border: 1px solid var(--theme-secondary);
+            padding: 3rem 2.4rem; max-width: 540px; width: 90%; border-radius: 4px;
+            box-shadow: 0 25px 70px rgba(0,0,0,0.95), 0 0 40px var(--secondary-glow);
+            position: relative; text-align: center;
+        }
+
+        .vault-close {
+            position: absolute; top: 1.2rem; right: 1.5rem; font-size: 2rem;
+            color: var(--theme-secondary); background: none; border: none; cursor: pointer; transition: transform 0.3s;
+        }
+        .vault-close:hover { transform: rotate(90deg); }
+
+        .vault-tag { font-size: 0.65rem; letter-spacing: 4px; color: var(--theme-secondary); text-transform: uppercase; margin-bottom: 0.5rem; }
+        .vault-title { font-family: var(--font-serif); font-size: 1.65rem; color: #fff; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 1rem; }
+        .vault-prompt-text { font-size: 0.82rem; color: #a0aec0; line-height: 1.6; margin-bottom: 1.8rem; }
+
+        .vault-input-group { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem; }
+        .vault-input {
+            width: 100%; background: rgba(0, 0, 0, 0.6); border: 1px solid var(--border-line); border-bottom: 2px solid var(--theme-secondary);
+            padding: 0.85rem 1rem; color: var(--parchment); font-family: var(--font-serif); font-size: 0.95rem; letter-spacing: 2px;
+            outline: none; text-align: center; border-radius: 2px; transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .vault-input:focus { border-color: var(--theme-secondary); box-shadow: 0 0 15px var(--secondary-glow); }
+        .vault-submit-btn {
+            background: transparent; border: 1px solid var(--theme-secondary); color: var(--theme-secondary);
+            font-family: var(--font-serif); padding: 0.85rem; font-size: 0.8rem; letter-spacing: 3px; cursor: pointer; text-transform: uppercase; transition: all 0.3s ease;
+        }
+        .vault-submit-btn:hover { background: rgba(255, 183, 3, 0.1); box-shadow: 0 0 20px var(--secondary-glow); color: #fff; }
+        
+        .vault-error { color: #e63946; font-size: 0.75rem; letter-spacing: 2px; font-family: var(--font-serif); margin-top: 0.5rem; min-height: 18px; }
+
+        .vault-unlocked-container { display: none; flex-direction: column; gap: 0.8rem; text-align: left; }
+        .manifest-item {
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(4, 8, 12, 0.75); border: 1px solid var(--border-line);
+            padding: 0.85rem 1.1rem; border-radius: 2px; transition: all 0.3s ease;
+        }
+        .manifest-item:hover { border-color: var(--theme-primary); box-shadow: 0 0 12px var(--theme-glow); }
+        .file-info { display: flex; flex-direction: column; gap: 0.2rem; max-width: 70%; }
+        .file-name { font-family: var(--font-serif); font-size: 0.78rem; color: #fff; word-break: break-word; }
+        .file-spec { font-size: 0.62rem; color: #7d8c99; letter-spacing: 1px; text-transform: uppercase; }
+        
+        .download-btn {
+            background: transparent; border: 1px solid var(--theme-primary); color: var(--theme-primary);
+            font-family: var(--font-serif); font-size: 0.68rem; letter-spacing: 2px; padding: 0.5rem 0.9rem;
+            text-transform: uppercase; text-decoration: none; border-radius: 2px; transition: all 0.3s ease; white-space: nowrap;
+        }
+        .download-btn:hover { background: var(--theme-primary); color: #000; font-weight: 600; box-shadow: 0 0 15px var(--theme-primary); }
+
+        /* --- LUXURY EDITORIAL FOOTER --- */
+        .luxury-footer {
+            position: relative; width: 100%; max-width: 1600px; margin: 2rem auto 2.8rem auto;
+            padding: 2rem 4vw 0 4vw; border-top: 1px dashed rgba(0, 229, 255, 0.15);
+            display: flex; flex-direction: column; gap: 1.4rem; z-index: 10; font-family: var(--font-serif); text-transform: uppercase;
+        }
+        .footer-top-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.72rem; letter-spacing: 3px; }
+        .footer-left { color: #64748b; display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+        .footer-dim { color: #52637a; letter-spacing: 3px; }
+        .footer-gold { color: var(--theme-secondary); font-weight: 600; letter-spacing: 2px; text-shadow: 0 0 10px var(--secondary-glow); }
+        .footer-right { color: var(--theme-primary); letter-spacing: 3px; font-size: 0.7rem; text-shadow: 0 0 8px var(--theme-glow); }
+        .footer-bottom-row { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.04); padding-top: 1.2rem; }
+        .social-links { display: flex; gap: 1.2rem; align-items: center; flex-wrap: wrap; }
+        .social-links a { color: rgba(226, 232, 240, 0.45); text-decoration: none; font-size: 0.72rem; letter-spacing: 3px; transition: color 0.3s; }
+        .social-links a:hover { color: var(--theme-primary); text-shadow: 0 0 10px var(--theme-glow); }
+        .social-sep { color: rgba(0, 229, 255, 0.3); font-size: 0.6rem; }
+        .vgen-highlight { color: var(--theme-secondary) !important; font-weight: 600; }
+        .credit-sub { font-size: 0.62rem; color: rgba(226, 232, 240, 0.2); letter-spacing: 2px; }
+
+        /* RESPONSIVE */
+        @media (max-width: 1150px) {
+            body { overflow-y: auto; padding-bottom: 3rem; }
+            .showcase-container { flex-direction: column; gap: 3rem; align-items: center; }
+            .artwork-column, .codex-column { width: 100%; max-width: 750px; }
+            .package-header { flex-direction: column; gap: 1.5rem; text-align: center; }
+            .footer-top-row, .footer-bottom-row { flex-direction: column; gap: 1rem; text-align: center; justify-content: center; }
+            .footer-left { justify-content: center; }
+        }
+        @media (max-width: 768px) {
+            .codex-card { padding: 2rem 1.5rem; }
+            .codex-title { font-size: 1.5rem; }
+            .meta-summary { grid-template-columns: 1fr; }
+            .character-nav { flex-direction: column; }
+            .manifest-item { flex-direction: column; align-items: flex-start; gap: 0.8rem; }
+            .download-btn { width: 100%; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ethereal Frost Particles & Cursor Aura -->
+    <canvas id="ambientCanvas"></canvas>
+    <div id="cursorAura"></div>
+
+    <!-- Lightbox Modal -->
+    <div id="lightboxModal">
+        <button class="lightbox-close" id="modalClose">&times;</button>
+        <div class="lightbox-content-box" onclick="event.stopPropagation()">
+            <img class="lightbox-img" id="lightboxImg" src="Selkie, Blake Thorburn.png" alt="Blake Thorburn — The Pizza Run">
+            <p class="lightbox-caption">BLAKE THORBURN ー THE PIZZA RUN</p>
+        </div>
+    </div>
+
+    <!-- Password-Protected Vault Modal -->
+    <div id="vaultModal">
+        <div class="vault-card">
+            <button class="vault-close" id="vaultClose">&times;</button>
+            
+            <!-- Locked State Screen -->
+            <div id="vaultLockedState">
+                <p class="vault-tag">✦ Sealed Archive ✦</p>
+                <h3 class="vault-title">Deliverables Vault</h3>
+                <p class="vault-prompt-text">
+                    This archive is protected by the practitioner's oath. Speak the true passphrase to unlock the master .PNG and .PSD assets.
+                </p>
+                <div class="vault-input-group">
+                    <input type="password" id="vaultPassInput" class="vault-input" placeholder="WHISPER THE PHRASE..." autocomplete="off">
+                    <button class="vault-submit-btn" id="vaultSubmitBtn">Breach Ward</button>
+                </div>
+                <div class="vault-error" id="vaultError"></div>
+            </div>
+
+            <!-- Unlocked State Screen -->
+            <div id="vaultUnlockedState" class="vault-unlocked-container">
+                <p class="vault-tag" style="color: var(--theme-primary);">✦ Seal Breached ✦</p>
+                <h3 class="vault-title" style="text-align: left; margin-bottom: 0.6rem;">The Pizza Run</h3>
+                <p class="vault-prompt-text" style="text-align: left; margin-bottom: 1.2rem;">
+                    Master delivery assets are unlocked for patron handover.
+                </p>
+                
+                <div class="manifest-item">
+                    <div class="file-info">
+                        <span class="file-name">Selkie, Blake Thorburn.png</span>
+                        <span class="file-spec">Master Full-Render Asset · 350 DPI</span>
+                    </div>
+                    <a href="Selkie, Blake Thorburn.png" download class="download-btn">Save Asset</a>
+                </div>
+
+                <div class="manifest-item">
+                    <div class="file-info">
+                        <span class="file-name">Selkie, Blake Thorburn.psd</span>
+                        <span class="file-spec">Master Single-Layer Archive (.PSD)</span>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1P6pMKyplojDuCtBjMD8o5E5DzYaCax7d/view?usp=sharing" target="_blank" class="download-btn">Save Asset</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- TOP HEADER -->
+    <header class="package-header">
+        <div class="publisher-brand">
+            <img class="logo-img" src="../logo.png" alt="Karachiiy Scriptorium">
+            <div class="package-title-group">
+                <h1>Selkie Myth</h1>
+                <p class="package-badge">Official Pact Asset Vault</p>
+            </div>
+        </div>
+        <div class="delivery-status-badge">
+            <span class="status-dot"></span>
+            <span>✦ Patron Delivery Package</span>
+        </div>
+    </header>
+
+    <!-- MAIN SHOWCASE CONTAINER -->
+    <main class="showcase-container">
+        
+        <!-- MASTER ARTWORK DISPLAY -->
+        <section class="artwork-column">
+            <div class="artwork-frame" id="artworkFrame">
+                <img class="display-img" id="displayImg" src="Selkie, Blake Thorburn.png" alt="Blake Thorburn Illustration">
+                <div class="expand-badge">✦ CLICK TO EXPAND FULL MASTER ✦</div>
+            </div>
+        </section>
+
+        <!-- DIGITAL PACKAGE CODEX -->
+        <section class="codex-column">
+            <div class="codex-card">
+                <div class="card-inner-frame"></div>
+                
+                <div class="codex-header">
+                    <p class="client-tag">Commission Delivery // Pact Fanart</p>
+                    <h2 class="codex-title">Blake Thorburn</h2>
+                </div>
+                
+                <div class="codex-divider">✦ ✥ ✦</div>
+                
+                <!-- NARRATIVE BOX -->
+                <div class="synopsis-box">
+                    Blake Thorburn just inherited seven lifetimes of apocalyptic karmic debt, a haunted Victorian mansion, and an army of supernatural monsters waiting to assassinate him if he steps foot on the lawn. Naturally, his first course of action was to order a takeaway pizza.
+                </div>
+
+                <!-- DIALOGUE BOX -->
+                <div class="dialogue-box">
+                    <div class="dialogue-line">
+                        <span class="speaker-rose">ROSE:</span> "Let me get this straight. You used our ancestral Frost Hatchet—a weapon forged by binding a vengeful, drowning water ghost—to secure a pepperoni pizza."
+                    </div>
+                    <div class="dialogue-line">
+                        <span class="speaker-blake">BLAKE:</span> "I was hungry, Rose. The goblins were on the lawn. It was a tactical acquisition."
+                    </div>
+                    <div class="dialogue-line">
+                        <span class="speaker-rose">ROSE:</span> "The pizza is literally frozen solid, Blake."
+                    </div>
+                    <div class="dialogue-line">
+                        <span class="speaker-blake">BLAKE:</span> "I'll microwave it."
+                    </div>
+                </div>
+
+                <!-- CHARACTER ARCHIVE TABS -->
+                <div class="character-nav">
+                    <button class="char-tab active" data-char="blake">✦ Blake</button>
+                    <button class="char-tab" data-char="rose">✦ Rose</button>
+                    <button class="char-tab btn-amber" data-char="hatchet">✦ Frost Hatchet</button>
+                </div>
+
+                <!-- DYNAMIC DOSSIER PANEL -->
+                <div class="char-dossier-panel" id="dossierPanel">
+                    <div class="dossier-identity">
+                        <span class="dossier-name" id="dossierName">Blake Thorburn</span>
+                        <span class="dossier-role" id="dossierRole">Diabolist Heir & Handyman</span>
+                    </div>
+                    <p class="dossier-desc" id="dossierDesc">
+                        A 20-year-old runaway turned practitioner. Armed with a blue hoodie, distinctive watercolor bird tattoos that gauge his spiritual distress, and an unshakeable, deadpan stubbornness to survive the occult underworld.
+                    </p>
+                </div>
+
+                <!-- METADATA SPECS -->
+                <div class="meta-summary">
+                    <div class="meta-box">
+                        <p class="meta-box-label">Patron</p>
+                        <p class="meta-box-val">Selkie Myth</p>
+                    </div>
+                    <div class="meta-box">
+                        <p class="meta-box-label">Author</p>
+                        <p class="meta-box-val">Wildbow</p>
+                    </div>
+                    <div class="meta-box">
+                        <p class="meta-box-label">Web Serial</p>
+                        <p class="meta-box-val">PACT</p>
+                    </div>
+                    <div class="meta-box">
+                        <p class="meta-box-label">Subject</p>
+                        <p class="meta-box-val">Black Thorburn</p>
+                    </div>
+                </div>
+
+                <!-- ACTION BUTTONS -->
+                <div class="action-btn-group">
+                    <button class="inspect-action-btn" id="inspectBtn">✦ Inspect Canvas ✦</button>
+                    <button class="vault-trigger-btn" id="vaultBtn">🔒 Master Asset Vault</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- LUXURY EDITORIAL FOOTER -->
+    <footer class="luxury-footer">
+        <div class="footer-top-row">
+            <div class="footer-left">
+                <span class="footer-dim">ILLUSTRATED WITH GRIM DEVOTION BY </span>
+                <span class="footer-gold">ARCHMAGE KARACHIIY</span>
+                <span class="footer-dim"> FOR </span>
+                <span class="footer-gold">SELKIE MYTH</span>
+            </div>
+            <div class="footer-right">
+                PACT ARCHIVE // BLAKE THORBURN
+            </div>
+        </div>
+
+        <div class="footer-bottom-row">
+            <div class="social-links">
+                <a href="https://x.com/Karachiiy" target="_blank">𝕏 / Twitter</a>
+                <span class="social-sep">✦</span>
+                <a href="https://www.pixiv.net/en/users/33593211" target="_blank">Pixiv</a>
+                <span class="social-sep">✦</span>
+                <a href="mailto:karacia8555@gmail.com">Email Contact</a>
+                <span class="social-sep">✦</span>
+                <a href="https://vgen.co/Karachiiy" target="_blank" class="vgen-highlight">Commission on VGen</a>
+            </div>
+            <p class="credit-sub">Arcane Craftsmanship & Storytelling Vault</p>
+        </div>
+    </footer>
+
+    <script>
+        // CANONICAL LORE DATA
+        const characterData = {
+            blake: {
+                name: "Blake Thorburn",
+                role: "Diabolist Heir & Handyman",
+                desc: "A 20-year-old runaway turned practitioner. Armed with a blue hoodie, distinctive watercolor bird tattoos that gauge his spiritual distress, and an unshakeable, deadpan stubbornness to survive the occult underworld.",
+                roleColor: "#00e5ff"
+            },
+            rose: {
+                name: "Rose Thorburn",
+                role: "The Girl in the Mirror",
+                desc: "Blake's alternate-self and co-heir to the Thorburn legacy. Trapped in the mirror world, she provides magical knowledge, tactical advice, and constant exasperation regarding Blake's reckless survival methods.",
+                roleColor: "#cbd5e1"
+            },
+            hatchet: {
+                name: "The Frost Hatchet",
+                role: "Bound Occult Weapon",
+                desc: "An ordinary hardware-store steel hatchet bound with the vengeful ghost of June Burlison. It radiates sub-zero supernatural cold, leaving trails of freezing cyan mist and flash-freezing flesh (and pizza) on contact.",
+                roleColor: "#ffb703"
+            }
+        };
+
+        // DOSSIER TAB LOGIC
+        const charTabs = document.querySelectorAll(".char-tab");
+        const dossierName = document.getElementById("dossierName");
+        const dossierRole = document.getElementById("dossierRole");
+        const dossierDesc = document.getElementById("dossierDesc");
+
+        charTabs.forEach(tab => {
+            tab.addEventListener("click", () => {
+                const charKey = tab.getAttribute("data-char");
+                const data = characterData[charKey];
+                if (!data) return;
+
+                charTabs.forEach(t => t.classList.remove("active"));
+                tab.classList.add("active");
+
+                dossierName.innerText = data.name;
+                dossierRole.innerText = data.role;
+                dossierRole.style.color = data.roleColor;
+                dossierDesc.innerText = data.desc;
+            });
+        });
+
+        // LIGHTBOX LOGIC
+        const artworkFrame = document.getElementById("artworkFrame");
+        const inspectBtn = document.getElementById("inspectBtn");
+        const lightboxModal = document.getElementById("lightboxModal");
+        const modalClose = document.getElementById("modalClose");
+
+        function openLightbox() { lightboxModal.classList.add("active"); }
+        function closeLightbox() { lightboxModal.classList.remove("active"); }
+
+        artworkFrame.addEventListener("click", openLightbox);
+        inspectBtn.addEventListener("click", openLightbox);
+        modalClose.addEventListener("click", closeLightbox);
+        lightboxModal.addEventListener("click", (e) => { if (e.target === lightboxModal) closeLightbox(); });
+
+        // VAULT LOGIC
+        const vaultBtn = document.getElementById("vaultBtn");
+        const vaultModal = document.getElementById("vaultModal");
+        const vaultClose = document.getElementById("vaultClose");
+        const vaultPassInput = document.getElementById("vaultPassInput");
+        const vaultSubmitBtn = document.getElementById("vaultSubmitBtn");
+        const vaultError = document.getElementById("vaultError");
+        const vaultLockedState = document.getElementById("vaultLockedState");
+        const vaultUnlockedState = document.getElementById("vaultUnlockedState");
+
+        let isVaultUnlocked = false;
+
+        function unlockVault() {
+            const entered = vaultPassInput.value.trim().toLowerCase().replace(/[^a-z0-9]/g, "");
+            const target = "ruleofthree"; // "rule of three" stripped of spaces
+
+            if (entered === target) {
+                isVaultUnlocked = true;
+                vaultError.innerText = "";
+                vaultLockedState.style.display = "none";
+                vaultUnlockedState.style.display = "flex";
+            } else {
+                vaultError.innerText = "✦ The ward rejects your phrase. ✦";
+                vaultPassInput.value = "";
+                setTimeout(() => { vaultError.innerText = ""; }, 2500);
+            }
+        }
+
+        vaultBtn.addEventListener("click", () => {
+            vaultModal.classList.add("active");
+            if (isVaultUnlocked) {
+                vaultLockedState.style.display = "none";
+                vaultUnlockedState.style.display = "flex";
+            } else {
+                vaultLockedState.style.display = "block";
+                vaultUnlockedState.style.display = "none";
+                setTimeout(() => vaultPassInput.focus(), 200);
+            }
+        });
+
+        vaultSubmitBtn.addEventListener("click", unlockVault);
+        vaultPassInput.addEventListener("keydown", (e) => { if (e.key === "Enter") unlockVault(); });
+        vaultClose.addEventListener("click", () => vaultModal.classList.remove("active"));
+        vaultModal.addEventListener("click", (e) => { if (e.target === vaultModal) vaultModal.classList.remove("active"); });
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") {
+                closeLightbox();
+                vaultModal.classList.remove("active");
+            }
+        });
+
+        // CURSOR AURA TRACKING
+        const aura = document.getElementById("cursorAura");
+        document.addEventListener("mousemove", (e) => {
+            aura.style.left = e.clientX + "px";
+            aura.style.top = e.clientY + "px";
+        });
+
+        // AMBIENT FROST PARTICLES
+        const canvas = document.getElementById("ambientCanvas");
+        const ctx = canvas.getContext("2d");
+        let w = canvas.width = window.innerWidth;
+        let h = canvas.height = window.innerHeight;
+
+        window.addEventListener("resize", () => {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        });
+
+        class FrostParticle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * w;
+                this.y = h + Math.random() * 80;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedY = -(Math.random() * 0.8 + 0.2);
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.alpha = Math.random() * 0.5 + 0.1;
+                this.alphaDir = Math.random() > 0.5 ? 0.002 : -0.002;
+                this.life = Math.random() * 200 + 100;
+                
+                // Colors: 70% Cyan Frost, 30% Goldfinch Amber
+                if (Math.random() < 0.7) {
+                    this.color = "0, 229, 255";
+                } else {
+                    this.color = "255, 183, 3";
+                }
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += Math.sin(this.life * 0.02) * 0.5;
+                this.alpha += this.alphaDir;
+                if (this.alpha > 0.75 || this.alpha < 0.05) this.alphaDir = -this.alphaDir;
+                this.life--;
+                if (this.life <= 0 || this.y < -20) this.reset();
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${this.color}, ${this.alpha})`;
+                ctx.shadowBlur = this.size > 1.5 ? 8 : 0;
+                ctx.shadowColor = `rgba(${this.color}, 0.6)`;
+                ctx.fill();
+            }
+        }
+
+        const particles = Array.from({ length: 80 }, () => new FrostParticle());
+
+        function animate() {
+            ctx.clearRect(0, 0, w, h);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>
