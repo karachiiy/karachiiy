@@ -1,1 +1,861 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schale Archive // Delivery for 月ノ宮瑠華</title>
+    
+    <!-- Clean, Modern Anime/Tech Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,600;0,700;0,900;1,400&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Blue Archive Aesthetic Palette */
+            --bg-deep: #0f172a;           /* Night sky navy */
+            --bg-panel: #ffffff;          /* Clean white for main panels */
+            --schale-blue: #00a2ff;       /* Signature cyan/blue */
+            --schale-blue-glow: rgba(0, 162, 255, 0.4);
+            --schale-dark: #1e293b;       /* Dark UI elements */
+            --schale-pink: #ff5e94;       /* Romantic/teasing accent */
+            --text-main: #334155;
+            --text-muted: #94a3b8;
+            
+            --font-en: 'Montserrat', sans-serif;
+            --font-jp: 'Noto Sans JP', sans-serif;
+        }
 
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: var(--font-en);
+            min-height: 100vh;
+            overflow-x: hidden;
+            user-select: none;
+            background-image: 
+                linear-gradient(rgba(0, 162, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 162, 255, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+            background-position: center center;
+        }
+
+        /* Kivotos Floating Crosses & Particles */
+        #schaleCanvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* --- SCHALE HEADER --- */
+        .schale-header {
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem 4vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .status-icon {
+            width: 40px; height: 40px;
+            background: var(--schale-blue);
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
+            display: flex; justify-content: center; align-items: center;
+            color: #fff; font-weight: 900; font-size: 1.2rem;
+            box-shadow: 0 0 15px var(--schale-blue-glow);
+        }
+
+        .status-text h1 {
+            font-family: var(--font-en);
+            font-size: 1.1rem;
+            color: #fff;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .status-text p {
+            font-family: var(--font-jp);
+            font-size: 0.7rem;
+            color: var(--schale-blue);
+            letter-spacing: 1px;
+        }
+
+        .patron-badge {
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid var(--schale-pink);
+            padding: 0.6rem 1.5rem;
+            backdrop-filter: blur(5px);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .patron-label {
+            font-size: 0.6rem;
+            color: var(--schale-pink);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        .patron-name {
+            font-family: var(--font-jp);
+            font-size: 1.2rem;
+            color: #fff;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        /* --- MAIN LAYOUT --- */
+        .layout-container {
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 1rem 4vw 2rem 4vw;
+            display: flex;
+            gap: 2.5rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* LEFT: ARTWORK VIEWER */
+        .artwork-section {
+            flex: 1.2;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .artwork-frame {
+            background: var(--bg-panel);
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1);
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .artwork-frame:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.6), 0 0 30px var(--schale-blue-glow);
+        }
+
+        .artwork-frame::before {
+            content: 'VIEW MASTER ARCHIVE';
+            position: absolute;
+            bottom: 1.5rem; right: -1rem;
+            background: var(--schale-dark);
+            color: #fff;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            padding: 0.6rem 1.5rem;
+            clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+            pointer-events: none;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .main-image {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+            display: block;
+        }
+
+        /* RIGHT: SCHALE TERMINAL */
+        .terminal-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .terminal-box {
+            background: var(--bg-panel);
+            border-radius: 8px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 600px;
+        }
+
+        /* Tech Tabs */
+        .terminal-tabs {
+            display: flex;
+            background: #f1f5f9;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .tech-tab {
+            flex: 1;
+            padding: 1.2rem 1rem;
+            font-family: var(--font-jp);
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            background: transparent;
+            border: none;
+            outline: none;
+        }
+
+        .tech-tab:hover {
+            color: var(--schale-blue);
+        }
+
+        .tech-tab.active {
+            color: #fff;
+            background: var(--schale-blue);
+        }
+        
+        .tech-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px; left: 0; width: 100%; height: 2px;
+            background: var(--schale-blue);
+        }
+
+        /* Tab Content Areas */
+        .tab-content {
+            padding: 2.5rem;
+            display: none;
+            flex-direction: column;
+            flex-grow: 1;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .tab-content.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Report Info */
+        .report-header {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px dashed #e2e8f0;
+        }
+
+        .report-tag {
+            display: inline-block;
+            background: var(--schale-dark);
+            color: #fff;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            padding: 0.4rem 0.8rem;
+            border-radius: 2px;
+            margin-bottom: 0.8rem;
+        }
+
+        .report-title {
+            font-family: var(--font-jp);
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--schale-dark);
+            line-height: 1.3;
+        }
+
+        .report-log {
+            font-family: var(--font-jp);
+            font-size: 0.9rem;
+            line-height: 1.8;
+            color: var(--text-main);
+            background: #f8fafc;
+            border-left: 4px solid var(--schale-blue);
+            padding: 1.2rem;
+            border-radius: 0 4px 4px 0;
+            margin-bottom: 2rem;
+        }
+
+        .report-log b {
+            color: var(--schale-pink);
+        }
+
+        .metadata-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .meta-box {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            padding: 0.8rem;
+            border-radius: 4px;
+        }
+
+        .meta-label {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.3rem;
+            font-weight: 700;
+        }
+
+        .meta-value {
+            font-family: var(--font-jp);
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--schale-dark);
+        }
+
+        .switch-vault-btn {
+            background: var(--schale-dark);
+            color: #fff;
+            border: none;
+            padding: 1rem;
+            font-family: var(--font-en);
+            font-weight: 700;
+            letter-spacing: 2px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            margin-top: auto;
+        }
+
+        .switch-vault-btn:hover {
+            background: var(--schale-blue);
+            box-shadow: 0 5px 15px var(--schale-blue-glow);
+        }
+
+        /* Vault State */
+        .vault-lock-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            flex-grow: 1;
+            height: 100%;
+        }
+
+        .lock-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .vault-title {
+            font-family: var(--font-jp);
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: var(--schale-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .vault-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 1rem;
+            font-family: var(--font-jp);
+            font-size: 1rem;
+            text-align: center;
+            border: 2px solid #e2e8f0;
+            border-radius: 4px;
+            outline: none;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .password-input:focus {
+            border-color: var(--schale-blue);
+            box-shadow: 0 0 0 4px rgba(0, 162, 255, 0.1);
+        }
+
+        .unlock-btn {
+            width: 100%;
+            background: var(--schale-pink);
+            color: #fff;
+            border: none;
+            padding: 1rem;
+            font-family: var(--font-jp);
+            font-weight: 700;
+            letter-spacing: 2px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .unlock-btn:hover {
+            background: #e11d48;
+            box-shadow: 0 5px 15px rgba(255, 94, 148, 0.4);
+        }
+
+        .error-msg {
+            color: #e11d48;
+            font-family: var(--font-jp);
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-top: 1rem;
+            min-height: 20px;
+        }
+
+        /* Unlocked Manifest */
+        .vault-unlocked {
+            display: none;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .success-banner {
+            background: rgba(0, 162, 255, 0.1);
+            color: var(--schale-blue);
+            padding: 1rem;
+            border-radius: 4px;
+            text-align: center;
+            font-family: var(--font-jp);
+            font-weight: 700;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(0, 162, 255, 0.2);
+        }
+
+        .manifest-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .manifest-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .manifest-item:hover {
+            border-color: var(--schale-blue);
+            box-shadow: 0 5px 15px rgba(0, 162, 255, 0.08);
+            background: #fff;
+        }
+
+        .file-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+            max-width: 70%;
+        }
+
+        .file-name {
+            font-family: var(--font-jp);
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--schale-dark);
+            word-break: break-word;
+        }
+
+        .file-type {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .download-btn {
+            background: var(--schale-blue);
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .download-btn:hover {
+            background: #0284c7;
+            box-shadow: 0 4px 10px rgba(0, 162, 255, 0.3);
+        }
+
+        .download-btn.btn-pink {
+            background: var(--schale-pink);
+        }
+        .download-btn.btn-pink:hover {
+            background: #e11d48;
+            box-shadow: 0 4px 10px rgba(255, 94, 148, 0.3);
+        }
+
+        /* --- LIGHTBOX --- */
+        #lightbox {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(15, 23, 42, 0.95);
+            z-index: 1000; display: flex; justify-content: center; align-items: center;
+            opacity: 0; visibility: hidden; pointer-events: none;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        #lightbox.active {
+            opacity: 1; visibility: visible; pointer-events: auto;
+        }
+
+        .lightbox-img {
+            max-width: 90vw; max-height: 90vh;
+            border-radius: 4px;
+            box-shadow: 0 0 50px rgba(0, 162, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .close-lightbox {
+            position: absolute; top: 2rem; right: 3rem;
+            font-size: 3rem; color: #fff; cursor: pointer;
+            transition: transform 0.3s ease, color 0.3s;
+        }
+
+        .close-lightbox:hover {
+            color: var(--schale-pink);
+            transform: rotate(90deg);
+        }
+
+        /* --- SCHALE FOOTER (DEDICATION) --- */
+        .schale-footer {
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto 2rem auto;
+            padding: 1.5rem 4vw;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-left {
+            font-family: var(--font-en);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .footer-left strong {
+            color: #fff;
+            font-weight: 700;
+            font-family: var(--font-jp);
+        }
+
+        .footer-left .highlight {
+            color: var(--schale-blue);
+            font-family: var(--font-en);
+            text-shadow: 0 0 8px var(--schale-blue-glow);
+        }
+
+        .footer-right {
+            font-family: var(--font-en);
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.3);
+            letter-spacing: 3px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .layout-container { flex-direction: column; }
+            .artwork-section, .terminal-section { width: 100%; }
+            .manifest-item { flex-direction: column; align-items: flex-start; gap: 1rem; }
+            .file-info { max-width: 100%; }
+            .schale-footer { flex-direction: column; gap: 1rem; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Floating Halos & Festival Lights -->
+    <canvas id="schaleCanvas"></canvas>
+
+    <!-- Lightbox -->
+    <div id="lightbox">
+        <div class="close-lightbox" id="closeBtn">&times;</div>
+        <img class="lightbox-img" src="愛清飯店風華主廚特製羽流奈套餐 Eri Miyo Matsuri.png" alt="Festival Master Artwork">
+    </div>
+
+    <!-- Header Section -->
+    <header class="schale-header">
+        <div class="system-status">
+            <div class="status-icon">S</div>
+            <div class="status-text">
+                <h1>Schale System</h1>
+                <p>Mission Archive Database</p>
+            </div>
+        </div>
+        <div class="patron-badge">
+            <span class="patron-label">Authorized VIP Patron</span>
+            <span class="patron-name">月ノ宮瑠華</span>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="layout-container">
+        
+        <!-- Artwork Display -->
+        <section class="artwork-section">
+            <div class="artwork-frame" id="artFrame">
+                <img class="main-image" src="愛清飯店風華主廚特製羽流奈套餐 Eri Miyo Matsuri.png" alt="Eri and Miyo Festival">
+            </div>
+        </section>
+
+        <!-- Terminal System -->
+        <section class="terminal-section">
+            <div class="terminal-box">
+                
+                <div class="terminal-tabs">
+                    <button class="tech-tab active" data-target="tab-report">【作戦記録】 OVERVIEW</button>
+                    <button class="tech-tab" data-target="tab-vault">【機密保管庫】 VAULT</button>
+                </div>
+
+                <!-- Tab 1: Mission Report -->
+                <div class="tab-content active" id="tab-report">
+                    <div class="report-header">
+                        <span class="report-tag">FILE: BA-FESTIVAL-01</span>
+                        <h2 class="report-title">Kivotos Summer Festival: Night Operation</h2>
+                    </div>
+
+                    <div class="report-log">
+                        <b>[Observation Log]:</b> Monitoring student activity during the coastal summer festival event. Subjects <b>Shirao Eri</b> and <b>Sakurai Miyo</b> were observed navigating the local stalls in specialized summer attire.<br><br>
+                        Eri was noted engaging in playful, teasing behavior via festival confectioneries (choco-banana), while Miyo demonstrated precise marksmanship at the shooting gallery despite visible fluster. Commemorative chibi dolls of Kinui Rena and Hiromi were successfully acquired. The atmospheric tension between the subjects was recorded as highly intimate.
+                    </div>
+
+                    <!-- UPDATED METADATA GRID -->
+                    <div class="metadata-grid">
+                        <div class="meta-box">
+                            <div class="meta-label">VIP Patron</div>
+                            <div class="meta-value">月ノ宮瑠華</div>
+                        </div>
+                        <div class="meta-box">
+                            <div class="meta-label">Primary Subjects</div>
+                            <div class="meta-value">Shirao Eri, Sakurai Miyo</div>
+                        </div>
+                        <div class="meta-box">
+                            <div class="meta-label">Secondary Entities</div>
+                            <div class="meta-value">Kinui Rena, Hiromi (Dolls)</div>
+                        </div>
+                        <div class="meta-box">
+                            <div class="meta-label">Illustrationship</div>
+                            <div class="meta-value" style="color: var(--schale-blue);">Karachiiy</div>
+                        </div>
+                    </div>
+
+                    <button class="switch-vault-btn" id="shortcutVault">Proceed to Asset Vault ➔</button>
+                </div>
+
+                <!-- Tab 2: The Vault -->
+                <div class="tab-content" id="tab-vault">
+                    
+                    <!-- Locked State -->
+                    <div class="vault-lock-screen" id="lockScreen">
+                        <div class="lock-icon">🔒</div>
+                        <h2 class="vault-title">【機密保管庫】 Access Restricted</h2>
+                        <p class="vault-desc">Enter the designated authorization phrase to unlock master deliverables.</p>
+                        
+                        <input type="password" id="passInput" class="password-input" placeholder="パスワードを入力してください..." autocomplete="off">
+                        <button class="unlock-btn" id="unlockBtn">AUTHENTICATE</button>
+                        <div class="error-msg" id="errorMsg"></div>
+                    </div>
+
+                    <!-- Unlocked State -->
+                    <div class="vault-unlocked" id="unlockedScreen">
+                        <div class="success-banner">
+                            Authentication Successful. Welcome back, 月ノ宮瑠華.
+                        </div>
+
+                        <div class="manifest-list">
+                            <!-- Delivery File 1: PNG -->
+                            <div class="manifest-item">
+                                <div class="file-info">
+                                    <span class="file-name">愛清飯店風華主廚特製羽流奈套餐 Eri Miyo Matsuri.png</span>
+                                    <span class="file-type">MASTER FULL-RENDER ASSET [PNG]</span>
+                                </div>
+                                <a href="愛清飯店風華主廚特製羽流奈套餐 Eri Miyo Matsuri.png" download class="download-btn">DOWNLOAD</a>
+                            </div>
+
+                            <!-- Delivery File 2: PSD Link -->
+                            <div class="manifest-item">
+                                <div class="file-info">
+                                    <span class="file-name">Master Source Archive (.PSD)</span>
+                                    <span class="file-type">EXTERNAL SECURE DRIVE LINK</span>
+                                </div>
+                                <a href="https://drive.google.com/file/d/1YIPLf50byjTxEI5-k8J0veEcMUmVv3Ez/view?usp=sharing" target="_blank" class="download-btn btn-pink">ACCESS DRIVE</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- OFFICIAL SCHALE DELIVERY FOOTER -->
+    <footer class="schale-footer">
+        <div class="footer-left">
+            ILLUSTRATED WITH DEDICATION BY <strong class="highlight">KARACHIIY</strong> FOR <strong>月ノ宮瑠華</strong>
+        </div>
+        <div class="footer-right">
+            SCHALE MISSION ARCHIVE // ASSET DELIVERY
+        </div>
+    </footer>
+
+    <script>
+        // --- TAB LOGIC ---
+        const tabs = document.querySelectorAll('.tech-tab');
+        const contents = document.querySelectorAll('.tab-content');
+        const shortcutBtn = document.getElementById('shortcutVault');
+
+        function switchTab(targetId) {
+            tabs.forEach(t => t.classList.remove('active'));
+            contents.forEach(c => c.classList.remove('active'));
+            
+            document.querySelector(`[data-target="${targetId}"]`).classList.add('active');
+            document.getElementById(targetId).classList.add('active');
+        }
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                switchTab(tab.getAttribute('data-target'));
+            });
+        });
+
+        shortcutBtn.addEventListener('click', () => {
+            switchTab('tab-vault');
+        });
+
+        // --- VAULT LOGIC ---
+        const passInput = document.getElementById('passInput');
+        const unlockBtn = document.getElementById('unlockBtn');
+        const errorMsg = document.getElementById('errorMsg');
+        const lockScreen = document.getElementById('lockScreen');
+        const unlockedScreen = document.getElementById('unlockedScreen');
+
+        // Password matching requirement
+        const TARGET_PASSWORD = "愛清飯店風華主廚特製羽流奈套餐";
+
+        function attemptUnlock() {
+            const val = passInput.value.trim();
+            if (val === TARGET_PASSWORD) {
+                errorMsg.innerText = "";
+                lockScreen.style.display = "none";
+                unlockedScreen.style.display = "flex";
+            } else {
+                errorMsg.innerText = "Error: Invalid Authentication. 認証に失敗しました。";
+                passInput.value = "";
+                setTimeout(() => { errorMsg.innerText = ""; }, 3000);
+            }
+        }
+
+        unlockBtn.addEventListener('click', attemptUnlock);
+        passInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') attemptUnlock();
+        });
+
+        // --- LIGHTBOX LOGIC ---
+        const artFrame = document.getElementById('artFrame');
+        const lightbox = document.getElementById('lightbox');
+        const closeBtn = document.getElementById('closeBtn');
+
+        artFrame.addEventListener('click', () => {
+            lightbox.classList.add('active');
+        });
+
+        closeBtn.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+        });
+
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                lightbox.classList.remove('active');
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                lightbox.classList.remove('active');
+            }
+        });
+
+        // --- KIVOTOS PARTICLES / CROSSES ANIMATION ---
+        const canvas = document.getElementById('schaleCanvas');
+        const ctx = canvas.getContext('2d');
+        let w = canvas.width = window.innerWidth;
+        let h = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        });
+
+        class Particle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * w;
+                this.y = h + Math.random() * 100;
+                this.size = Math.random() * 3 + 1;
+                this.speed = Math.random() * 1 + 0.3;
+                this.alpha = Math.random() * 0.4 + 0.1;
+                // 30% chance to be a small Blue Archive aesthetic cross
+                this.isCross = Math.random() > 0.7; 
+            }
+            update() {
+                this.y -= this.speed;
+                this.x += Math.sin(this.y * 0.01) * 0.4;
+                if (this.y < -10) this.reset();
+            }
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.fillStyle = `rgba(0, 162, 255, ${this.alpha})`;
+                
+                if (this.isCross) {
+                    ctx.fillRect(-this.size/2, -this.size*1.5, this.size, this.size*3);
+                    ctx.fillRect(-this.size*1.5, -this.size/2, this.size*3, this.size);
+                } else {
+                    ctx.beginPath();
+                    ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                ctx.restore();
+            }
+        }
+
+        const particles = Array.from({ length: 45 }, () => new Particle());
+        
+        function animate() {
+            ctx.clearRect(0, 0, w, h);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>
