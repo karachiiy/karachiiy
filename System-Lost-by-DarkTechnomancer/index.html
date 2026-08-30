@@ -1,1 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>System Lost — Reverie | Karachiiy Scriptorium</title>
+    <link rel="icon" type="image/png" href="../favicon.png">
+    
+    <!-- Ethereal & Modern Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Outfit:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Palette: Deep Void, Starlight, Nebula Blue, and Warm Hair Rimlight */
+            --void-bg: #03060a;
+            --void-deep: #060b13;
+            --glass-bg: rgba(14, 22, 38, 0.4);
+            --glass-border: rgba(100, 149, 237, 0.15);
+            
+            --star-white: #e2e8f0;
+            --nebula-blue: #3b82f6;
+            --nebula-glow: rgba(59, 130, 246, 0.3);
+            
+            --rimlight-orange: #fb923c;
+            --rimlight-glow: rgba(251, 146, 60, 0.25);
+            
+            --text-main: #cbd5e1;
+            --text-muted: #64748b;
+            
+            --font-display: 'Cormorant Garamond', serif;
+            --font-ui: 'Outfit', sans-serif;
+        }
 
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--void-bg);
+            color: var(--text-main);
+            font-family: var(--font-ui);
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- THE COSMIC VOID BACKGROUND --- */
+        body::before {
+            content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(251, 146, 60, 0.05) 0%, transparent 40%);
+            pointer-events: none; z-index: 0;
+        }
+
+        /* Interactive Starfield Canvas */
+        #starfield {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: 1; pointer-events: none; opacity: 0.8;
+        }
+
+        /* --- FLOATING HEADER --- */
+        .stellar-header {
+            position: fixed; top: 0; left: 0; width: 100%;
+            padding: 1.5rem 4vw; display: flex; justify-content: space-between; align-items: center;
+            z-index: 100; background: linear-gradient(to bottom, rgba(3,6,10,0.9) 0%, transparent 100%);
+            backdrop-filter: blur(4px);
+        }
+
+        .brand-link {
+            display: flex; align-items: center; gap: 1rem; text-decoration: none;
+        }
+        .brand-logo {
+            height: 40px; width: auto; filter: drop-shadow(0 0 10px var(--nebula-blue));
+            transition: transform 0.5s ease;
+        }
+        .brand-link:hover .brand-logo { transform: scale(1.1) rotate(5deg); }
+
+        .brand-text { display: flex; flex-direction: column; }
+        .brand-title {
+            font-family: var(--font-display); font-size: 1.5rem; font-weight: 600;
+            color: var(--star-white); letter-spacing: 2px; text-transform: uppercase; line-height: 1;
+        }
+        .brand-subtitle {
+            font-size: 0.65rem; color: var(--nebula-blue); letter-spacing: 4px;
+            text-transform: uppercase; font-weight: 500; margin-top: 0.2rem;
+        }
+
+        .client-badge {
+            background: rgba(14, 22, 38, 0.6); border: 1px solid var(--glass-border);
+            padding: 0.6rem 1.2rem; border-radius: 30px; display: flex; align-items: center; gap: 10px;
+            backdrop-filter: blur(10px); box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        .client-badge-icon {
+            width: 8px; height: 8px; background: var(--rimlight-orange);
+            border-radius: 50%; box-shadow: 0 0 10px var(--rimlight-orange);
+            animation: pulseStar 3s infinite alternate;
+        }
+        .client-badge-text {
+            font-size: 0.7rem; font-weight: 500; color: var(--star-white);
+            letter-spacing: 2px; text-transform: uppercase;
+        }
+
+        @keyframes pulseStar {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            100% { transform: scale(1.2); opacity: 1; }
+        }
+
+        /* --- MASTER LAYOUT: ASYMMETRICAL STICKY GRID --- */
+        .system-lost-layout {
+            display: flex; align-items: flex-start; gap: 4vw;
+            width: 100%; max-width: 1700px; margin: 0 auto;
+            padding: 8rem 4vw 5rem 4vw; position: relative; z-index: 10;
+        }
+
+        /* LEFT: The Sticky Cinematic Viewport */
+        .cinematic-viewport {
+            flex: 1.2; position: sticky; top: 8rem;
+            display: flex; flex-direction: column; gap: 1.5rem;
+        }
+
+        .glass-frame {
+            position: relative; width: 100%; border-radius: 12px;
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 0 20px rgba(255,255,255,0.02);
+            backdrop-filter: blur(20px); overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        /* The Custom Crossfade Mechanism (Replacing the Slider) */
+        .crossfade-engine {
+            position: relative; width: 100%; aspect-ratio: 4/5;
+            overflow: hidden; border-radius: 10px;
+        }
+
+        .img-state {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1), transform 3s ease;
+        }
+        
+        .img-slumber { z-index: 1; opacity: 1; }
+        .img-lucid { z-index: 2; opacity: 0; }
+
+        /* Subtle breathing zoom on hover */
+        .glass-frame:hover .img-state { transform: scale(1.02); }
+
+        /* The Toggle Interaction */
+        .crossfade-engine.is-lucid .img-slumber { opacity: 0; }
+        .crossfade-engine.is-lucid .img-lucid { opacity: 1; }
+
+        .consciousness-controls {
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(5, 10, 18, 0.8); border: 1px solid var(--glass-border);
+            padding: 1rem 1.5rem; border-radius: 8px; backdrop-filter: blur(10px);
+        }
+        .state-indicator {
+            display: flex; flex-direction: column; gap: 0.2rem;
+        }
+        .state-label { font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 3px; }
+        .state-value { font-family: var(--font-display); font-size: 1.4rem; color: var(--star-white); letter-spacing: 1px; transition: color 0.5s; }
+        
+        .toggle-btn {
+            background: transparent; border: 1px solid var(--nebula-blue);
+            color: var(--nebula-blue); padding: 0.8rem 1.5rem; border-radius: 30px;
+            font-family: var(--font-ui); font-size: 0.75rem; font-weight: 500;
+            letter-spacing: 2px; text-transform: uppercase; cursor: pointer;
+            transition: all 0.4s ease; display: flex; align-items: center; gap: 8px;
+        }
+        .toggle-btn:hover {
+            background: var(--nebula-glow); color: #fff; box-shadow: 0 0 20px var(--nebula-glow);
+        }
+        .toggle-btn.active {
+            border-color: var(--rimlight-orange); color: var(--rimlight-orange);
+        }
+        .toggle-btn.active:hover {
+            background: var(--rimlight-glow); color: #fff; box-shadow: 0 0 20px var(--rimlight-glow);
+        }
+
+        /* RIGHT: The Data Shards (Lore & Dev Notes) */
+        .data-shards-column {
+            flex: 1; display: flex; flex-direction: column; gap: 2.5rem;
+            padding-bottom: 4rem; /* Allows scrolling past the sticky image */
+        }
+
+        .shard-card {
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            border-radius: 12px; padding: 2.5rem; backdrop-filter: blur(20px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4); transition: transform 0.4s ease, border-color 0.4s;
+        }
+        .shard-card:hover {
+            transform: translateY(-5px); border-color: rgba(255,255,255,0.1);
+        }
+
+        .shard-tag {
+            font-size: 0.65rem; color: var(--nebula-blue); text-transform: uppercase;
+            letter-spacing: 4px; font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;
+        }
+        .shard-tag::before { content: ''; width: 20px; height: 1px; background: var(--nebula-blue); }
+
+        .shard-title {
+            font-family: var(--font-display); font-size: 2.5rem; color: #fff;
+            line-height: 1.1; margin-bottom: 1.5rem; font-weight: 500; letter-spacing: 1px;
+        }
+        .shard-title span { color: var(--rimlight-orange); font-style: italic; }
+
+        .shard-text {
+            font-size: 0.95rem; line-height: 1.8; color: var(--text-main); margin-bottom: 1.5rem; font-weight: 300;
+        }
+        .shard-text b { color: #fff; font-weight: 500; }
+        .shard-text:last-child { margin-bottom: 0; }
+
+        /* The Dev Log List */
+        .dev-log-list {
+            display: flex; flex-direction: column; gap: 1.5rem; margin-top: 1rem;
+        }
+        .dev-log-item {
+            display: flex; gap: 1.2rem; align-items: flex-start;
+            background: rgba(0,0,0,0.3); padding: 1.5rem; border-radius: 8px;
+            border-left: 2px solid var(--nebula-blue);
+        }
+        .dev-log-item.orange-accent { border-left-color: var(--rimlight-orange); }
+        
+        .log-icon { font-size: 1.5rem; line-height: 1; opacity: 0.8; }
+        .log-content h4 {
+            font-family: var(--font-display); font-size: 1.2rem; color: #fff; margin-bottom: 0.4rem; letter-spacing: 1px;
+        }
+        .log-content p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* Metadata Grid */
+        .manifest-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;
+        }
+        .manifest-item {
+            background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
+            padding: 1.2rem; border-radius: 8px;
+        }
+        .manifest-label { font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.4rem; }
+        .manifest-value { font-family: var(--font-display); font-size: 1.1rem; color: var(--star-white); }
+
+        .inspect-btn {
+            width: 100%; background: transparent; border: 1px solid var(--text-muted);
+            color: var(--text-main); padding: 1.2rem; border-radius: 8px;
+            font-size: 0.8rem; letter-spacing: 3px; text-transform: uppercase;
+            cursor: pointer; transition: all 0.3s; margin-top: 1rem;
+        }
+        .inspect-btn:hover { background: var(--star-white); color: #000; border-color: var(--star-white); }
+
+        /* --- LIGHTBOX MODAL --- */
+        #lightbox {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(3, 6, 10, 0.98); z-index: 2000;
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; visibility: hidden; pointer-events: none;
+            transition: opacity 0.4s ease; backdrop-filter: blur(10px);
+        }
+        #lightbox.active { opacity: 1; visibility: visible; pointer-events: auto; }
+        
+        .lightbox-img { max-width: 90vw; max-height: 85vh; object-fit: contain; box-shadow: 0 20px 60px rgba(0,0,0,0.8); border-radius: 8px; }
+        .lightbox-close {
+            position: absolute; top: 2rem; right: 3rem; font-size: 3rem; color: var(--text-muted);
+            background: none; border: none; cursor: pointer; transition: color 0.3s, transform 0.3s;
+        }
+        .lightbox-close:hover { color: #fff; transform: rotate(90deg) scale(1.1); }
+        .lightbox-hint {
+            position: absolute; bottom: 2rem; font-family: var(--font-display); font-size: 1.2rem;
+            color: var(--text-muted); letter-spacing: 4px; text-transform: uppercase;
+        }
+
+        /* --- FOOTER --- */
+        .stellar-footer {
+            width: 100%; max-width: 1700px; margin: 0 auto; padding: 2rem 4vw;
+            border-top: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center;
+            position: relative; z-index: 10;
+        }
+        .footer-text { font-size: 0.7rem; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; }
+        .footer-text b { color: var(--star-white); font-weight: 500; }
+        .social-links { display: flex; gap: 1.5rem; }
+        .social-links a { color: var(--text-muted); text-decoration: none; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; transition: color 0.3s; }
+        .social-links a:hover { color: var(--nebula-blue); }
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media (max-width: 1100px) {
+            .system-lost-layout { flex-direction: column; padding-top: 7rem; }
+            .cinematic-viewport { position: relative; top: 0; width: 100%; }
+            .data-shards-column { width: 100%; }
+            .manifest-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .stellar-header { padding: 1rem 5vw; flex-direction: column; gap: 1rem; }
+            .client-badge { width: 100%; justify-content: center; }
+            .shard-card { padding: 1.5rem; }
+            .shard-title { font-size: 2rem; }
+            .dev-log-item { flex-direction: column; gap: 1rem; }
+            .consciousness-controls { flex-direction: column; gap: 1rem; text-align: center; }
+            .stellar-footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Deep Space Parallax & Interactive Dust Canvas -->
+    <canvas id="starfield"></canvas>
+
+    <!-- Master Lightbox -->
+    <div id="lightbox">
+        <button class="lightbox-close" id="lbClose">&times;</button>
+        <img class="lightbox-img" id="lbImg" src="" alt="Full Master Illustration">
+        <div class="lightbox-hint" id="lbHint">Deep Slumber</div>
+    </div>
+
+    <!-- FLOATING HEADER -->
+    <header class="stellar-header">
+        <a href="../index.html" class="brand-link">
+            <img class="brand-logo" src="../logo.png" alt="Karachiiy Scriptorium">
+            <div class="brand-text">
+                <h1 class="brand-title">System Lost</h1>
+                <p class="brand-subtitle">The Phantom Archive</p>
+            </div>
+        </a>
+        <div class="client-badge">
+            <div class="client-badge-icon"></div>
+            <div class="client-badge-text">Official Commission For DarkTechnomancer</div>
+        </div>
+    </header>
+
+    <!-- MASTER LAYOUT -->
+    <main class="system-lost-layout">
+        
+        <!-- LEFT: STICKY CINEMATIC VIEWPORT -->
+        <div class="cinematic-viewport">
+            <div class="glass-frame">
+                <!-- Crossfade Engine replaces the traditional Slider -->
+                <div class="crossfade-engine" id="crossfadeWrapper">
+                    <img class="img-state img-slumber" id="imgSlumber" src="system lost, Allison, eye closed.png" alt="Allison - Deep Slumber">
+                    <img class="img-state img-lucid" id="imgLucid" src="system lost, Allison, eye half-closed.png" alt="Allison - Lucid Awakening">
+                </div>
+            </div>
+
+            <!-- Consciousness Controls -->
+            <div class="consciousness-controls">
+                <div class="state-indicator">
+                    <span class="state-label">Current Consciousness</span>
+                    <span class="state-value" id="stateText">Deep Slumber</span>
+                </div>
+                <button class="toggle-btn" id="awakenBtn">
+                    <span id="btnText">Shift to Lucid</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </button>
+            </div>
+            
+            <button class="inspect-btn" id="inspectBtn">Inspect Current State in Full Resolution</button>
+        </div>
+
+        <!-- RIGHT: DATA SHARDS (LORE & DEV NOTES) -->
+        <div class="data-shards-column">
+            
+            <!-- Shard 1: The Brief -->
+            <div class="shard-card">
+                <div class="shard-tag">Character Codex</div>
+                <h2 class="shard-title">Reverie: The Ephemeral <span>Phantom</span></h2>
+                <p class="shard-text">
+                    This illustration brings to life <b>Reverie</b>, a new and highly specialized persona within Allison's mindscape. Existing almost exclusively as an ephemeral phantom, she rarely assumes control of the physical body unless conjured by illusion.
+                </p>
+                <p class="shard-text">
+                    The prompt required a distinct departure from her other personalities: her hair left unstyled, messy, and impossibly long down to her ankles; her glasses discarded; and clothed only in a flowing nightgown while drifting listlessly through a blue-ish galactic void.
+                </p>
+            </div>
+
+            <!-- Shard 2: Development Log -->
+            <div class="shard-card">
+                <div class="shard-tag">Scriptorium Log</div>
+                <h2 class="shard-title">Forging the <span>Dreamscape</span></h2>
+                
+                <div class="dev-log-list">
+                    
+                    <div class="dev-log-item orange-accent">
+                        <div class="log-icon">🌙</div>
+                        <div class="log-content">
+                            <h4>The Midnight Sahur Sprint</h4>
+                            <p>A bounty was placed by the manager (WhiteSamurai) for a same-day rough color composition. Working through the Indonesian Ramadan schedule, the initial draft was painted between breaking the fast (Iftar) and waking up for Sahur, delivering the foundation within hours.</p>
+                        </div>
+                    </div>
+
+                    <div class="dev-log-item">
+                        <div class="log-icon">👁️</div>
+                        <div class="log-content">
+                            <h4>The WLOP Doctrine</h4>
+                            <p>Directed to adhere strictly to the "WLOP Doctrine"—pushing pixel resolution and rendering quality on the facial features to the absolute maximum. Distracting square-texture brushes were meticulously removed to maintain the smooth, mesmerizing quality of the focal point.</p>
+                        </div>
+                    </div>
+
+                    <div class="dev-log-item">
+                        <div class="log-icon">🌊</div>
+                        <div class="log-content">
+                            <h4>The Physics of Slumber</h4>
+                            <p>Iterative adjustments were made to her limbs to remove any feeling of "posing." By relaxing the arms further and straightening the legs, we achieved the precise anatomical sensation of her being weightlessly suspended in deep water.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Shard 3: Metadata Manifest -->
+            <div class="shard-card">
+                <div class="shard-tag">Asset Manifest</div>
+                <h2 class="shard-title">Project <span>Parameters</span></h2>
+                
+                <div class="manifest-grid">
+                    <div class="manifest-item">
+                        <div class="manifest-label">Client / Author</div>
+                        <div class="manifest-value">DarkTechnomancer</div>
+                    </div>
+                    <div class="manifest-item">
+                        <div class="manifest-label">Art Direction</div>
+                        <div class="manifest-value">WhiteSamurai</div>
+                    </div>
+                    <div class="manifest-item">
+                        <div class="manifest-label">Subject</div>
+                        <div class="manifest-value">Allison (Reverie)</div>
+                    </div>
+                    <div class="manifest-item">
+                        <div class="manifest-label">Deliverables</div>
+                        <div class="manifest-value">2 State Variations</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="stellar-footer">
+        <div class="footer-text">
+            ARCHIVED BY <b>KARACHIIY</b> FOR THE SYSTEM LOST UNIVERSE
+        </div>
+        <div class="social-links">
+            <a href="https://x.com/Karachiiy" target="_blank">Twitter</a>
+            <a href="https://www.pixiv.net/en/users/33593211" target="_blank">Pixiv</a>
+            <a href="https://vgen.co/Karachiiy" target="_blank">VGen</a>
+        </div>
+    </footer>
+
+    <script>
+        // --- CONSCIOUSNESS TOGGLE LOGIC (Replaces Slider) ---
+        const wrapper = document.getElementById('crossfadeWrapper');
+        const awakenBtn = document.getElementById('awakenBtn');
+        const stateText = document.getElementById('stateText');
+        const btnText = document.getElementById('btnText');
+        const inspectBtn = document.getElementById('inspectBtn');
+        
+        let isLucid = false;
+        
+        // Image sources for the lightbox
+        const srcSlumber = "system lost, Allison, eye closed.png";
+        const srcLucid = "system lost, Allison, eye half-closed.png";
+
+        awakenBtn.addEventListener('click', () => {
+            isLucid = !isLucid;
+            
+            if (isLucid) {
+                wrapper.classList.add('is-lucid');
+                awakenBtn.classList.add('active');
+                stateText.innerText = "Lucid Awakening";
+                stateText.style.color = "var(--rimlight-orange)";
+                btnText.innerText = "Return to Slumber";
+            } else {
+                wrapper.classList.remove('is-lucid');
+                awakenBtn.classList.remove('active');
+                stateText.innerText = "Deep Slumber";
+                stateText.style.color = "var(--star-white)";
+                btnText.innerText = "Shift to Lucid";
+            }
+        });
+
+        // --- LIGHTBOX LOGIC ---
+        const lightbox = document.getElementById('lightbox');
+        const lbImg = document.getElementById('lbImg');
+        const lbClose = document.getElementById('lbClose');
+        const lbHint = document.getElementById('lbHint');
+
+        function openLightbox() {
+            lbImg.src = isLucid ? srcLucid : srcSlumber;
+            lbHint.innerText = isLucid ? "State: Lucid Awakening" : "State: Deep Slumber";
+            lbHint.style.color = isLucid ? "var(--rimlight-orange)" : "var(--text-muted)";
+            lightbox.classList.add('active');
+        }
+
+        inspectBtn.addEventListener('click', openLightbox);
+        
+        // Also allow clicking the image itself
+        wrapper.addEventListener('click', openLightbox);
+
+        lbClose.addEventListener('click', () => lightbox.classList.remove('active'));
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) lightbox.classList.remove('active');
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') lightbox.classList.remove('active');
+        });
+
+        // --- INTERACTIVE STARFIELD & NEBULA CANVAS ---
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+        let w = canvas.width = window.innerWidth;
+        let h = canvas.height = window.innerHeight;
+        
+        let mouseX = w / 2;
+        let mouseY = h / 2;
+        let targetMouseX = w / 2;
+        let targetMouseY = h / 2;
+
+        window.addEventListener('resize', () => {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            targetMouseX = e.clientX;
+            targetMouseY = e.clientY;
+        });
+
+        class Star {
+            constructor() { this.reset(true); }
+            
+            reset(randomize = false) {
+                this.x = Math.random() * w;
+                this.y = randomize ? Math.random() * h : h + 10;
+                this.size = Math.random() * 1.5 + 0.2;
+                this.baseAlpha = Math.random() * 0.8 + 0.2;
+                this.alpha = this.baseAlpha;
+                this.speed = Math.random() * 0.2 + 0.05;
+                
+                // Colors: mostly white/blue, rare orange
+                const roll = Math.random();
+                if (roll < 0.8) this.color = "226, 232, 240"; // Star white
+                else if (roll < 0.95) this.color = "59, 130, 246"; // Nebula blue
+                else this.color = "251, 146, 60"; // Rimlight orange
+                
+                this.twinkleSpeed = Math.random() * 0.02 + 0.01;
+                this.life = Math.random() * Math.PI * 2;
+            }
+            
+            update() {
+                // Parallax drift based on mouse
+                const driftX = (w/2 - mouseX) * 0.005 * this.size;
+                const driftY = (h/2 - mouseY) * 0.005 * this.size;
+                
+                this.y -= this.speed;
+                this.x += driftX;
+                this.y += driftY;
+                
+                // Twinkle
+                this.life += this.twinkleSpeed;
+                this.alpha = this.baseAlpha * (0.5 + 0.5 * Math.sin(this.life));
+                
+                // Wrap around
+                if (this.y < -10) this.y = h + 10;
+                if (this.x < -10) this.x = w + 10;
+                if (this.x > w + 10) this.x = -10;
+            }
+            
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${this.color}, ${this.alpha})`;
+                
+                if (this.size > 1.2) {
+                    ctx.shadowBlur = 6;
+                    ctx.shadowColor = `rgba(${this.color}, 0.8)`;
+                } else {
+                    ctx.shadowBlur = 0;
+                }
+                
+                ctx.fill();
+            }
+        }
+
+        const stars = Array.from({ length: 150 }, () => new Star());
+
+        function animateCanvas() {
+            ctx.clearRect(0, 0, w, h);
+            
+            // Smooth mouse interpolation
+            mouseX += (targetMouseX - mouseX) * 0.05;
+            mouseY += (targetMouseY - mouseY) * 0.05;
+            
+            stars.forEach(s => {
+                s.update();
+                s.draw();
+            });
+            
+            requestAnimationFrame(animateCanvas);
+        }
+        animateCanvas();
+    </script>
+</body>
+</html>
