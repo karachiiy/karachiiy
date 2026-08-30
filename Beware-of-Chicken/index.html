@@ -1,1 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Beware of Chicken — Cultivation of the Canvas | Karachiiy</title>
+    <link rel="icon" type="image/png" href="../favicon.png">
+    
+    <!-- Cinematic Xianxia Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;900&family=Montserrat:ital,wght@0,200;0,300;0,400;0,500;0,600;1,300;1,400&family=Noto+Serif+TC:wght@400;600;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Palette: Heavenly Dao - Deep Jade, Fa Ram Earth, Dawn Gold, and Abyssal Ink */
+            --bg-void: #050806;
+            --bg-sect: #0a100c;
+            --bg-card: rgba(12, 18, 14, 0.92);
+            
+            --jade-primary: #52b788;
+            --jade-dark: #1b4332;
+            --jade-glow: rgba(82, 183, 136, 0.25);
+            
+            --dawn-gold: #e9c46a;
+            --dawn-glow: rgba(233, 196, 106, 0.2);
+            
+            --sect-red: #9c2a2a; /* Seal stamp red */
+            
+            --ink-text: #d8e2dc;
+            --muted-text: #8b9d93;
+            
+            --border-elegant: rgba(82, 183, 136, 0.3);
+            
+            --font-serif: 'Cinzel', serif;
+            --font-sans: 'Montserrat', sans-serif;
+            --font-asian: 'Noto Serif TC', serif;
+        }
 
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-void);
+            color: var(--ink-text);
+            font-family: var(--font-sans);
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- AUSPICIOUS CLOUDS & SPIRITUAL GRAIN OVERLAY --- */
+        body::before {
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            /* Subtle seamless Asian cloud pattern (Xiangyun) */
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M54.627 0l.83.83-1.66 1.66-.83-.83.83-.83zm-14.93 0l5.81 5.81-1.66 1.66-5.81-5.81 1.66-1.66zM29.56 0l25.06 25.06-1.66 1.66L27.9 1.66 29.56 0zM14.63 0l39.99 39.99-1.66 1.66L12.97 1.66 14.63 0zM0 13.27l46.73 46.73-1.66 1.66L0 14.93v-1.66zm0 14.93L31.8 60h-2.35L0 30.55v-2.35zm0 14.93L16.87 60h-2.35L0 45.48v-2.35zm0 14.93L1.94 60H0v-1.87z' fill='%2352b788' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+            pointer-events: none; z-index: 0;
+        }
+        body::after {
+            content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: radial-gradient(circle at center, transparent 30%, rgba(3, 5, 4, 0.95) 100%);
+            pointer-events: none; z-index: 1;
+        }
+
+        /* Heavenly Cursor Aura */
+        #cursorAura {
+            position: fixed; width: 600px; height: 600px; border-radius: 50%;
+            background: radial-gradient(circle, var(--jade-glow) 0%, rgba(233, 196, 106, 0.05) 40%, transparent 70%);
+            z-index: 2; pointer-events: none; transform: translate(-50%, -50%);
+            mix-blend-mode: screen; transition: width 0.4s, height 0.4s;
+            display: none;
+        }
+        @media (hover: hover) and (pointer: fine) { #cursorAura { display: block; } }
+
+        /* Falling Bamboo Leaves Canvas */
+        #qiCanvas {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: 2; pointer-events: none; opacity: 0.7;
+        }
+
+        /* --- HEADER --- */
+        .sect-header {
+            width: 100%; max-width: 1600px; margin: 0 auto;
+            padding: 2.5rem 4vw 1rem 4vw;
+            display: flex; justify-content: space-between; align-items: center;
+            position: relative; z-index: 10;
+        }
+
+        .sect-brand { display: flex; align-items: center; gap: 1.2rem; text-decoration: none; color: inherit; }
+        .logo-img { height: 50px; width: auto; filter: drop-shadow(0 0 12px var(--jade-primary)); transition: transform 0.4s ease; }
+        .sect-brand:hover .logo-img { transform: scale(1.05) rotate(2deg); }
+
+        .sect-title-group h1 { font-family: var(--font-serif); font-size: 1.15rem; letter-spacing: 4px; color: #fff; text-transform: uppercase; }
+        .sect-badge { font-size: 0.65rem; letter-spacing: 3px; color: var(--jade-primary); text-transform: uppercase; font-weight: 500; }
+
+        .patron-badge {
+            display: flex; align-items: center; gap: 12px;
+            padding: 0.7rem 1.5rem; background: rgba(10, 16, 12, 0.85);
+            border: 1px solid var(--jade-dark); border-left: 3px solid var(--dawn-gold);
+            border-radius: 2px; box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+        }
+        .patron-label { font-size: 0.55rem; color: var(--muted-text); text-transform: uppercase; letter-spacing: 3px; }
+        .patron-name { font-family: var(--font-serif); font-size: 0.95rem; color: var(--dawn-gold); font-weight: 600; letter-spacing: 2px; }
+        .patron-text { display: flex; flex-direction: column; align-items: flex-end; }
+
+        /* --- NAVIGATION SCROLLS (TABS) --- */
+        .pagoda-nav {
+            display: flex; justify-content: center; gap: 0.8rem; flex-wrap: wrap;
+            width: 100%; max-width: 1200px; margin: 2rem auto 3rem auto;
+            position: relative; z-index: 10; padding: 0 1rem;
+        }
+        
+        .pagoda-tab {
+            background: rgba(6, 10, 8, 0.8); border: 1px solid var(--jade-dark);
+            padding: 0.85rem 2rem; font-family: var(--font-serif); font-size: 0.75rem;
+            color: var(--muted-text); letter-spacing: 3px; text-transform: uppercase;
+            cursor: pointer; transition: all 0.4s cubic-bezier(0.25, 1, 0.2, 1); border-radius: 2px;
+            position: relative; overflow: hidden;
+        }
+        .pagoda-tab::before, .pagoda-tab::after {
+            content: ''; position: absolute; width: 6px; height: 6px;
+            border: 1px solid transparent; transition: border-color 0.4s;
+        }
+        .pagoda-tab::before { top: 3px; left: 3px; border-top-color: var(--jade-dark); border-left-color: var(--jade-dark); }
+        .pagoda-tab::after { bottom: 3px; right: 3px; border-bottom-color: var(--jade-dark); border-right-color: var(--jade-dark); }
+        
+        .pagoda-tab:hover, .pagoda-tab.active {
+            color: var(--dawn-gold); border-color: var(--jade-primary); background: rgba(82, 183, 136, 0.08);
+            box-shadow: 0 0 20px var(--jade-glow);
+        }
+        .pagoda-tab:hover::before, .pagoda-tab.active::before { border-top-color: var(--dawn-gold); border-left-color: var(--dawn-gold); }
+        .pagoda-tab:hover::after, .pagoda-tab.active::after { border-bottom-color: var(--dawn-gold); border-right-color: var(--dawn-gold); }
+
+        /* --- EXHIBITION CONTAINERS --- */
+        .exhibition-panel {
+            width: 100%; max-width: 1600px; margin: 0 auto; padding: 0 4vw 4rem 4vw;
+            display: none; opacity: 0; transform: translateY(20px); position: relative; z-index: 10;
+        }
+        .exhibition-panel.active { display: flex; animation: fadeUp 0.6s ease forwards; }
+        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+        /* --- ALCHEMY LORE BOXES --- */
+        .alchemy-lore {
+            background: var(--bg-card); border: 1px solid var(--jade-dark);
+            padding: 3rem; border-radius: 4px; box-shadow: 0 30px 60px rgba(0,0,0,0.95);
+            position: relative;
+        }
+        /* Chinese Corner Ornaments */
+        .alchemy-lore::before, .alchemy-lore::after {
+            content: ''; position: absolute; width: 30px; height: 30px; border: 2px solid var(--jade-primary); opacity: 0.5;
+        }
+        .alchemy-lore::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+        .alchemy-lore::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+        .lore-tag { font-size: 0.65rem; color: var(--dawn-gold); text-transform: uppercase; letter-spacing: 4px; margin-bottom: 0.6rem; font-weight: 600; }
+        .lore-title { font-family: var(--font-serif); font-size: 2.2rem; color: #fff; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 1.2rem; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
+        .lore-text { font-size: 0.88rem; line-height: 1.8; color: var(--ink-text); margin-bottom: 1.8rem; }
+        
+        /* THE ILLUSTRATOR'S NOTE (Bamboo Slip Style) */
+        .illustrator-note {
+            background: rgba(18, 14, 10, 0.8);
+            border-left: 3px solid var(--sect-red);
+            border-right: 1px solid rgba(255,255,255,0.05);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 1.5rem; position: relative;
+            font-family: var(--font-asian); font-size: 0.85rem; line-height: 1.7; color: var(--dawn-gold);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+        }
+        .illustrator-note::before {
+            content: '注'; position: absolute; top: 10px; right: 15px;
+            font-family: var(--font-asian); font-size: 3rem; color: rgba(156, 42, 42, 0.1);
+            line-height: 1; pointer-events: none;
+        }
+        .illustrator-note-title {
+            font-family: var(--font-serif); font-size: 0.6rem; letter-spacing: 4px; color: var(--sect-red); text-transform: uppercase; margin-bottom: 0.5rem; font-weight: 700;
+        }
+
+        /* --- LAYOUT CONFIGURATIONS --- */
+        .layout-split { display: flex; gap: 4vw; align-items: center; }
+        .layout-split > .art-col { flex: 1.2; }
+        .layout-split > .lore-col { flex: 0.8; }
+
+        .layout-stack { display: flex; flex-direction: column; gap: 2rem; align-items: center; }
+        .layout-stack > .lore-col { max-width: 900px; text-align: center; }
+        
+        /* Static Art Frame */
+        .static-frame {
+            width: 100%; border: 1px solid var(--jade-dark); border-radius: 4px;
+            box-shadow: 0 30px 70px rgba(0,0,0,0.95); overflow: hidden; position: relative;
+            background: #000;
+        }
+        .static-frame img { width: 100%; height: auto; max-height: 80vh; object-fit: contain; display: block; transition: transform 0.8s ease;}
+        .static-frame:hover img { transform: scale(1.02); }
+
+        /* --- THE SLIDER ENGINE (Universal) --- */
+        .comparison-slider {
+            position: relative; width: 100%; overflow: hidden;
+            border: 1px solid var(--jade-dark); border-radius: 4px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.95); background: #000;
+            cursor: ew-resize; touch-action: pan-y; 
+        }
+        .slider-img-before { width: 100%; display: block; height: auto; }
+        .slider-after-wrapper {
+            position: absolute; top: 0; left: 0; width: 50%; height: 100%;
+            overflow: hidden; border-right: 2px solid var(--jade-primary);
+            box-shadow: 5px 0 15px rgba(0,0,0,0.8);
+        }
+        .slider-img-after { position: absolute; top: 0; left: 0; height: 100%; width: auto; max-width: none; }
+
+        .slider-handle {
+            position: absolute; top: 0; bottom: 0; left: 50%; width: 2px;
+            background: var(--jade-primary); transform: translateX(-50%); z-index: 10;
+            pointer-events: none; box-shadow: 0 0 15px var(--jade-primary);
+        }
+        .slider-handle-btn {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(45deg);
+            width: 32px; height: 32px; background: #060a08; border: 1px solid var(--jade-primary);
+            display: flex; justify-content: center; align-items: center; box-shadow: 0 0 10px rgba(0,0,0,0.8);
+        }
+        .slider-handle-btn::after { content: '◈'; transform: rotate(-45deg); color: var(--dawn-gold); font-size: 0.75rem; }
+
+        /* --- IMAGE BOX CORNER ACCENTS (As requested via screenshot) --- */
+        .static-frame::before, .comparison-slider::before, .webtoon-scroll-container::before {
+            content: ''; position: absolute; top: 0; left: 0;
+            width: 35px; height: 35px;
+            border-top: 5px solid var(--jade-primary);
+            border-left: 5px solid var(--jade-primary);
+            z-index: 20; pointer-events: none;
+        }
+        .static-frame::after, .comparison-slider::after, .webtoon-scroll-container::after {
+            content: ''; position: absolute; top: 0; left: 0;
+            width: 12px; height: 12px;
+            background: var(--jade-primary);
+            z-index: 20; pointer-events: none;
+        }
+
+        /* --- SCROLL II: THE "MA" PLACARD (Context UI matching Screenshot) --- */
+        .scholars-placard {
+            position: absolute; top: 50%; right: 4%; transform: translateY(-50%);
+            width: 340px; background: rgba(8, 12, 10, 0.88);
+            border-radius: 4px; padding: 1.8rem 1.6rem; backdrop-filter: blur(12px); 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+            z-index: 15; pointer-events: none; opacity: 0; transition: opacity 0.8s ease 0.5s;
+        }
+        .exhibition-panel.active .scholars-placard { opacity: 1; }
+        .placard-title { font-family: var(--font-sans); font-weight: 600; font-size: 0.75rem; color: var(--jade-primary); letter-spacing: 2.5px; line-height: 1.4; margin-bottom: 1rem; text-transform: uppercase; }
+        .placard-text { font-family: var(--font-sans); font-size: 0.85rem; line-height: 1.7; color: var(--muted-text); }
+        .placard-text b { color: #fff; font-weight: 600; }
+
+        /* --- SCROLL IV: THE VERTICAL WEBTOON SPECIFIC UI --- */
+        .layout-webtoon {
+            display: grid; grid-template-columns: 1fr 1.2fr; gap: 3vw;
+            background: var(--bg-sect); border: 1px solid var(--jade-dark);
+            padding: 3.5rem; border-radius: 6px; box-shadow: 0 40px 90px rgba(0,0,0,0.95);
+            width: 100%;
+        }
+
+        .webtoon-lore-col { display: flex; flex-direction: column; justify-content: center; }
+        .webtoon-lore-tag { font-family: var(--font-serif); font-size: 0.65rem; color: var(--jade-primary); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;}
+        .webtoon-lore-tag::before, .webtoon-lore-tag::after { content: '✦'; font-size: 0.5rem;}
+        
+        .webtoon-lore-title { font-family: var(--font-serif); font-size: 2.2rem; color: #fff; margin-bottom: 1.5rem; line-height: 1.2; text-shadow: 0 2px 10px rgba(0,0,0,0.8);}
+        .webtoon-lore-text { font-size: 0.9rem; line-height: 1.8; color: var(--ink-text); margin-bottom: 2rem; }
+
+        /* Special 1-Day Tribulation Box */
+        .tribulation-box {
+            background: rgba(14, 20, 15, 0.6); border: 1px dashed var(--jade-dark);
+            padding: 1.5rem; border-radius: 4px; display: flex; gap: 1rem; align-items: flex-start;
+        }
+        .trib-icon { font-size: 1.8rem; line-height: 1; filter: grayscale(1) brightness(1.5); opacity: 0.8;}
+        .trib-content h4 { font-family: var(--font-serif); font-size: 0.75rem; color: var(--dawn-gold); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.5rem; }
+        .trib-content p { font-size: 0.8rem; line-height: 1.6; color: var(--muted-text); }
+        .trib-content b { color: #fff; }
+
+        /* The Scrolling Container */
+        .webtoon-scroll-container {
+            width: 100%; height: 75vh; overflow-y: auto; overflow-x: hidden;
+            border: 1px solid var(--jade-primary); border-radius: 4px;
+            box-shadow: 0 0 40px rgba(0,0,0,0.9), 0 0 20px rgba(82, 183, 136, 0.15);
+            background: #000; position: relative;
+            scrollbar-width: thin; scrollbar-color: var(--jade-primary) #0a100c;
+        }
+        .webtoon-scroll-container::-webkit-scrollbar { width: 6px; }
+        .webtoon-scroll-container::-webkit-scrollbar-track { background: #0a100c; }
+        .webtoon-scroll-container::-webkit-scrollbar-thumb { background: var(--jade-primary); border-radius: 3px; }
+        
+        .webtoon-handle-btn {
+            position: sticky; top: 50vh; left: 50%; transform: translate(-50%, -50%) rotate(45deg);
+            width: 38px; height: 38px; background: #060a08; border: 2px solid var(--jade-primary);
+            display: flex; justify-content: center; align-items: center; margin-top: -19px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.8);
+        }
+        .webtoon-handle-btn::after { content: '◈'; transform: rotate(-45deg); color: var(--dawn-gold); font-size: 0.85rem; }
+
+        /* --- SPIRITUAL SENSE (GLOBAL MODAL EASTER EGG) --- */
+        .spiritual-sense-btn {
+            position: fixed; bottom: 2rem; right: 2rem; z-index: 1000;
+            width: 50px; height: 50px; border-radius: 50%; background: rgba(10, 16, 12, 0.9);
+            border: 1px solid var(--jade-dark); display: flex; justify-content: center; align-items: center;
+            cursor: pointer; transition: all 0.4s ease; backdrop-filter: blur(8px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+        .spiritual-sense-btn::before { content: '👁'; font-size: 1.4rem; filter: grayscale(1); opacity: 0.4; transition: all 0.4s ease; }
+        .spiritual-sense-btn:hover { border-color: var(--jade-primary); box-shadow: 0 0 20px var(--jade-glow); }
+        .spiritual-sense-btn.active { border-color: var(--dawn-gold); box-shadow: 0 0 25px var(--dawn-glow); background: #000; }
+        .spiritual-sense-btn.active::before { filter: grayscale(0); opacity: 1; text-shadow: 0 0 15px var(--dawn-gold); }
+
+        #spiritualModal {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(3, 5, 4, 0.98); z-index: 999;
+            display: flex; justify-content: center; align-items: center; flex-direction: column;
+            opacity: 0; visibility: hidden; pointer-events: none; transition: all 0.6s ease;
+            backdrop-filter: blur(15px);
+        }
+        #spiritualModal.active { opacity: 1; visibility: visible; pointer-events: auto; }
+        
+        .modal-content-box { max-width: 90vw; max-height: 85vh; display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
+        .modal-img { max-width: 100%; max-height: 70vh; border: 1px solid var(--jade-dark); box-shadow: 0 0 50px rgba(0,0,0,1); object-fit: contain; }
+        
+        .modal-lore { text-align: center; max-width: 600px; }
+        .modal-title { font-family: var(--font-serif); font-size: 1.5rem; color: var(--dawn-gold); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 0.5rem; }
+        .modal-desc { font-size: 0.85rem; color: var(--muted-text); line-height: 1.6; }
+
+        /* --- FOOTER --- */
+        .sect-footer {
+            width: 100%; max-width: 1600px; margin: 2rem auto 0 auto; padding: 2.5rem 4vw;
+            border-top: 1px dashed rgba(82, 183, 136, 0.2); display: flex; justify-content: space-between; align-items: center;
+            position: relative; z-index: 10;
+        }
+        .footer-credits { font-family: var(--font-serif); font-size: 0.65rem; color: var(--muted-text); letter-spacing: 3px; text-transform: uppercase; }
+        .footer-credits b { color: var(--dawn-gold); }
+        .social-links { display: flex; gap: 1.5rem; }
+        .social-links a { color: var(--muted-text); text-decoration: none; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; transition: color 0.3s; }
+        .social-links a:hover { color: var(--jade-primary); text-shadow: 0 0 10px var(--jade-glow); }
+
+        /* --- RESPONSIVE MOBILE OPTIMIZATION --- */
+        @media (max-width: 1100px) {
+            .layout-split { flex-direction: column; }
+            .scholars-placard { position: relative; top: auto; right: auto; transform: none; width: 100%; margin-top: 1.5rem; border-left: none; border-top: 3px solid var(--jade-primary); }
+            .layout-webtoon { grid-template-columns: 1fr; padding: 2.5rem; }
+            .webtoon-scroll-container { height: 65vh; }
+        }
+        @media (max-width: 768px) {
+            .sect-header { flex-direction: column; gap: 1.5rem; text-align: center; padding-top: 2rem; }
+            .patron-badge { width: 100%; justify-content: center; }
+            .patron-text { align-items: center; }
+            .pagoda-nav { gap: 0.6rem; flex-direction: column; }
+            .pagoda-tab { justify-content: center; width: 100%; padding: 1rem; }
+            .alchemy-lore { padding: 2rem 1.5rem; }
+            .lore-title { font-size: 1.6rem; }
+            .illustrator-note { padding: 1.2rem; }
+            .layout-webtoon { padding: 1.5rem; }
+            .webtoon-lore-title { font-size: 1.6rem; }
+            .tribulation-box { flex-direction: column; gap: 0.5rem; }
+            .sect-footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Falling Bamboo Leaves & Dao Motes -->
+    <canvas id="qiCanvas"></canvas>
+    <div id="cursorAura"></div>
+    
+    <!-- Spiritual Sense Toggle (Global Easter Egg) -->
+    <div class="spiritual-sense-btn" id="spiritToggle" title="Open Spiritual Sense"></div>
+
+    <!-- Hidden Yin Modal -->
+    <div id="spiritualModal">
+        <div class="modal-content-box" onclick="event.stopPropagation()">
+            <img class="modal-img" src="Yin.png" alt="Yin from Beware of Chicken">
+            <div class="modal-lore">
+                <h3 class="modal-title">Scroll 0: The Hidden Shadow</h3>
+                <p class="modal-desc">You have opened your spiritual sense. The veil parts to reveal Yin, stalking through the earthly underbrush. A hidden piece of the foundation, unseen by mortal eyes.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header class="sect-header">
+        <a href="../index.html" class="sect-brand">
+            <img class="logo-img" src="../logo.png" alt="Karachiiy Scriptorium">
+            <div class="sect-title-group">
+                <h1>Beware of Chicken</h1>
+                <p class="sect-badge">Cultivation of the Canvas</p>
+            </div>
+        </a>
+        <div class="patron-badge">
+            <div class="patron-text">
+                <span class="patron-label">VIP Heavenly Patron</span>
+                <span class="patron-name">Casualfarmer</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- NAVIGATION -->
+    <nav class="pagoda-nav">
+        <button class="pagoda-tab active" data-target="scroll-1">Scroll I</button>
+        <button class="pagoda-tab" data-target="scroll-2">Scroll II</button>
+        <button class="pagoda-tab" data-target="scroll-3">Scroll III</button>
+        <button class="pagoda-tab" data-target="scroll-4">Scroll IV</button>
+    </nav>
+
+    <!-- SCROLL I: CAI XIULAN PORTRAIT -->
+    <main class="exhibition-panel active" id="scroll-1">
+        <div class="layout-split">
+            <div class="art-col">
+                <div class="static-frame">
+                    <img src="Cai Xiulan.png" alt="Cai Xiulan - The Sword Fairy's Grace">
+                </div>
+            </div>
+            
+            <div class="lore-col">
+                <div class="alchemy-lore">
+                    <p class="lore-tag">Scroll I — Original Portraiture</p>
+                    <h2 class="lore-title">The Sword Fairy's Grace</h2>
+                    <p class="lore-text">
+                        An original portrayal of Cai Xiulan, capturing the serene yet formidable aura of the Cloudy Sword Sect's former disciple. The illustration focuses on her calm demeanor, bridging the gap between a deadly martial artist and the grounded reality of life on Fa Ram.
+                    </p>
+                    <div class="illustrator-note">
+                        <div class="illustrator-note-title">Illustrator's Note</div>
+                        A careful balance of emerald greens and soft dawn lighting was utilized, echoing her profound connection to nature and the tranquil Dao she cultivates upon the farm.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- SCROLL II: ARRIVAL AT AZURE HILLS -->
+    <main class="exhibition-panel" id="scroll-2">
+        <div class="layout-stack">
+            
+            <div class="lore-col">
+                <p class="lore-tag">Scroll II — Webtoon Establishing Scene</p>
+                <h2 class="lore-title">Arrival at Azure Hills</h2>
+                <p class="lore-text">
+                    The very moment Jin Rou arrives at the Azure Hills, a pivotal scene from the official webtoon serialization. It sets the stage for a grand departure from the heavenly realms into the humble, earthly Dao.
+                </p>
+                <div class="illustrator-note" style="text-align: left;">
+                    <div class="illustrator-note-title">Illustrator's Note</div>
+                    To match the rigorous Heavenly Dao of serialization, this paint-over was executed in a staggering <b>3-day sprint</b>. The composition captures the vibrant vastness of the frontier, contrasting the peaceful hearth of the countryside with the daunting peaks beyond.
+                </div>
+            </div>
+
+            <div class="comparison-slider js-slider">
+                <img class="slider-img-before" src="Arrival before paint over.png" alt="Arrival Before">
+                <div class="slider-after-wrapper">
+                    <img class="slider-img-after" src="Arrival after paint over.png" alt="Arrival After">
+                </div>
+                <div class="slider-handle"><div class="slider-handle-btn"></div></div>
+                
+                <!-- The Scholar's Placard (Ma Principle) -->
+                <div class="scholars-placard">
+                    <h4 class="placard-title">ILLUSTRATOR'S NOTE: THE PRINCIPLE OF MA (間)</h4>
+                    <p class="placard-text">
+                        Notice how the composition inherently guides the eye leftward. By strategically positioning the interface over the rightward forest, we embrace the Eastern concept of <b>Negative Space (Ma)</b>. It respectfully anchors the layout, amplifying the focal subjects as they gaze upon their new land without obscuring the Dao of the scene.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- SCROLL III: OPERA MAKEUP -->
+    <main class="exhibition-panel" id="scroll-3">
+        <div class="layout-stack">
+            
+            <div class="lore-col">
+                <p class="lore-tag">Scroll III — Compositional Re-imagining</p>
+                <h2 class="scroll-title">The Painted <span>Opera</span></h2>
+                <p class="lore-text">
+                    A specialized paint-over study adapting a foundational composition conceptualized by the esteemed <b>artof666k</b>. Commissioned by Casualfarmer to envision Cai Xiulan applying her vibrant ritual opera paint with focused, steady precision.
+                </p>
+                <div class="illustrator-note" style="text-align: left;">
+                    <div class="illustrator-note-title">Illustrator's Note</div>
+                    Reinterpreting another artist's composition while injecting the visual identity of the Cloudy Sword Sect required meticulous care. The focus was placed heavily on the wet sheen of the vermilion pigment and the intense, reflective focus in her eyes as the brush meets her cheek.
+                </div>
+            </div>
+
+            <div class="comparison-slider js-slider" style="max-width: 1100px;">
+                <img class="slider-img-before" src="Cai Xiulan before paint over.png" alt="Xiulan Makeup Before">
+                <div class="slider-after-wrapper">
+                    <img class="slider-img-after" src="Cai Xiulan after paint over.png" alt="Xiulan Makeup After">
+                </div>
+                <div class="slider-handle"><div class="slider-handle-btn"></div></div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- SCROLL IV: VERTICAL WEBTOON 1-DAY RUN -->
+    <main class="exhibition-panel" id="scroll-4">
+        <div class="layout-webtoon">
+            
+            <div class="webtoon-lore-col">
+                <div class="webtoon-lore-tag">Scroll IV — Webtoon Panel Refinement</div>
+                <h2 class="webtoon-lore-title">The Vertical Flow of Qi</h2>
+                <p class="webtoon-lore-text">
+                    The Dao of Webtoons demands flow and stamina. This entire vertical sequence was fully refined in a staggering <b>1-day run</b>. A vertical journey demonstrating that speed and profound beauty can coexist when one follows the Dao.
+                </p>
+                
+                <div class="tribulation-box">
+                    <div class="trib-icon">🌪️</div>
+                    <div class="trib-content">
+                        <h4>The 1-Day Tribulation</h4>
+                        <p>This high-quality paint-over was executed at blistering speed to meet the <b>Heavenly Dao of publishing deadlines</b>, trading micro-rendering for maximum atmospheric impact and scrolling rhythm.</p>
+                    </div>
+                </div>
+                
+                <div class="illustrator-note" style="margin-top: 2rem;">
+                    <div class="illustrator-note-title">Illustrator's Note</div>
+                    Time flows vertically here, not horizontally. Details were deliberately subordinated to kinetic energy, lighting, and narrative momentum. Notice the crisp dappled lighting and intense rim-light across Jin's shoulders.
+                </div>
+            </div>
+
+            <!-- Vertical Scrolling Viewport -->
+            <div class="webtoon-scroll-container">
+                <div class="comparison-slider js-slider" style="border:none; box-shadow:none; border-radius: 0;">
+                    <img class="slider-img-before" src="Sam new test before paint over.png" alt="Webtoon Vertical Before">
+                    
+                    <div class="slider-after-wrapper">
+                        <img class="slider-img-after" src="Sam new test after paint over.png" alt="Webtoon Vertical After">
+                    </div>
+                    
+                    <div class="slider-handle webtoon-handle">
+                        <div class="webtoon-handle-btn"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="sect-footer">
+        <div class="footer-credits">
+            ILLUSTRATED WITH PROFOUND REVERENCE BY <b>ARCHMAGE KARACHIIY</b> FOR <b>CASUALFARMER</b>
+        </div>
+        <div class="social-links">
+            <a href="https://x.com/Karachiiy" target="_blank">Twitter</a>
+            <a href="https://www.pixiv.net/en/users/33593211" target="_blank">Pixiv</a>
+            <a href="https://vgen.co/Karachiiy" target="_blank">VGen</a>
+        </div>
+    </footer>
+
+    <script>
+        // --- PAGODA TAB NAVIGATION ---
+        const tabs = document.querySelectorAll('.pagoda-tab');
+        const panels = document.querySelectorAll('.exhibition-panel');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                if (tab.classList.contains('active')) return;
+                
+                tabs.forEach(t => t.classList.remove('active'));
+                panels.forEach(p => p.classList.remove('active'));
+                
+                tab.classList.add('active');
+                const target = document.getElementById(tab.getAttribute('data-target'));
+                target.classList.add('active');
+                
+                syncSliders();
+            });
+        });
+
+        // --- UNIVERSAL SLIDER ENGINE ---
+        const sliders = document.querySelectorAll('.js-slider');
+
+        function initSlider(slider) {
+            const wrapper = slider.querySelector('.slider-after-wrapper');
+            const handle = slider.querySelector('.slider-handle');
+            const imgAfter = slider.querySelector('.slider-img-after');
+            let isDragging = false;
+
+            function syncImageSize() {
+                imgAfter.style.width = slider.offsetWidth + 'px';
+            }
+
+            function updateSlider(clientX) {
+                const rect = slider.getBoundingClientRect();
+                let x = clientX - rect.left;
+                if (x < 0) x = 0;
+                if (x > rect.width) x = rect.width;
+                
+                const percentage = (x / rect.width) * 100;
+                wrapper.style.width = `${percentage}%`;
+                handle.style.left = `${percentage}%`;
+            }
+
+            slider.addEventListener('mousedown', (e) => { isDragging = true; updateSlider(e.clientX); });
+            window.addEventListener('mousemove', (e) => { if (!isDragging) return; updateSlider(e.clientX); });
+            window.addEventListener('mouseup', () => { isDragging = false; });
+
+            // Mobile touch: passive: true allows the vertical webtoon container to scroll natively
+            slider.addEventListener('touchstart', (e) => { isDragging = true; updateSlider(e.touches[0].clientX); }, {passive: true});
+            window.addEventListener('touchmove', (e) => { if (!isDragging) return; updateSlider(e.touches[0].clientX); }, {passive: true});
+            window.addEventListener('touchend', () => { isDragging = false; });
+
+            window.addEventListener('resize', syncImageSize);
+            setTimeout(syncImageSize, 100); 
+            slider.syncImageSize = syncImageSize;
+        }
+
+        sliders.forEach(initSlider);
+        function syncSliders() { sliders.forEach(s => { if(s.syncImageSize) s.syncImageSize(); }); }
+        window.addEventListener('load', syncSliders);
+
+        // --- SPIRITUAL SENSE (GLOBAL MODAL EASTER EGG) ---
+        const spiritBtn = document.getElementById('spiritToggle');
+        const spiritualModal = document.getElementById('spiritualModal');
+        
+        function openSpiritualSense() {
+            spiritBtn.classList.add('active');
+            spiritualModal.classList.add('active');
+        }
+        function closeSpiritualSense() {
+            spiritBtn.classList.remove('active');
+            spiritualModal.classList.remove('active');
+        }
+
+        spiritBtn.addEventListener('click', () => {
+            if(spiritualModal.classList.contains('active')) closeSpiritualSense();
+            else openSpiritualSense();
+        });
+
+        spiritualModal.addEventListener('click', (e) => {
+            if(e.target === spiritualModal) closeSpiritualSense();
+        });
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'Escape' && spiritualModal.classList.contains('active')) closeSpiritualSense();
+        });
+
+        // --- CURSOR AURA TRACKING ---
+        const aura = document.getElementById("cursorAura");
+        document.addEventListener("mousemove", (e) => {
+            if(aura.style.display !== 'none') {
+                aura.style.left = e.clientX + "px";
+                aura.style.top = e.clientY + "px";
+            }
+        });
+
+        // --- HEAVENLY QI & FALLING LEAF CANVAS ---
+        const canvas = document.getElementById("qiCanvas");
+        const ctx = canvas.getContext("2d");
+        let w = canvas.width = window.innerWidth;
+        let h = canvas.height = window.innerHeight;
+
+        window.addEventListener("resize", () => { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; });
+
+        class QiMote {
+            constructor() { this.reset(); this.y = Math.random() * h; } 
+            reset() {
+                this.x = Math.random() * w; this.y = -20;
+                this.size = Math.random() * 2.5 + 0.5;
+                this.speedY = Math.random() * 0.8 + 0.3;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.alpha = Math.random() * 0.4 + 0.05;
+                this.alphaDir = Math.random() > 0.5 ? 0.002 : -0.002;
+                this.life = Math.random() * 100;
+                
+                // Color Distribution: 70% Jade, 30% Gold
+                if (Math.random() < 0.70) this.color = "82, 183, 136";
+                else this.color = "233, 196, 106"; 
+                
+                this.isLeaf = Math.random() > 0.75;
+                this.rotation = Math.random() * Math.PI * 2;
+                this.rotSpeed = (Math.random() - 0.5) * 0.04;
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += Math.sin(this.life * 0.02) * 0.8 + this.speedX;
+                this.rotation += this.rotSpeed;
+                
+                this.alpha += this.alphaDir;
+                if (this.alpha > 0.6 || this.alpha < 0.05) this.alphaDir = -this.alphaDir;
+                
+                this.life++;
+                if (this.y > h + 20) this.reset();
+            }
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+                
+                if (this.isLeaf) {
+                    ctx.fillStyle = `rgba(${this.color}, ${this.alpha})`;
+                    ctx.beginPath();
+                    ctx.ellipse(0, 0, this.size * 2.5, this.size, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                } else {
+                    ctx.fillStyle = `rgba(${this.color}, ${this.alpha})`;
+                    ctx.beginPath();
+                    ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+                    ctx.shadowBlur = this.size > 1.5 ? 8 : 0;
+                    ctx.shadowColor = `rgba(${this.color}, 0.8)`;
+                    ctx.fill();
+                }
+                ctx.restore();
+            }
+        }
+
+        const motes = Array.from({ length: 70 }, () => new QiMote());
+
+        function animate() {
+            ctx.clearRect(0, 0, w, h);
+            motes.forEach(m => { m.update(); m.draw(); });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>
