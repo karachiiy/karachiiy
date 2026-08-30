@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>KARACHIIY — Scriptorium & Fantasy Illustrator</title>
     <!-- Favicon link strictly customized -->
     <link rel="icon" type="image/png" href="favicon.png">
@@ -16,7 +16,7 @@
             --parchment: #e8dcc4;
             --ui-bg: rgba(9, 11, 14, 0.75);
             
-            /* Dynamic Theme Variables */
+            /* Dynamic Theme Variables (Defaults to SotGG Gold) */
             --theme-color: #d4af37;        
             --theme-color-dim: #7a631c;    
             --theme-glow: rgba(212, 175, 55, 0.15); 
@@ -56,15 +56,15 @@
 
         .layout-wrapper {
             display: flex; justify-content: space-between; align-items: center;
-            width: 100%; height: 100%; max-width: 1600px; margin: 0 auto; padding: 0 6vw;
+            width: 100%; height: 100%; max-width: 1650px; margin: 0 auto; padding: 0 5vw;
             position: relative; z-index: 10;
         }
 
         .left-column {
-            display: flex; flex-direction: column; justify-content: center; height: 100%; position: relative; width: 520px;
+            display: flex; flex-direction: column; justify-content: center; height: 100%; position: relative; width: 560px;
         }
 
-        .brand-header { position: absolute; top: 3rem; left: 0; z-index: 100; display: flex; align-items: center; gap: 1rem; }
+        .brand-header { position: absolute; top: 2.5rem; left: 0; z-index: 100; display: flex; align-items: center; gap: 1rem; }
         .logo-img { height: 55px; width: auto; filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.2)); transition: transform 0.4s ease; margin-bottom: 1.2rem; }
         .logo-img:hover { transform: scale(1.03) rotate(-1deg); }
         .brand-tagline {
@@ -74,15 +74,17 @@
         }
         .brand-tagline b { color: var(--theme-color); font-weight: 600; transition: color 0.5s ease; }
 
-        .vault-layout { display: flex; gap: 2rem; align-items: center; margin-top: 2rem; }
+        .vault-layout { display: flex; gap: 2rem; align-items: center; margin-top: 2.5rem; }
 
-        .project-deck { display: flex; flex-direction: column; gap: 1.2rem; }
+        .project-deck { display: flex; flex-direction: column; gap: 0.75rem; }
+        
         .deck-tab {
-            width: 45px; height: 45px; background: rgba(10, 14, 18, 0.6);
+            width: 42px; height: 42px; background: rgba(10, 14, 18, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 4px; transform: rotate(45deg);
-            color: rgba(232, 220, 196, 0.3); font-family: var(--font-serif); font-size: 0.9rem; font-weight: 600;
+            color: rgba(232, 220, 196, 0.3); font-family: var(--font-serif); font-size: 0.85rem; font-weight: 600;
             display: flex; justify-content: center; align-items: center; cursor: pointer;
             transition: all 0.4s cubic-bezier(0.25, 1, 0.2, 1); position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            flex-shrink: 0;
         }
         .deck-tab span { transform: rotate(-45deg); }
         .deck-tab:hover {
@@ -106,7 +108,7 @@
             width: 100%; background: linear-gradient(135deg, rgba(12, 16, 20, 0.8) 0%, rgba(5, 7, 8, 0.95) 100%);
             border: 1px solid var(--theme-color-dim); padding: 3.5rem 3rem; border-radius: 4px;
             box-shadow: 0 40px 80px rgba(0,0,0,0.95), 0 0 50px rgba(255,255,255,0.02) inset;
-            backdrop-filter: blur(12px); position: relative; min-height: 550px;
+            backdrop-filter: blur(12px); position: relative; min-height: 580px;
             display: flex; flex-direction: column; justify-content: space-between; transition: border-color 0.5s ease, box-shadow 0.5s ease;
         }
         .portfolio-card:hover { box-shadow: 0 40px 80px rgba(0,0,0,1), 0 0 30px var(--theme-glow) inset; }
@@ -122,13 +124,13 @@
         .card-content { opacity: 1; transition: opacity 0.4s ease; height: 100%; display: flex; flex-direction: column; }
         .card-content.fade-out { opacity: 0; }
 
-        .card-label { font-size: 0.7rem; color: #7d8c99; text-transform: uppercase; letter-spacing: 5px; margin-bottom: 1rem; font-weight: 600; text-align: center; }
+        .card-label { font-size: 0.65rem; color: #7d8c99; text-transform: uppercase; letter-spacing: 5px; margin-bottom: 0.8rem; font-weight: 600; text-align: center; }
         .card-title {
-            font-family: var(--font-serif); font-size: 2.1rem; color: var(--theme-color); line-height: 1.2; margin-bottom: 1rem;
-            text-shadow: 0 4px 15px rgba(0,0,0,0.8); text-transform: uppercase; letter-spacing: 3px; text-align: center; transition: color 0.5s;
+            font-family: var(--font-serif); font-size: 2rem; color: var(--theme-color); line-height: 1.2; margin-bottom: 1rem;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.8); text-transform: uppercase; letter-spacing: 2px; text-align: center; transition: color 0.5s;
         }
         .card-divider {
-            display: flex; align-items: center; justify-content: center; gap: 15px; color: var(--theme-color-dim); font-size: 0.8rem; margin-bottom: 1.5rem; opacity: 0.7; transition: color 0.5s;
+            display: flex; align-items: center; justify-content: center; gap: 15px; color: var(--theme-color-dim); font-size: 0.8rem; margin-bottom: 1.2rem; opacity: 0.7; transition: color 0.5s;
         }
         .card-divider::before, .card-divider::after {
             content: ''; height: 1px; width: 50px; background: linear-gradient(90deg, transparent, var(--theme-color-dim), transparent);
@@ -136,15 +138,15 @@
 
         .card-lore {
             background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.03); border-left: 2px solid var(--theme-color);
-            padding: 1.2rem; font-size: 0.85rem; line-height: 1.7; color: #c4cdd5; font-style: italic; margin-bottom: 1.5rem;
+            padding: 1.2rem; font-size: 0.82rem; line-height: 1.7; color: #c4cdd5; font-style: italic; margin-bottom: 1.5rem;
             transition: all 0.5s ease; box-shadow: inset 0 0 20px rgba(0,0,0,0.4);
         }
         .card-lore b { color: var(--theme-color); font-weight: 600; letter-spacing: 1px; font-style: normal; }
 
-        .card-meta { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 2rem; flex-grow: 1; }
+        .card-meta { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 2rem; flex-grow: 1; }
         .meta-row {
             display: flex; justify-content: space-between; align-items: center; background: rgba(4, 5, 7, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.03); padding: 0.8rem 1.2rem; border-radius: 2px; transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.03); padding: 0.75rem 1.2rem; border-radius: 2px; transition: all 0.3s ease;
         }
         .meta-row:hover { background: rgba(4, 5, 7, 0.8); border-color: rgba(255, 255, 255, 0.08); }
         .meta-row.highlight-total {
@@ -155,19 +157,19 @@
             100% { border-color: rgba(212, 175, 55, 0.45); box-shadow: 0 0 15px rgba(212, 175, 55, 0.08); }
         }
         .meta-label { color: #7d8c99; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; }
-        .meta-val { color: var(--parchment); font-size: 0.8rem; font-weight: 500; font-family: var(--font-serif); letter-spacing: 1px; text-transform: uppercase; }
-        .meta-row.highlight-total .meta-val { color: var(--gold); text-shadow: 0 0 10px var(--gold-glow); }
+        .meta-val { color: var(--parchment); font-size: 0.75rem; font-weight: 500; font-family: var(--font-serif); letter-spacing: 1px; text-transform: uppercase; }
+        .meta-row.highlight-total .meta-val { color: var(--theme-color); text-shadow: 0 0 10px var(--theme-glow); }
 
         .enter-btn {
             width: 100%; background: transparent; border: 1px solid var(--theme-color-dim); color: var(--theme-color);
-            font-family: var(--font-serif); padding: 1.1rem; font-size: 0.85rem; letter-spacing: 5px; cursor: pointer;
+            font-family: var(--font-serif); padding: 1.1rem; font-size: 0.85rem; letter-spacing: 4px; cursor: pointer;
             text-transform: uppercase; transition: all 0.3s ease; position: relative; z-index: 5;
         }
         .enter-btn:hover {
-            background: rgba(255, 255, 255, 0.02); border-color: var(--theme-color); box-shadow: 0 0 25px var(--theme-glow); color: #fff; letter-spacing: 6px;
+            background: rgba(255, 255, 255, 0.02); border-color: var(--theme-color); box-shadow: 0 0 25px var(--theme-glow); color: #fff; letter-spacing: 5px;
         }
         .enter-btn.btn-disabled { border-color: rgba(255,255,255,0.05); color: rgba(232, 220, 196, 0.25); cursor: pointer; }
-        .enter-btn.btn-disabled:hover { background: transparent; box-shadow: none; color: rgba(232, 220, 196, 0.25); letter-spacing: 5px; }
+        .enter-btn.btn-disabled:hover { background: transparent; box-shadow: none; color: rgba(232, 220, 196, 0.25); letter-spacing: 4px; }
         
         .btn-error-state { border-color: #e06c75 !important; color: #e06c75 !important; text-shadow: 0 0 10px rgba(224, 108, 117, 0.5) !important; font-weight: 600; }
 
@@ -207,7 +209,7 @@
         .portal-wrapper:hover .ring-inner { stroke: var(--theme-core); filter: drop-shadow(0 0 15px var(--theme-core-glow)); }
         .portal-flash { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #fff; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 1s cubic-bezier(0.25, 1, 0.2, 1); }
 
-        .home-footer { position: absolute; bottom: 2.5rem; left: 0; z-index: 100; display: flex; flex-direction: column; gap: 0.8rem; }
+        .home-footer { position: absolute; bottom: 2rem; left: 0; z-index: 100; display: flex; flex-direction: column; gap: 0.8rem; }
         .social-links { display: flex; gap: 1.5rem; align-items: center; }
         .social-links a {
             color: rgba(232, 220, 196, 0.4); text-decoration: none; font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; font-family: var(--font-serif); transition: color 0.3s, text-shadow 0.3s;
@@ -219,81 +221,45 @@
         @keyframes spinCCW { 0% { transform: translateZ(inherit) rotate(360deg); } 100% { transform: translateZ(inherit) rotate(0deg); } }
         @keyframes corePulse { 0% { transform: scale(0.9); opacity: 0.7; } 100% { transform: scale(1.1); opacity: 1; } }
 
-        @media (max-width: 1100px) {
+        @media (max-width: 1150px) {
             body { overflow-y: auto; padding: 2rem; }
-            .layout-wrapper { flex-direction: column; gap: 4rem; justify-content: flex-start; margin-top: 2rem; }
+            .layout-wrapper { flex-direction: column; gap: 4rem; justify-content: flex-start; margin-top: 1rem; }
             .left-column { width: 100%; align-items: center; }
             .brand-header { position: relative; top: 0; align-items: center; text-align: center; margin-bottom: 2rem; }
             .brand-tagline { border-left: none; border-top: 2px solid var(--theme-color-dim); padding-left: 0; padding-top: 1rem; }
             .vault-layout { margin-top: 0; flex-direction: column; }
-            .project-deck { flex-direction: row; }
+            .project-deck { flex-direction: row; flex-wrap: wrap; justify-content: center; }
             .deck-tab::after { display: none; }
             .home-footer { position: relative; bottom: 0; align-items: center; text-align: center; margin-top: 3rem; }
         }
-		/* =========================================
-           MOBILE OPTIMIZATION (Phones / Small Tablets)
-           ========================================= */
         @media (max-width: 768px) {
-            /* 1. Allow scrolling and remove strict height limits */
-            body {
-                overflow-y: auto;
-                overflow-x: hidden;
-                height: auto;
-                min-height: 100vh;
-                padding: 1.5rem 1rem;
-            }
-
-            /* 2. Fix the layout wrapper so it flows downward */
-            .layout-wrapper {
-                padding: 0;
-                gap: 2rem;
-                margin-top: 0;
-            }
-
-            /* 3. Center the brand header and scale it down */
+            body { overflow-y: auto; overflow-x: hidden; height: auto; min-height: 100vh; padding: 1.5rem 1rem; }
+            .layout-wrapper { padding: 0; gap: 2rem; margin-top: 0; }
             .left-column { width: 100%; }
             .brand-header { margin-bottom: 1rem; }
             .logo-img { height: 45px; margin-bottom: 0.8rem; }
             .brand-tagline { font-size: 0.75rem; padding: 0.8rem 0 0 0; }
-
-            /* 4. Adjust the Card and Tabs for narrow screens */
+            
             .vault-layout { gap: 1.5rem; }
             .project-deck { gap: 1rem; justify-content: center; margin-bottom: 0.5rem; }
-            .deck-tab { width: 35px; height: 35px; font-size: 0.8rem; }
+            .deck-tab { width: 38px; height: 38px; font-size: 0.8rem; }
             
-            .portfolio-card {
-                padding: 2rem 1.5rem;
-                min-height: auto;
-            }
+            .portfolio-card { padding: 2rem 1.5rem; min-height: auto; }
             .card-title { font-size: 1.6rem; }
             .card-lore { font-size: 0.8rem; padding: 1rem; }
-            .meta-row { 
-                flex-direction: column; 
-                align-items: flex-start; 
-                gap: 0.3rem; 
-                padding: 0.6rem 1rem;
-            }
-            .meta-val { font-size: 0.75rem; }
+            .meta-row { flex-direction: column; align-items: flex-start; gap: 0.3rem; padding: 0.6rem 1rem; }
+            .meta-val { font-size: 0.7rem; }
 
-            /* 5. Scale down the 3D Portal so it fits the screen */
             .right-column { margin-top: 2rem; margin-bottom: 4rem; }
-            .portal-wrapper {
-                width: 320px;
-                height: 320px;
-            }
+            .portal-wrapper { width: 320px; height: 320px; }
             .portal-core { width: 70px; height: 70px; transform: translateZ(50px) rotate(45deg); }
             .portal-wrapper:hover .portal-core { transform: translateZ(70px) scale(1.1) rotate(45deg); }
-            
-            /* SVG text scaling for mobile */
             .ring-outer text { font-size: 7px; }
             .ring-middle text { font-size: 10px; }
 
-            /* 6. Footer adjustments */
             .home-footer { position: relative; margin-top: 2rem; gap: 1.2rem; padding-bottom: 2rem;}
             .social-links { flex-wrap: wrap; justify-content: center; gap: 1rem; }
         }
-
-        /* 7. Hide the glowing cursor aura on touch devices */
         @media (hover: none) and (pointer: coarse) {
             #cursorAura { display: none !important; }
         }
@@ -318,11 +284,17 @@
             </header>
 
             <div class="vault-layout">
+                <!-- 9 TABS DECK -->
                 <div class="project-deck">
                     <div class="deck-tab active" data-id="0" data-title="I. Song of the Gift-Giver"><span>I</span></div>
                     <div class="deck-tab" data-id="1" data-title="II. Beneath the Dragoneye Moons"><span>II</span></div>
                     <div class="deck-tab" data-id="2" data-title="III. Beware of Chicken"><span>III</span></div>
                     <div class="deck-tab" data-id="3" data-title="IV. Taste of Magic"><span>IV</span></div>
+                    <div class="deck-tab" data-id="4" data-title="V. Death is a Girl"><span>V</span></div>
+                    <div class="deck-tab" data-id="5" data-title="VI. Pact (Blake Thorburn)"><span>VI</span></div>
+                    <div class="deck-tab" data-id="6" data-title="VII. System Lost"><span>VII</span></div>
+                    <div class="deck-tab" data-id="7" data-title="VIII. Moonveil Archives"><span>VIII</span></div>
+                    <div class="deck-tab" data-id="8" data-title="IX. Schale Operations"><span>IX</span></div>
                 </div>
 
                 <div class="portfolio-container">
@@ -363,9 +335,9 @@
                     <a href="https://x.com/Karachiiy" target="_blank">𝕏 / Twitter</a>
                     <a href="https://www.pixiv.net/en/users/33593211" target="_blank">Pixiv</a>
                     <a href="mailto:karacia8555@gmail.com">Email Contact</a>
-	<a href="https://vgen.co/Karachiiy" target="_blank">VGen</a>
+                    <a href="https://vgen.co/Karachiiy" target="_blank">VGen</a>
                 </div>
-                <p class="credit-text">All Magics are Crafted by Arcmage Karachiiy</p>
+                <p class="credit-text">All Magics are Crafted by Archmage Karachiiy</p>
             </footer>
         </div>
 
@@ -409,7 +381,7 @@
         const cardContent = document.getElementById("cardContent");
         const portfolioCard = document.getElementById("portfolioCard");
 
-        // PROJECT DATABASE WITH FUNNY LORE AND FUNNY REJECTION MESSAGES
+        // PROJECT MASTER DATABASE
         const projects = [
             {
                 id: 0,
@@ -423,10 +395,7 @@
                 extraLore: "To breach the wards of the sanctum, you must speak the true name of the Coven: <br><br><b>Morsin's Monsters</b><br><br>*(Please wipe your boots before entering. Felix just mopped this floor and he will literally cry if you ruin it.)*",
                 btnText: "ENTER SANCTUM",
                 disabled: false,
-                colors: {
-                    color: "#d4af37", dim: "#7a631c", glow: "rgba(212, 175, 55, 0.25)",
-                    core: "#ff9f1c", coreGlow: "rgba(255, 159, 28, 0.25)"
-                }
+                colors: { color: "#d4af37", dim: "#7a631c", glow: "rgba(212, 175, 55, 0.25)", core: "#ff9f1c", coreGlow: "rgba(255, 159, 28, 0.25)" }
             },
             {
                 id: 1,
@@ -441,10 +410,7 @@
                 btnText: "✧ SEALED BY OATH ✧",
                 disabled: true,
                 lockedMessages: ["✧ ELAINE SAID NO ✧", "✧ LACK OF MANGOS DETECTED ✧", "✧ OATHBREAKER DETECTED ✧"],
-                colors: {
-                    color: "#64dfdf", dim: "#177e89", glow: "rgba(100, 223, 223, 0.25)",
-                    core: "#ffb703", coreGlow: "rgba(255, 183, 3, 0.25)"
-                }
+                colors: { color: "#64dfdf", dim: "#177e89", glow: "rgba(100, 223, 223, 0.25)", core: "#ffb703", coreGlow: "rgba(255, 183, 3, 0.25)" }
             },
             {
                 id: 2,
@@ -452,17 +418,13 @@
                 label: "Cultivation Scroll",
                 meta: [
                     { label: "Client", val: "Casualfarmer" },
-                    { label: "Warding Status", val: "Heavenly Dao of Farming" },
-                    { label: "Security Guard", val: "Great Master Bi De" }
+                    { label: "Format", val: "Webtoon Serial & Portraits" },
+                    { label: "Total Bound", val: "4 Heavenly Scrolls", highlight: true }
                 ],
-                extraLore: "Access denied. The archives are heavily guarded by a Heavenly Martial Arts Rooster who demands you respect the Dao of Farming. <br><br>Attempting to bypass these wards will result in getting pecked into your next reincarnation cycle.",
-                btnText: "✧ PECKED SHUT ✧",
-                disabled: true,
-                lockedMessages: ["✧ *ANGRY CLUCKING NOISES* ✧", "✧ THE DAO REJECTS YOU ✧", "✧ GET PECKED ✧"],
-                colors: {
-                    color: "#8cb369", dim: "#4a5d23", glow: "rgba(140, 179, 105, 0.25)",
-                    core: "#f4e285", coreGlow: "rgba(244, 226, 133, 0.25)"
-                }
+                extraLore: "Access granted. Welcome to the Heavenly Dao of Cultivation. <br><br><b>The Painter's Dao</b><br><br>Step into Fa Ram to witness the serene Sword Fairy and experience the blistering pace of a 1-Day vertical webtoon tribulation sprint.",
+                btnText: "OPEN SCROLL",
+                disabled: false,
+                colors: { color: "#8cb369", dim: "#4a5d23", glow: "rgba(140, 179, 105, 0.25)", core: "#f4e285", coreGlow: "rgba(244, 226, 133, 0.25)" }
             },
             {
                 id: 3,
@@ -470,16 +432,83 @@
                 label: "Culinary Grimoire",
                 meta: [
                     { label: "Client", val: "Amber Atlas" },
-                    { label: "Special Note", val: "Cozy Kitchen" },
+                    { label: "Special Note", val: "Cozy Kitchen Alchemy" },
                     { label: "Total Bound", val: "2 Cover Vessels", highlight: true }
                 ],
                 extraLore: "A warm, flour-dusted kitchen where magic rising as yeast is perfectly legal. <br><br>Warning: Hovering near the oven-wyrm Sienna might result in singed sleeves. Do not attempt to scry while eating Shimmertart.",
                 btnText: "ENTER SANCTUM",
                 disabled: false,
-                colors: {
-                    color: "#f28482", dim: "#844445", glow: "rgba(242, 132, 130, 0.25)",
-                    core: "#f6bd60", coreGlow: "rgba(246, 189, 96, 0.25)"
-                }
+                colors: { color: "#f28482", dim: "#844445", glow: "rgba(242, 132, 130, 0.25)", core: "#f6bd60", coreGlow: "rgba(246, 189, 96, 0.25)" }
+            },
+            {
+                id: 4,
+                title: "Death is a Girl",
+                label: "Omnibus Archive",
+                meta: [
+                    { label: "Publisher", val: "Mango Media" },
+                    { label: "Format", val: "Audiobook Cover" },
+                    { label: "Security Guard", val: "Noir the Eldritch Cat", highlight: true }
+                ],
+                extraLore: "Welcome to the grim, rain-slicked urban streets. Morrigan died as a sacrifice, but the Grim Reaper had other plans. <br><br>She now wields a <b>cyan-bladed scythe</b>, balancing high school drama with her daily murder list.",
+                btnText: "CROSS THE VEIL",
+                disabled: false,
+                colors: { color: "#00f0ff", dim: "#008a99", glow: "rgba(0, 240, 255, 0.25)", core: "#e63946", coreGlow: "rgba(230, 57, 70, 0.25)" }
+            },
+            {
+                id: 5,
+                title: "Pact",
+                label: "Fanart Package",
+                meta: [
+                    { label: "Patron", val: "Selkie Myth" },
+                    { label: "Subject", val: "Blake Thorburn" },
+                    { label: "Status", val: "Karma Debt Critical", highlight: true }
+                ],
+                extraLore: "Blake Thorburn just inherited apocalyptic karmic debt and an army of supernatural assassins waiting on the lawn. <br><br>His first tactical move? <b>Ordering a takeaway pizza</b> using a ghost-bound Frost Hatchet.",
+                btnText: "INSPECT OATH",
+                disabled: false,
+                colors: { color: "#00e5ff", dim: "#00808e", glow: "rgba(0, 229, 255, 0.25)", core: "#ffb703", coreGlow: "rgba(255, 183, 3, 0.25)" }
+            },
+            {
+                id: 6,
+                title: "System Lost",
+                label: "Phantom Archive",
+                meta: [
+                    { label: "Client", val: "DarkTechnomancer" },
+                    { label: "Subject", val: "Allison (Reverie)" },
+                    { label: "Consciousness", val: "Deep Slumber", highlight: true }
+                ],
+                extraLore: "A cosmic dive into the mindscape of Allison. <b>Reverie</b> is an ephemeral phantom suspended in the deep void.<br><br>Access this glassmorphic archive to shift her consciousness from deep slumber to a lucid awakening.",
+                btnText: "ENTER MINDSCAPE",
+                disabled: false,
+                colors: { color: "#3b82f6", dim: "#1d4ed8", glow: "rgba(59, 130, 246, 0.25)", core: "#fb923c", coreGlow: "rgba(251, 146, 60, 0.25)" }
+            },
+            {
+                id: 7,
+                title: "Moonveil Archives",
+                label: "Patron Exhibition",
+                meta: [
+                    { label: "Patron", val: "Talieson" },
+                    { label: "Subjects", val: "Jade & Layla" },
+                    { label: "Operation", val: "The Great Egg Heist", highlight: true }
+                ],
+                extraLore: "Action first, ask questions never. <br><br>Chronicling the chaotic <b>'aggressive long-term borrowing'</b> egg heists and peaceful moonlit solitudes of two unyielding adventurers whose partnership remains unbroken.",
+                btnText: "VIEW EXHIBITION",
+                disabled: false,
+                colors: { color: "#38b000", dim: "#206600", glow: "rgba(56, 176, 0, 0.25)", core: "#ffb703", coreGlow: "rgba(255, 183, 3, 0.25)" }
+            },
+            {
+                id: 8,
+                title: "Schale Archive",
+                label: "Kivotos Festival",
+                meta: [
+                    { label: "VIP Patron", val: "Tsukinomiya Ruka" },
+                    { label: "Subjects", val: "Shirao Eri & Sakurai Miyo" },
+                    { label: "Clearance", val: "Level 9 Authorization", highlight: true }
+                ],
+                extraLore: "<b>System Online.</b><br><br>Authorized access granted to the high-security terminal logging the covert, sweet, and highly intimate summer festival operations of Shirao Eri and Sakurai Miyo.",
+                btnText: "ACCESS TERMINAL",
+                disabled: false,
+                colors: { color: "#00a2ff", dim: "#005c91", glow: "rgba(0, 162, 255, 0.25)", core: "#ff5e94", coreGlow: "rgba(255, 94, 148, 0.25)" }
             }
         ];
 
@@ -574,12 +603,16 @@
 
             particles.forEach(p => p.speed = Math.random() * 25 + 10);
             setTimeout(() => { flash.style.opacity = "1"; }, 300);
+            
             setTimeout(() => { 
-                if (activeProject.id === 0) {
-                    window.location.href = "./Song-of-the-Gift-Giver/"; 
-                } else if (activeProject.id === 3) {
-                    window.location.href = "./Taste-of-Magic/"; 
-                }
+                if (activeProject.id === 0) window.location.href = "./Song-of-the-Gift-Giver/"; 
+                else if (activeProject.id === 2) window.location.href = "./Beware-of-Chicken/"; 
+                else if (activeProject.id === 3) window.location.href = "./Taste-of-Magic/"; 
+                else if (activeProject.id === 4) window.location.href = "./Death-is-a-Girl/"; 
+                else if (activeProject.id === 5) window.location.href = "./Selkie-Myth-Pact-by-Wildbow/"; 
+                else if (activeProject.id === 6) window.location.href = "./System-Lost-by-DarkTechnomancer/"; 
+                else if (activeProject.id === 7) window.location.href = "./Talieson/"; 
+                else if (activeProject.id === 8) window.location.href = "./tsukinomiya-ruka/"; 
             }, 1000);
         }
 
