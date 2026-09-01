@@ -1,1 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AUTH REQUIRED // KARACHIIY STUDIO</title>
+    <style>
+        :root {
+            --bg: #050505;
+            --text-main: #f0f0f0;
+            --text-muted: #666666;
+            --accent: #ffffff;
+            --danger: #ff3333;
+        }
 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* PASSWORD GATE STYLES */
+        #gate-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: var(--bg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .gate-title {
+            font-size: 0.8rem;
+            letter-spacing: 4px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        input[type="password"] {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #333;
+            color: var(--text-main);
+            font-size: 1.2rem;
+            text-align: center;
+            padding: 10px;
+            outline: none;
+            width: 250px;
+            transition: border-color 0.3s ease;
+            letter-spacing: 2px;
+        }
+
+        input[type="password"]:focus {
+            border-bottom: 1px solid var(--accent);
+        }
+
+        .error-msg {
+            color: var(--danger);
+            font-size: 0.8rem;
+            margin-top: 15px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* MAIN CONTENT STYLES */
+        #payload-screen {
+            display: none;
+            width: 100%;
+            max-width: 800px;
+            padding: 80px 20px;
+            opacity: 0;
+            animation: fadeInSlow 2s forwards;
+        }
+
+        @keyframes fadeInSlow {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .terminal-header {
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            border-bottom: 1px solid #222;
+            padding-bottom: 20px;
+            margin-bottom: 60px;
+        }
+
+        .redacted-section {
+            margin-bottom: 60px;
+        }
+
+        .redacted-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .redacted-block {
+            background: #111;
+            padding: 20px;
+            border-left: 3px solid var(--danger);
+            color: var(--text-muted);
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: #cccccc;
+            margin-bottom: 25px;
+            font-weight: 400;
+        }
+
+        .image-container {
+            margin: 60px 0;
+            width: 100%;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            transition: transform 0.5s ease;
+        }
+
+        .image-container:hover {
+            transform: scale(1.01);
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .quote-block {
+            padding-left: 20px;
+            border-left: 2px solid #555;
+            margin: 40px 0;
+            font-style: italic;
+            color: #999;
+        }
+
+        /* BUTTONS */
+        .action-container {
+            margin-top: 80px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn {
+            text-decoration: none;
+            text-align: center;
+            padding: 18px 30px;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .btn-primary {
+            background-color: var(--text-main);
+            color: var(--bg);
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            background-color: #ffffff;
+            box-shadow: 0 0 20px rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-muted);
+            border: 1px solid #333;
+        }
+
+        .btn-secondary:hover {
+            border-color: #666;
+            color: #aaa;
+        }
+
+        /* Fade in on scroll utility */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PASSWORD GATE -->
+    <div id="gate-screen">
+        <div class="gate-title">SECURE CONNECTION ESTABLISHED</div>
+        <input type="password" id="passkey" placeholder="enter password" autocomplete="off" autofocus>
+        <div class="error-msg" id="error">incorrect.</div>
+    </div>
+
+    <!-- MAIN PAYLOAD -->
+    <div id="payload-screen">
+        <div class="terminal-header">
+            > BEHAVIORAL ARCHITECTURE LOG<br>
+            > DATE: 01.09.2026<br>
+            > STATUS: Q4 NDA PENDING
+        </div>
+
+        <div class="redacted-section reveal">
+            <div class="redacted-title">MPV BEHAVIORAL BYPASS MECHANISM</div>
+            <div class="redacted-block">
+                [ FILE DELETED FROM SERVER ]
+            </div>
+            <br>
+            <p>i originally put the full venmo drop bypass mechanism right here. but honestly, i'm not sure if i can do that because i'm about to sign the q4 nda for the client. so i deleted it.</p>
+        </div>
+
+        <div class="reveal">
+            <p>however, i'll keep this little idea i had while researching mschf here.</p>
+            <p>it's a rock candy thank you card concept. The behavioral mechanics behind this thank you card—especially considering MSCHF's nature—can apply to any MSCHF-style product, even better than the rock candy featured in this mockup. </p>
+            <p>so this is merely something like a proof of work, not an active "let's do it" project.</p>
+        </div>
+
+        <div class="image-container reveal">
+            <img src="mschf rock candy thank you card.png" alt="Proof of Work: Behavioral Architecture">
+        </div>
+
+        <div class="reveal">
+            <p>the idea is simple.</p>
+            <div class="quote-block">
+                as daniel greenberg said: "microinfluencers work better than major influencers."
+            </div>
+            <p>if you see a major influencer promote something, it triggers banner blindness. you know they do it because of the financial incentive. but if your friend is genuinely happy about a product to the point they promote it, you are way more likely to buy it, because you know your friend promoting it is real.</p>
+            <p>that is why I architected this thank you card gift. It is a psychological trap designed to encourage buyers to flex to their friends. It bypasses the logical brain and weaponizes mimetic human nature. It is a lethal chemical combination with MSCHF's nature.
+
+</p>
+            <p>That is just one small mechanism. The Venmo mechanism I deleted was much larger.
+
+</p>
+        </div>
+
+        <div class="action-container reveal">
+            <a href="mailto:kara@karachiiy.com" class="btn btn-primary">let's make that happen before the q4 nda signs</a>
+            <a href="https://wearebraindead.com" class="btn btn-secondary">maybe let them have it</a>
+        </div>
+    </div>
+
+    <script>
+        // PASSWORD GATE LOGIC
+        const gateScreen = document.getElementById('gate-screen');
+        const payloadScreen = document.getElementById('payload-screen');
+        const passkeyInput = document.getElementById('passkey');
+        const errorMsg = document.getElementById('error');
+
+        passkeyInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                if (passkeyInput.value === 'projectvenmo') {
+                    // Success
+                    errorMsg.style.opacity = '0';
+                    gateScreen.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        gateScreen.style.display = 'none';
+                        payloadScreen.style.display = 'block';
+                        document.title = "MSCHF AUTOPSY // KARACHIIY";
+                        initScrollReveal();
+                    }, 1000);
+                } else {
+                    // Fail
+                    errorMsg.style.opacity = '1';
+                    passkeyInput.value = '';
+                }
+            }
+        });
+
+        // SCROLL REVEAL ANIMATIONS (Makes it feel high-end/luxury)
+        function initScrollReveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            // Trigger first elements immediately
+            reveals.forEach((reveal, index) => {
+                if (index < 2) {
+                    setTimeout(() => {
+                        reveal.classList.add('active');
+                    }, index * 300);
+                }
+            });
+
+            // Trigger rest on scroll
+            window.addEventListener('scroll', () => {
+                const windowHeight = window.innerHeight;
+                const elementVisible = 100;
+
+                reveals.forEach(reveal => {
+                    const elementTop = reveal.getBoundingClientRect().top;
+                    if (elementTop < windowHeight - elementVisible) {
+                        reveal.classList.add('active');
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+</html>
