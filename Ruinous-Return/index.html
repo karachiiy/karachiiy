@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ruinous Return — Omnibus Archive | Karachiiy</title>
+    <link rel="icon" type="image/png" href="../favicon.png">
+    
+    <!-- Majestic Dark Fantasy & Modern Sci-Fi LitRPG Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Palette: Obsidian Shards, Calamity Blue Flame, Slate Ash */
+            --bg-deep: #020304;
+            --obsidian: #0b0c10;
+            --obsidian-light: #1f2833;
+            
+            --cyan-core: #00e5ff;
+            --cyan-lava: #45f3ff;
+            --cyan-glow: rgba(0, 229, 255, 0.35);
+            --cyan-dim: rgba(0, 229, 255, 0.08);
+            
+            --text-primary: #c5c6c7;
+            --text-white: #ffffff;
+            
+            --font-heading: 'Cinzel Decorative', serif;
+            --font-body: 'Rajdhani', sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            /* Custom Blue Ember Cursor */
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="4" fill="%2300e5ff" style="filter: drop-shadow(0 0 4px %2300e5ff)"/></svg>') 8 8, auto;
+        }
+
+        /* --- BACKGROUND CANVAS & EFFECTS --- */
+        #calamityCanvas {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: 0; pointer-events: none; opacity: 0.85;
+        }
+        
+        body::before {
+            content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: radial-gradient(circle at 25% 50%, rgba(0, 229, 255, 0.03) 0%, transparent 60%);
+            pointer-events: none; z-index: 1;
+        }
+
+        /* --- SYSTEM ALARM TOAST --- */
+        .system-toast {
+            position: fixed; top: 100px; right: -500px;
+            background: rgba(0, 229, 255, 0.05); border: 1px solid var(--cyan-core);
+            border-left: 4px solid var(--cyan-core);
+            color: var(--cyan-core); padding: 1.2rem 2rem;
+            font-family: var(--font-body); font-weight: 600; font-size: 1.1rem; letter-spacing: 2px;
+            box-shadow: 0 0 25px rgba(0, 229, 255, 0.2);
+            transition: right 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 2000; backdrop-filter: blur(10px);
+            text-transform: uppercase;
+        }
+        .system-toast.show { right: 40px; }
+
+        /* --- TOP NAVIGATION BAR --- */
+        .top-nav {
+            position: fixed; top: 0; left: 0; width: 100%;
+            padding: 1.5rem 4vw; display: flex; justify-content: space-between; align-items: center;
+            z-index: 100; background: linear-gradient(to bottom, rgba(2,3,4,0.95) 0%, transparent 100%);
+            backdrop-filter: blur(4px);
+        }
+
+        .brand-link {
+            display: flex; align-items: center; gap: 1rem; text-decoration: none;
+        }
+        .brand-logo {
+            height: 40px; width: auto; filter: drop-shadow(0 0 10px var(--cyan-core));
+            transition: transform 0.5s ease;
+        }
+        .brand-link:hover .brand-logo { transform: scale(1.05); }
+
+        .brand-text { display: flex; flex-direction: column; }
+        .brand-title {
+            font-family: var(--font-heading); font-size: 1.2rem; font-weight: 700;
+            color: var(--text-white); letter-spacing: 3px; line-height: 1;
+        }
+        .brand-subtitle {
+            font-family: var(--font-body); font-size: 0.7rem; color: var(--cyan-core);
+            letter-spacing: 5px; text-transform: uppercase; font-weight: 600; margin-top: 0.3rem;
+        }
+
+        .client-badge {
+            background: rgba(11, 12, 16, 0.8); border: 1px solid var(--obsidian-light);
+            padding: 0.6rem 1.5rem; display: flex; align-items: center; gap: 12px;
+            backdrop-filter: blur(10px); border-radius: 2px;
+        }
+        .client-badge-icon {
+            width: 8px; height: 8px; background: var(--cyan-core);
+            box-shadow: 0 0 10px var(--cyan-core); transform: rotate(45deg);
+            animation: pulseFlame 2s infinite alternate;
+        }
+        .client-badge-text {
+            font-family: var(--font-body); font-size: 0.85rem; font-weight: 600;
+            color: var(--text-white); letter-spacing: 2px; text-transform: uppercase;
+        }
+
+        @keyframes pulseFlame {
+            0% { transform: rotate(45deg) scale(0.8); opacity: 0.6; }
+            100% { transform: rotate(45deg) scale(1.2); opacity: 1; box-shadow: 0 0 15px var(--cyan-lava); }
+        }
+
+        /* --- FULL BLEED SPLIT LAYOUT --- */
+        .layout-grid {
+            display: flex; width: 100%; min-height: 100vh; position: relative; z-index: 10;
+        }
+
+        /* LEFT: VISUAL ANCHOR (STICKY) */
+        .visual-anchor {
+            width: 50%; height: 100vh; position: sticky; top: 0;
+            display: flex; justify-content: center; align-items: center;
+            padding: 6rem 3rem 3rem 3rem; background: radial-gradient(circle at center, rgba(11,12,16,0.5) 0%, var(--bg-deep) 100%);
+            border-right: 1px solid var(--obsidian-light); overflow: hidden;
+        }
+
+        .artwork-container {
+            position: relative; width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        .artwork-img {
+            max-width: 100%; max-height: 100%; object-fit: contain;
+            filter: drop-shadow(0 0 40px rgba(0, 229, 255, 0.15));
+            transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.6s;
+        }
+        
+        .visual-anchor:hover .artwork-img {
+            transform: scale(1.02); filter: drop-shadow(0 0 60px rgba(0, 229, 255, 0.3));
+        }
+
+        .inspect-hint {
+            position: absolute; bottom: 2rem;
+            background: rgba(11, 12, 16, 0.8); border: 1px solid var(--cyan-core);
+            padding: 0.6rem 1.5rem; font-family: var(--font-body); font-size: 0.8rem;
+            font-weight: 600; letter-spacing: 4px; color: var(--cyan-core); text-transform: uppercase;
+            backdrop-filter: blur(5px); pointer-events: none; opacity: 0; transform: translateY(10px);
+            transition: all 0.4s ease;
+        }
+        .visual-anchor:hover .inspect-hint { opacity: 1; transform: translateY(0); }
+
+        /* RIGHT: CONTENT SCROLL */
+        .content-scroll {
+            width: 50%; padding: 8rem 5vw 6rem 5vw;
+            display: flex; flex-direction: column; gap: 4rem;
+        }
+
+        /* Data Shards (Brutalist Panels) */
+        .data-shard {
+            background: var(--obsidian); border: 1px solid var(--obsidian-light);
+            padding: 3rem; position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            /* Shattered Obsidian Corner Effect */
+            clip-path: polygon(0 15px, 15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
+            transition: border-color 0.4s ease, box-shadow 0.4s;
+        }
+        .data-shard:hover {
+            border-color: var(--cyan-dim); box-shadow: 0 20px 50px rgba(0, 229, 255, 0.05);
+        }
+
+        .shard-header {
+            font-family: var(--font-body); font-size: 0.85rem; color: var(--cyan-core);
+            text-transform: uppercase; letter-spacing: 5px; font-weight: 700; margin-bottom: 1rem;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .shard-header::before { content: ''; width: 30px; height: 2px; background: var(--cyan-core); }
+
+        .shard-title {
+            font-family: var(--font-heading); font-size: 2.5rem; color: var(--text-white);
+            line-height: 1.1; margin-bottom: 1.5rem; text-shadow: 0 0 15px rgba(0,0,0,0.8);
+        }
+
+        .shard-body {
+            font-size: 1.1rem; line-height: 1.7; color: var(--text-primary);
+            font-weight: 500;
+        }
+        .shard-body b { color: var(--text-white); font-weight: 700; }
+        .shard-body i { color: var(--cyan-core); }
+
+        /* Meta Grid */
+        .meta-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem;
+            border-top: 1px solid var(--obsidian-light); padding-top: 2rem;
+        }
+        .meta-item { display: flex; flex-direction: column; gap: 0.4rem; }
+        .meta-label { font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; }
+        .meta-value { font-family: var(--font-heading); font-size: 1.2rem; color: var(--text-white); letter-spacing: 1px; }
+
+        /* The Prompt Box */
+        .prompt-box {
+            background: rgba(0, 229, 255, 0.03); border-left: 3px solid var(--cyan-core);
+            padding: 1.5rem; margin-top: 2rem; font-style: italic; font-size: 1rem;
+            color: #94a3b8; line-height: 1.6;
+        }
+
+        /* --- THE VAULT & IGNITE BUTTON --- */
+        .vault-container {
+            display: flex; flex-direction: column; align-items: center; gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .ignite-btn {
+            background: #000; border: 1px solid #333; color: #555;
+            text-transform: uppercase; font-family: var(--font-heading); font-weight: 900;
+            font-size: 1.2rem; letter-spacing: 6px; padding: 1.5rem 4rem;
+            position: relative; overflow: hidden; cursor: pointer;
+            transition: all 0.4s ease;
+            clip-path: polygon(15px 0, 100% 0, calc(100% - 15px) 100%, 0 100%);
+            width: 100%;
+        }
+        .ignite-btn::before {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px;
+            background: var(--cyan-core); transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease;
+        }
+        .ignite-btn:hover {
+            color: var(--cyan-core); border-color: var(--cyan-core);
+            box-shadow: 0 0 30px var(--cyan-glow) inset;
+        }
+        .ignite-btn:hover::before { transform: scaleX(1); }
+        
+        .ignite-btn.ignited {
+            background: rgba(0, 229, 255, 0.08); color: #fff;
+            border-color: var(--cyan-core); box-shadow: 0 0 40px var(--cyan-glow);
+            text-shadow: 0 0 10px var(--cyan-core); pointer-events: none;
+        }
+
+        /* Manifest List */
+        .manifest-list {
+            width: 100%; display: flex; flex-direction: column; gap: 1rem;
+        }
+        
+        .manifest-item {
+            background: rgba(0, 229, 255, 0.02); border: 1px solid var(--obsidian-light);
+            border-left: 3px solid var(--cyan-core); padding: 1.5rem 2rem;
+            display: flex; justify-content: space-between; align-items: center;
+            opacity: 0; transform: translateX(-30px); transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            display: none; /* Hidden until ignited */
+        }
+        .manifest-item.revealed {
+            display: flex; opacity: 1; transform: translateX(0);
+        }
+
+        .manifest-info { display: flex; flex-direction: column; gap: 0.3rem; }
+        .manifest-name { font-family: var(--font-heading); font-size: 1.1rem; color: #fff; letter-spacing: 1px; }
+        .manifest-type { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; font-weight: 600; }
+
+        .download-link {
+            color: var(--cyan-core); text-decoration: none; font-family: var(--font-body);
+            font-weight: 700; letter-spacing: 3px; border: 1px solid var(--cyan-core);
+            padding: 0.8rem 2rem; transition: all 0.3s ease; text-transform: uppercase;
+        }
+        .download-link:hover {
+            background: var(--cyan-core); color: #000; box-shadow: 0 0 20px var(--cyan-glow);
+        }
+
+        /* --- LIGHTBOX MODAL --- */
+        .lightbox {
+            position: fixed; top:0; left:0; width:100%; height:100%;
+            background: rgba(2, 3, 4, 0.98); z-index: 3000;
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+            backdrop-filter: blur(10px);
+        }
+        .lightbox.active { opacity: 1; pointer-events: auto; }
+        
+        .lightbox img {
+            max-width: 90vw; max-height: 90vh; object-fit: contain;
+            box-shadow: 0 0 60px rgba(0, 229, 255, 0.15);
+            border: 1px solid var(--obsidian-light);
+            transform: scale(0.95); transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .lightbox.active img { transform: scale(1); border-color: var(--cyan-core); }
+
+        .close-btn {
+            position: absolute; top: 2rem; right: 3rem; font-size: 3rem;
+            color: var(--text-muted); background: none; border: none; cursor: pointer;
+            transition: color 0.3s, transform 0.3s;
+        }
+        .close-btn:hover { color: var(--cyan-core); transform: rotate(90deg) scale(1.1); }
+
+        /* --- FOOTER --- */
+        .omnibus-footer {
+            width: 100%; padding: 2rem 5vw; border-top: 1px solid var(--obsidian-light);
+            display: flex; justify-content: space-between; align-items: center;
+            margin-top: 4rem;
+        }
+        .footer-text { font-family: var(--font-body); font-size: 0.85rem; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; font-weight: 600; }
+        .footer-text b { color: var(--text-white); }
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media (max-width: 1100px) {
+            .layout-grid { flex-direction: column; }
+            .visual-anchor { width: 100%; height: auto; position: relative; padding: 8rem 2rem 2rem 2rem; border-right: none; border-bottom: 1px solid var(--obsidian-light); }
+            .artwork-img { max-height: 70vh; }
+            .content-scroll { width: 100%; padding: 4rem 5vw; }
+            .system-toast.show { right: 20px; top: 80px; padding: 1rem; font-size: 0.9rem; }
+        }
+        @media (max-width: 768px) {
+            .top-nav { flex-direction: column; gap: 1rem; text-align: center; }
+            .client-badge { width: 100%; justify-content: center; }
+            .data-shard { padding: 2rem 1.5rem; }
+            .shard-title { font-size: 2rem; }
+            .meta-grid { grid-template-columns: 1fr; }
+            .manifest-item { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+            .download-link { width: 100%; text-align: center; }
+            .omnibus-footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Blue Lava & Ash Particle Canvas -->
+    <canvas id="calamityCanvas"></canvas>
+
+    <!-- System Notification Toast -->
+    <div id="systemToast" class="system-toast">
+        SYSTEM OVERRIDE: DEITY CLASS DETECTED. ASSETS UNLOCKED.
+    </div>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="lightbox">
+        <button class="close-btn" id="lbClose">&times;</button>
+        <img id="lbImg" src="" alt="Full Artwork">
+    </div>
+
+    <!-- TOP NAVIGATION -->
+    <header class="top-nav">
+        <a href="../index.html" class="brand-link">
+            <img class="brand-logo" src="../logo.png" alt="Karachiiy Scriptorium">
+            <div class="brand-text">
+                <h1 class="brand-title">RUINOUS RETURN</h1>
+                <p class="brand-subtitle">OMNIBUS ARCHIVE DELIVERY</p>
+            </div>
+        </a>
+        <div class="client-badge">
+            <div class="client-badge-icon"></div>
+            <div class="client-badge-text">PATRON // MANGO MEDIA</div>
+        </div>
+    </header>
+
+    <!-- FULL BLEED SPLIT LAYOUT -->
+    <main class="layout-grid">
+        
+        <!-- LEFT: VISUAL ANCHOR (STICKY) -->
+        <div class="visual-anchor">
+            <div class="artwork-container">
+                <!-- Swapped .png for .jpg -->
+                <img class="artwork-img" id="masterArt" src="Mango Media Cover Order – Ruinous Return Audio Omnibus cover.jpg" alt="Ruinous Return Omnibus Cover">
+                <div class="inspect-hint">✦ Click to Inspect ✦</div>
+            </div>
+        </div>
+
+        <!-- RIGHT: CONTENT SCROLL -->
+        <div class="content-scroll">
+            
+            <!-- Shard 1: Lore -->
+            <div class="data-shard">
+                <div class="shard-header">Archive Lore</div>
+                <h2 class="shard-title">The Empire Builder</h2>
+                <div class="shard-body">
+                    The price for saving the world is the right to rule it. Cast back to Earth and forgotten by history, <b>Lyn Rivers</b> forced her violent return. Now wielding the power of a deity of destruction, she seeks to conquer dungeons, destroy kingdoms, and build an empire of her own.
+                    <br><br>
+                    <i>"After all, why ruin the world when you can bend it to your will?"</i>
+                </div>
+
+                <div class="meta-grid">
+                    <div class="meta-item">
+                        <span class="meta-label">Author</span>
+                        <span class="meta-value">SerasStreams</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Novel Series</span>
+                        <span class="meta-value">Ruinous Return</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Genre</span>
+                        <span class="meta-value">Dark Fantasy / LitRPG</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Format</span>
+                        <span class="meta-value" style="color: var(--cyan-core);">Audio Omnibus Cover</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shard 2: Art Direction -->
+            <div class="data-shard">
+                <div class="shard-header">Art Direction</div>
+                <h2 class="shard-title">The Obsidian Dragon Throne</h2>
+                <div class="shard-body">
+                    This omnibus cover captures Lyn Rivers at the absolute apex of her ruinous return. Seated dominantly upon an imposing throne formed from giant, shattered chunks of obsidian—casting the inner shadow of a dragon. 
+                    <br><br>
+                    In her grasp, her legendary greatsword <b>Calamity</b> is fully ignited with fierce blue flame, dripping molten light-blue lava onto the stone below.
+                </div>
+                
+                <div class="prompt-box">
+                    "We go a bit Game of Thrones and also include the weapons of the other heroes, all broken and battered at her feet." — <i>Mango Media Directive</i>
+                </div>
+            </div>
+
+            <!-- Shard 3: Delivery Vault -->
+            <div class="data-shard" style="border-color: #333;">
+                <div class="shard-header" style="color: #666;">Delivery Manifest</div>
+                <h2 class="shard-title" style="color: #888;">Master Asset Vault</h2>
+                
+                <div class="vault-container">
+                    <button id="igniteBtn" class="ignite-btn">Ignite Calamity</button>
+                    
+                    <div id="manifestList" class="manifest-list">
+                        <!-- PNG Render Download via Google Drive Link -->
+                        <div class="manifest-item">
+                            <div class="manifest-info">
+                                <div class="manifest-name">Ruinous Return Audio Omnibus.png</div>
+                                <div class="manifest-type">Master Render [350 DPI]</div>
+                            </div>
+                            <a href="https://drive.google.com/file/d/1sdt0x6NHLH5BMg_nmHiCAxB0M_gneetX/view?usp=drive_link" target="_blank" class="download-link">ACCESS PNG</a>
+                        </div>
+                        
+                        <!-- PSD Archive -->
+                        <div class="manifest-item">
+                            <div class="manifest-info">
+                                <div class="manifest-name">Ruinous Return Omnibus.psd</div>
+                                <div class="manifest-type">Master Source Archive</div>
+                            </div>
+                            <a href="https://drive.google.com/file/d/19Exa6vS5MoBklwgK2jgHcY6M27YqsY5i/view?usp=drive_link" target="_blank" class="download-link">ACCESS PSD</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer placed inside the scroll column at the bottom -->
+            <footer class="omnibus-footer">
+                <div class="footer-text">
+                    FORGED IN MAGICAL FIRE FOR <b>MANGO MEDIA & SERASSTREAMS</b> BY <b>ARCHMAGE KARACHIIY</b>
+                </div>
+            </footer>
+
+        </div>
+    </main>
+
+    <script>
+        // --- LIGHTBOX INTERACTION ---
+        const artworkImg = document.getElementById('masterArt');
+        const lightbox = document.getElementById('lightbox');
+        const lbImg = document.getElementById('lbImg');
+        const lbClose = document.getElementById('lbClose');
+
+        artworkImg.addEventListener('click', () => {
+            lbImg.src = artworkImg.src;
+            lightbox.classList.add('active');
+        });
+
+        lbClose.addEventListener('click', () => lightbox.classList.remove('active'));
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) lightbox.classList.remove('active');
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') lightbox.classList.remove('active');
+        });
+
+        // --- CALAMITY IGNITION & MANIFEST REVEAL ---
+        const igniteBtn = document.getElementById('igniteBtn');
+        const manifestItems = document.querySelectorAll('.manifest-item');
+        const toast = document.getElementById('systemToast');
+
+        igniteBtn.addEventListener('click', () => {
+            if (igniteBtn.classList.contains('ignited')) return;
+
+            // Change button state
+            igniteBtn.classList.add('ignited');
+            igniteBtn.innerHTML = "CALAMITY IGNITED";
+
+            // Show System Toast Notification
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); }, 5000);
+
+            // Trigger massive Ember burst on Canvas
+            triggerCalamityBurst();
+
+            // Reveal Manifest Items sequentially
+            manifestItems.forEach((item, index) => {
+                // Ensure display is block so transition applies
+                item.style.display = 'flex';
+                // Small trick to force reflow so display: flex registers before adding opacity class
+                void item.offsetWidth; 
+                
+                setTimeout(() => {
+                    item.classList.add('revealed');
+                }, 300 * (index + 1));
+            });
+        });
+
+        // --- PARTICLE SYSTEM: ASH & BLUE LAVA EMBERS ---
+        const canvas = document.getElementById('calamityCanvas');
+        const ctx = canvas.getContext('2d');
+        let w = canvas.width = window.innerWidth;
+        let h = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        });
+
+        const particles = [];
+
+        class Ash {
+            constructor() { this.reset(true); }
+            reset(randomY) {
+                this.x = Math.random() * w;
+                this.y = randomY ? Math.random() * h : -10;
+                this.size = Math.random() * 4 + 1;
+                this.speedY = Math.random() * 1.5 + 0.5; // Falling
+                this.speedX = (Math.random() - 0.5) * 1;
+                this.color = "30, 40, 50"; // Dark Slate Grey
+                this.alpha = Math.random() * 0.6 + 0.2;
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                if (this.y > h + 10) this.reset(false);
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${this.color}, ${this.alpha})`;
+                ctx.fill();
+            }
+        }
+
+        class Ember {
+            constructor() { this.reset(true); }
+            reset(randomY) {
+                this.x = Math.random() * w;
+                this.y = randomY ? Math.random() * h : h + 10;
+                this.size = Math.random() * 3 + 1;
+                this.speedY = -(Math.random() * 2 + 1); // Floating up
+                this.speedX = (Math.random() - 0.5) * 0.8;
+                // Cyan Lava Colors
+                this.color = Math.random() > 0.3 ? "0, 229, 255" : "69, 243, 255";
+                this.alpha = Math.random() * 0.8 + 0.2;
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX + Math.sin(this.y * 0.02) * 0.5;
+                if (this.y < -10) this.reset(false);
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${this.color}, ${this.alpha})`;
+                if (this.size > 2) {
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = `rgba(${this.color}, 0.8)`;
+                } else {
+                    ctx.shadowBlur = 0;
+                }
+                ctx.fill();
+            }
+        }
+
+        // Initialize background ambiance
+        for (let i = 0; i < 40; i++) particles.push(new Ash());
+        for (let i = 0; i < 30; i++) particles.push(new Ember());
+
+        function triggerCalamityBurst() {
+            // Adds a surge of fast-moving blue embers from the bottom
+            for (let i = 0; i < 60; i++) {
+                let e = new Ember();
+                e.y = h + Math.random() * 100;
+                e.speedY = -(Math.random() * 6 + 3); // Faster burst
+                e.size = Math.random() * 4 + 2; // Slightly larger
+                particles.push(e);
+            }
+        }
+
+        function animateCanvas() {
+            ctx.clearRect(0, 0, w, h);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+            requestAnimationFrame(animateCanvas);
+        }
+        animateCanvas();
+    </script>
+</body>
+</html>
