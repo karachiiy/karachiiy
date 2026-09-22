@@ -1,1 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>The Art of Seeking Gold — Book 1 | Karachiiy Scriptorium</title>
+    <link rel="icon" type="image/png" href="../favicon.png">
+    
+    <!-- Academy / Editorial Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Palette: Academy Navy, Sunlit Gold, Crimson Binding, Parchment */
+            --bg-deep: #0a0d14;
+            --bg-wood: #1a1412;
+            
+            --academy-navy: #152238;
+            --academy-blue: #2c426f;
+            
+            --sun-gold: #e2b34a;
+            --sun-glow: rgba(226, 179, 74, 0.4);
+            
+            --crimson-red: #8c1c13;
+            
+            --text-light: #e0e0e0;
+            --text-muted: #8892a3;
+            
+            --border-subtle: rgba(226, 179, 74, 0.15);
+            
+            --font-title: 'Cinzel', serif;
+            --font-ui: 'Montserrat', sans-serif;
+        }
 
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-light);
+            font-family: var(--font-ui);
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- AMBIENT CATHEDRAL DUST & SUNBEAMS --- */
+        #dustCanvas {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: 1; pointer-events: none; mix-blend-mode: screen;
+        }
+
+        .sunbeam-container {
+            position: absolute; top: -10%; left: -10%; width: 120%; height: 120%;
+            pointer-events: none; z-index: 0; overflow: hidden;
+        }
+        .sunbeam {
+            position: absolute; top: -20%; left: 30%; width: 150px; height: 200%;
+            background: linear-gradient(90deg, transparent, rgba(255, 235, 180, 0.08), transparent);
+            transform: rotate(35deg); filter: blur(20px);
+        }
+        .sunbeam:nth-child(2) { left: 50%; width: 250px; opacity: 0.7; }
+        .sunbeam:nth-child(3) { left: 70%; width: 100px; opacity: 0.5; }
+
+        /* --- HEADER --- */
+        .library-header {
+            position: relative; z-index: 100; width: 100%;
+            padding: 2rem 4vw; display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .brand-link { display: flex; align-items: center; gap: 1rem; text-decoration: none; }
+        .brand-logo { height: 45px; width: auto; filter: drop-shadow(0 0 10px var(--sun-gold)); transition: transform 0.4s ease; }
+        .brand-link:hover .brand-logo { transform: scale(1.05); }
+        
+        .brand-text { display: flex; flex-direction: column; }
+        .brand-title { font-family: var(--font-title); font-size: 1.3rem; color: #fff; letter-spacing: 2px; line-height: 1; text-transform: uppercase; }
+        .brand-subtitle { font-family: var(--font-ui); font-size: 0.65rem; color: var(--sun-gold); letter-spacing: 4px; text-transform: uppercase; font-weight: 600; margin-top: 0.3rem; }
+
+        .client-badge {
+            background: rgba(21, 34, 56, 0.6); border: 1px solid rgba(226, 179, 74, 0.2);
+            border-left: 3px solid var(--sun-gold); padding: 0.7rem 1.5rem;
+            display: flex; flex-direction: column; align-items: flex-end;
+            backdrop-filter: blur(8px); border-radius: 2px;
+        }
+        .client-badge-label { font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 3px; font-weight: 600; }
+        .client-badge-name { font-family: var(--font-title); font-size: 1rem; color: #fff; letter-spacing: 1px; }
+
+        /* --- MASTER LAYOUT --- */
+        .exhibit-layout {
+            flex-grow: 1;
+            display: flex; align-items: center; justify-content: center; gap: 6vw;
+            width: 100%; max-width: 1500px; margin: 0 auto;
+            padding: 2rem 4vw 6rem 4vw; position: relative; z-index: 10;
+        }
+
+        /* --- LEFT: 3D BOOK DISPLAY --- */
+        .book-stage {
+            position: relative; width: 50%; height: 600px;
+            display: flex; justify-content: center; align-items: flex-end;
+            perspective: 1200px; padding-bottom: 2rem;
+        }
+
+        .shelf-base {
+            position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 120%; max-width: 500px; height: 3rem;
+            background: linear-gradient(to bottom, #2a1f1a, #140e0c);
+            border-top: 2px solid #4a3831; box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+            z-index: 5; border-radius: 2px;
+        }
+        .shelf-base::before {
+            content: ''; position: absolute; top: -60px; left: 0; width: 100%; height: 60px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); pointer-events: none;
+        }
+
+        .book-volume {
+            position: relative; width: 340px; height: 500px;
+            transform-style: preserve-3d; transform: rotateY(-20deg) rotateX(2deg);
+            transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+            z-index: 20; cursor: pointer;
+            box-shadow: -20px 20px 30px rgba(0,0,0,0.6);
+        }
+        .book-volume:hover { transform: rotateY(-5deg) rotateX(0deg) scale(1.02); box-shadow: -10px 15px 30px rgba(0,0,0,0.7); }
+
+        .book-cover {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: #fff; border-radius: 2px 4px 4px 2px; overflow: hidden;
+            box-shadow: inset 4px 0 10px rgba(0,0,0,0.2);
+            transform: translateZ(15px);
+        }
+        .book-cover img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .book-pages {
+            position: absolute; top: 2px; right: -14px; width: 15px; height: calc(100% - 4px);
+            background: linear-gradient(to right, #e8e4d9, #fff);
+            transform-origin: left; transform: rotateY(90deg);
+        }
+        
+        .book-spine {
+            position: absolute; top: 0; left: 0; width: 30px; height: 100%;
+            background: linear-gradient(to right, var(--academy-navy), #0a111a);
+            transform-origin: left; transform: rotateY(-90deg);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            border-left: 1px solid rgba(255,255,255,0.1);
+        }
+        .spine-text {
+            color: var(--sun-gold); font-family: var(--font-title); font-size: 0.9rem;
+            writing-mode: vertical-rl; text-orientation: mixed; letter-spacing: 4px; text-transform: uppercase;
+        }
+
+        .inspect-badge {
+            position: absolute; bottom: -3rem; font-family: var(--font-ui);
+            font-size: 0.65rem; letter-spacing: 4px; color: var(--sun-gold);
+            text-transform: uppercase; font-weight: 600; opacity: 0.5;
+            transition: opacity 0.3s; z-index: 30; text-align: center; width: 100%;
+        }
+        .book-stage:hover .inspect-badge { opacity: 1; }
+
+        /* --- RIGHT: MINIMALIST METADATA VAULT --- */
+        .vault-section {
+            width: 50%; max-width: 550px;
+        }
+
+        .vault-card {
+            background: rgba(14, 18, 26, 0.85); border: 1px solid var(--border-subtle);
+            border-top: 4px solid var(--sun-gold);
+            padding: 3rem 2.5rem; border-radius: 4px; backdrop-filter: blur(12px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 40px rgba(226, 179, 74, 0.03);
+            display: flex; flex-direction: column;
+        }
+
+        .vault-tag {
+            font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase;
+            letter-spacing: 4px; font-weight: 600; margin-bottom: 0.8rem;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .vault-tag::before { content: '✦'; color: var(--sun-gold); }
+
+        .vault-title {
+            font-family: var(--font-title); font-size: 2.2rem; color: #fff;
+            line-height: 1.1; margin-bottom: 2rem; text-transform: uppercase; letter-spacing: 2px;
+        }
+
+        .meta-grid {
+            display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 2.5rem;
+        }
+        .meta-row {
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0,0,0,0.3); padding: 1rem 1.5rem; border-radius: 4px;
+            border: 1px solid rgba(255,255,255,0.02); transition: background 0.3s;
+        }
+        .meta-row:hover { background: rgba(226, 179, 74, 0.05); border-color: rgba(226, 179, 74, 0.2); }
+        
+        .meta-label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 3px; font-weight: 600; }
+        .meta-val { font-family: var(--font-title); font-size: 1.05rem; color: #fff; letter-spacing: 1px; }
+
+        .download-actions {
+            display: flex; gap: 1rem; flex-wrap: wrap;
+        }
+        .btn-download {
+            flex: 1; background: transparent; border: 1px solid var(--sun-gold);
+            color: var(--sun-gold); font-family: var(--font-ui); font-size: 0.75rem;
+            font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+            padding: 1rem; text-align: center; text-decoration: none; border-radius: 2px;
+            transition: all 0.3s ease; display: flex; justify-content: center; align-items: center; gap: 8px;
+        }
+        .btn-download:hover { background: var(--sun-gold); color: var(--bg-deep); box-shadow: 0 0 20px var(--sun-glow); }
+        .btn-download.btn-psd { border-color: #fff; color: #fff; }
+        .btn-download.btn-psd:hover { background: #fff; color: var(--bg-deep); box-shadow: 0 0 20px rgba(255,255,255,0.4); }
+
+        /* --- LIGHTBOX MODAL --- */
+        #lightbox {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(5, 8, 14, 0.95); z-index: 2000;
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; visibility: hidden; pointer-events: none;
+            transition: opacity 0.4s ease; backdrop-filter: blur(10px);
+        }
+        #lightbox.active { opacity: 1; visibility: visible; pointer-events: auto; }
+        
+        .lightbox-img {
+            max-width: 90vw; max-height: 90vh; object-fit: contain;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8); border-radius: 4px;
+            border: 1px solid rgba(226, 179, 74, 0.3);
+            transform: scale(0.95); transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        #lightbox.active .lightbox-img { transform: scale(1); }
+
+        .lightbox-close {
+            position: absolute; top: 2rem; right: 3rem; font-size: 3rem; color: var(--text-muted);
+            background: none; border: none; cursor: pointer; transition: color 0.3s, transform 0.3s;
+            font-family: sans-serif; font-weight: 200;
+        }
+        .lightbox-close:hover { color: var(--sun-gold); transform: rotate(90deg) scale(1.1); }
+
+        /* --- FOOTER --- */
+        .rack-footer {
+            width: 100%; padding: 2rem 4vw; border-top: 1px solid rgba(255,255,255,0.05);
+            display: flex; justify-content: space-between; align-items: center;
+            margin-top: auto; z-index: 10; position: relative;
+        }
+        .footer-text { font-family: var(--font-ui); font-size: 0.75rem; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; font-weight: 500; }
+        .footer-text b { color: #fff; font-weight: 700;}
+        .footer-text span { color: var(--sun-gold); }
+        .social-links { display: flex; gap: 1.5rem; }
+        .social-links a { color: var(--text-muted); text-decoration: none; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; transition: color 0.3s; font-weight: 600; }
+        .social-links a:hover { color: var(--sun-gold); }
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media (max-width: 1100px) {
+            .exhibit-layout { flex-direction: column; gap: 5rem; padding-top: 2rem; }
+            .book-stage { width: 100%; }
+            .vault-section { width: 100%; max-width: 700px; }
+        }
+        @media (max-width: 768px) {
+            .library-header { flex-direction: column; gap: 1rem; text-align: center; }
+            .client-badge { width: 100%; align-items: center; border-left: none; border-bottom: 3px solid var(--sun-gold); }
+            
+            /* Flatten 3D Book on Mobile */
+            .book-stage { height: auto; min-height: 450px; }
+            .book-volume { width: 280px; height: 410px; transform: rotateY(0) rotateX(0); box-shadow: 0 15px 30px rgba(0,0,0,0.8); }
+            .book-volume:hover { transform: scale(1.02); }
+            .book-spine, .book-pages { display: none; }
+            .shelf-base { width: 100%; max-width: 320px; }
+            .inspect-badge { bottom: -2.5rem; }
+
+            .vault-card { padding: 2rem 1.5rem; border-top-width: 3px; }
+            .vault-title { font-size: 1.8rem; }
+            .meta-row { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+            .download-actions { flex-direction: column; }
+            
+            .rack-footer { flex-direction: column; gap: 1rem; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ambient Dust Motes & Sunbeams -->
+    <canvas id="dustCanvas"></canvas>
+    <div class="sunbeam-container">
+        <div class="sunbeam"></div>
+        <div class="sunbeam"></div>
+        <div class="sunbeam"></div>
+    </div>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="lightbox">
+        <button class="lightbox-close" id="lbClose">&times;</button>
+        <img id="lbImg" class="lightbox-img" src="90.jpg" alt="The Art of Seeking Gold Cover Art">
+    </div>
+
+    <!-- HEADER -->
+    <header class="library-header">
+        <a href="../index.html" class="brand-link">
+            <img class="brand-logo" src="../logo.png" alt="Karachiiy Scriptorium">
+            <div class="brand-text">
+                <h1 class="brand-title">THE ART OF SEEKING GOLD</h1>
+                <p class="brand-subtitle">VOLUME 1 ARCHIVE</p>
+            </div>
+        </a>
+        <div class="client-badge">
+            <span class="client-badge-label">Official Patron</span>
+            <span class="client-badge-name">Mango Media</span>
+        </div>
+    </header>
+
+    <!-- MASTER LAYOUT -->
+    <main class="exhibit-layout">
+        
+        <!-- LEFT: 3D BOOK STAGE -->
+        <section class="book-stage" id="bookStage">
+            <div class="book-volume" id="bookModel">
+                <div class="book-cover">
+                    <img src="90.jpg" alt="The Art of Seeking Gold - Book 1">
+                </div>
+                <div class="book-pages"></div>
+                <div class="book-spine">
+                    <span class="spine-text">THE ART OF SEEKING GOLD</span>
+                </div>
+            </div>
+            <div class="shelf-base"></div>
+            <div class="inspect-badge">✦ Click Cover to Enlarge ✦</div>
+        </section>
+
+        <!-- RIGHT: MINIMALIST ASSET VAULT -->
+        <section class="vault-section">
+            <div class="vault-card">
+                
+                <div class="vault-tag">Omnibus Delivery</div>
+                <h2 class="vault-title">The Art of Seeking Gold</h2>
+
+                <div class="meta-grid">
+                    <div class="meta-row">
+                        <span class="meta-label">Author</span>
+                        <span class="meta-val">LoveMoney</span>
+                    </div>
+                    <div class="meta-row">
+                        <span class="meta-label">Publisher</span>
+                        <span class="meta-val" style="color: var(--sun-gold);">Mango Media</span>
+                    </div>
+                    <div class="meta-row">
+                        <span class="meta-label">Illustrationship</span>
+                        <span class="meta-val">Archmage Karachiiy</span>
+                    </div>
+                    <div class="meta-row">
+                        <span class="meta-label">Volume</span>
+                        <span class="meta-val">Book 1</span>
+                    </div>
+                </div>
+
+                <div class="download-actions">
+                    <a href="https://drive.google.com/file/d/1kI4ta_AgF9shmVY7wwPbuMctJusZU4IS/view?usp=drive_link" target="_blank" class="btn-download">
+                        Access PNG
+                    </a>
+                    <a href="https://drive.google.com/file/d/1RlvArcvYDSp5EuuY8SUoyLUByYJaYpkc/view?usp=drive_link" target="_blank" class="btn-download btn-psd">
+                        Access PSD
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="rack-footer">
+        <div class="footer-text">
+            PAINTED FOR <span>MANGO MEDIA</span> & <b>LOVEMONEY</b> BY <b>ARCHMAGE KARACHIIY</b>
+        </div>
+        <div class="social-links">
+            <a href="https://x.com/Karachiiy" target="_blank">Twitter</a>
+        </div>
+    </footer>
+
+    <script>
+        // --- 3D BOOK HOVER INTERACTION (Desktop Only) ---
+        const bookModel = document.getElementById('bookModel');
+        const bookStage = document.getElementById('bookStage');
+
+        if (window.matchMedia("(pointer: fine)").matches) {
+            bookStage.addEventListener('mousemove', (e) => {
+                const rect = bookStage.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = ((y - centerY) / centerY) * 5; 
+                const rotateY = -20 + ((x - centerX) / centerX) * 15; 
+                
+                bookModel.style.transform = `rotateY(${rotateY}deg) rotateX(${-rotateX}deg) scale(1.02)`;
+            });
+
+            bookStage.addEventListener('mouseleave', () => {
+                bookModel.style.transform = `rotateY(-20deg) rotateX(2deg) scale(1)`;
+            });
+        }
+
+        // --- LIGHTBOX MODAL ---
+        const lightbox = document.getElementById('lightbox');
+        const lbImg = document.getElementById('lbImg');
+        const lbClose = document.getElementById('lbClose');
+
+        bookModel.addEventListener('click', () => {
+            lightbox.classList.add('active');
+        });
+
+        lbClose.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+        });
+
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) lightbox.classList.remove('active');
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') lightbox.classList.remove('active');
+        });
+
+        // --- AMBIENT CATHEDRAL DUST MOTES ---
+        const canvas = document.getElementById('dustCanvas');
+        const ctx = canvas.getContext('2d');
+        let w = canvas.width = window.innerWidth;
+        let h = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        });
+
+        class DustMote {
+            constructor() { this.reset(true); }
+            reset(randomY) {
+                this.x = Math.random() * w;
+                this.y = randomY ? Math.random() * h : h + 10;
+                this.size = Math.random() * 1.5 + 0.2;
+                this.speedY = -(Math.random() * 0.5 + 0.1);
+                this.speedX = (Math.random() - 0.5) * 0.3;
+                this.alpha = Math.random() * 0.5 + 0.1;
+                this.alphaDir = Math.random() > 0.5 ? 0.005 : -0.005;
+                this.color = "255, 245, 220";
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                
+                this.alpha += this.alphaDir;
+                if (this.alpha > 0.6 || this.alpha < 0.05) this.alphaDir = -this.alphaDir;
+                
+                if (this.y < -10) this.reset(false);
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${this.color}, ${this.alpha})`;
+                
+                if (this.size > 1) {
+                    ctx.shadowBlur = 4;
+                    ctx.shadowColor = `rgba(${this.color}, 0.4)`;
+                } else {
+                    ctx.shadowBlur = 0;
+                }
+                
+                ctx.fill();
+            }
+        }
+
+        const dustArray = Array.from({ length: 80 }, () => new DustMote());
+
+        function animateDust() {
+            ctx.clearRect(0, 0, w, h);
+            dustArray.forEach(dust => {
+                dust.update();
+                dust.draw();
+            });
+            requestAnimationFra
