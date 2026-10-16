@@ -76,7 +76,8 @@
 
         .vault-layout { display: flex; gap: 2rem; align-items: center; margin-top: 2.5rem; }
 
-        .project-deck { display: flex; flex-direction: column; gap: 0.75rem; }
+        /* Deck holding 11 tabs, gap tightened slightly to fit beautifully */
+        .project-deck { display: flex; flex-direction: column; gap: 0.5rem; }
         
         .deck-tab {
             width: 42px; height: 42px; background: rgba(10, 14, 18, 0.6);
@@ -139,7 +140,7 @@
         .card-lore {
             background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.03); border-left: 2px solid var(--theme-color);
             padding: 1.2rem; font-size: 0.82rem; line-height: 1.7; color: #c4cdd5; font-style: italic; margin-bottom: 1.5rem;
-            transition: all 0.5s ease; box-shadow: inset 0 0 20px rgba(0,0,0,0.4);
+            transition: all 0.5s ease; box-shadow: inset 0 0 20px rgba(0,0,0,0.4); white-space: pre-wrap;
         }
         .card-lore b { color: var(--theme-color); font-weight: 600; letter-spacing: 1px; font-style: normal; }
 
@@ -284,7 +285,7 @@
             </header>
 
             <div class="vault-layout">
-                <!-- 9 TABS DECK -->
+                <!-- 11 TABS DECK -->
                 <div class="project-deck">
                     <div class="deck-tab active" data-id="0" data-title="I. Song of the Gift-Giver"><span>I</span></div>
                     <div class="deck-tab" data-id="1" data-title="II. Beneath the Dragoneye Moons"><span>II</span></div>
@@ -295,6 +296,8 @@
                     <div class="deck-tab" data-id="6" data-title="VII. System Lost"><span>VII</span></div>
                     <div class="deck-tab" data-id="7" data-title="VIII. Moonveil Archives"><span>VIII</span></div>
                     <div class="deck-tab" data-id="8" data-title="IX. Schale Operations"><span>IX</span></div>
+                    <div class="deck-tab" data-id="9" data-title="X. Ruinous Return"><span>X</span></div>
+                    <div class="deck-tab" data-id="10" data-title="XI. The Art of Seeking Gold"><span>XI</span></div>
                 </div>
 
                 <div class="portfolio-container">
@@ -381,7 +384,7 @@
         const cardContent = document.getElementById("cardContent");
         const portfolioCard = document.getElementById("portfolioCard");
 
-        // PROJECT MASTER DATABASE
+        // PROJECT MASTER DATABASE (NOW 11 SCROLLS)
         const projects = [
             {
                 id: 0,
@@ -421,7 +424,7 @@
                     { label: "Format", val: "Webtoon Serial & Portraits" },
                     { label: "Total Bound", val: "4 Heavenly Scrolls", highlight: true }
                 ],
-                extraLore: "Access granted. Welcome to the Heavenly Dao of Cultivation. <br><br><b>The Painter's Dao</b><br><br>Step into Fa Ram to witness the serene Sword Fairy and experience the blistering pace of a 1-Day vertical webtoon tribulation sprint.",
+                extraLore: "A peaceful sanctuary of farming and profound cultivation. <br><br><b>The Painter's Dao</b><br><br>Step into Fa Ram to witness the serene Sword Fairy and experience the blistering pace of a 1-Day vertical webtoon tribulation sprint.",
                 btnText: "OPEN SCROLL",
                 disabled: false,
                 colors: { color: "#8cb369", dim: "#4a5d23", glow: "rgba(140, 179, 105, 0.25)", core: "#f4e285", coreGlow: "rgba(244, 226, 133, 0.25)" }
@@ -509,6 +512,34 @@
                 btnText: "ACCESS TERMINAL",
                 disabled: false,
                 colors: { color: "#00a2ff", dim: "#005c91", glow: "rgba(0, 162, 255, 0.25)", core: "#ff5e94", coreGlow: "rgba(255, 94, 148, 0.25)" }
+            },
+            {
+                id: 9,
+                title: "Ruinous Return",
+                label: "Omnibus Archive",
+                meta: [
+                    { label: "Client", val: "Mango Media" },
+                    { label: "Author", val: "SerasStreams" },
+                    { label: "Format", val: "Audio Omnibus Cover", highlight: true }
+                ],
+                extraLore: "The price for saving the world is the right to rule it. Cast back to Earth and forgotten by history, <b>Lyn Rivers</b> forced her violent return.\n\nShe now wields the power of a deity of destruction, seated upon an obsidian dragon throne with <b>Calamity</b> ignited.",
+                btnText: "IGNITE CALAMITY",
+                disabled: false,
+                colors: { color: "#00e5ff", dim: "#005c66", glow: "rgba(0, 229, 255, 0.25)", core: "#0055ff", coreGlow: "rgba(0, 85, 255, 0.25)" }
+            },
+            {
+                id: 10,
+                title: "The Art of Seeking Gold",
+                label: "Book 1 Cover Archive",
+                meta: [
+                    { label: "Client", val: "Mango Media" },
+                    { label: "Author", val: "LoveMoney" },
+                    { label: "Location", val: "Arcanum Academy", highlight: true }
+                ],
+                extraLore: "A grand introduction to the prestige and overwhelming scale of the Arcanum Academy.\n\n<i>\"Welcome to the Arcanum Academy, students. I'm Archmage Elyndra, headmistress of the institution...\"</i>",
+                btnText: "ENTER ACADEMY",
+                disabled: false,
+                colors: { color: "#ffd700", dim: "#998100", glow: "rgba(255, 215, 0, 0.25)", core: "#3a86ff", coreGlow: "rgba(58, 134, 255, 0.25)" }
             }
         ];
 
@@ -613,6 +644,8 @@
                 else if (activeProject.id === 6) window.location.href = "./System-Lost-by-DarkTechnomancer/"; 
                 else if (activeProject.id === 7) window.location.href = "./Talieson/"; 
                 else if (activeProject.id === 8) window.location.href = "./tsukinomiya-ruka/"; 
+                else if (activeProject.id === 9) window.location.href = "./Ruinous-Return/"; 
+                else if (activeProject.id === 10) window.location.href = "./The-Art-of-Seeking-Gold/"; 
             }, 1000);
         }
 
